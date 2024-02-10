@@ -2,9 +2,10 @@ package utils;
 
 import structures.basic.Card;
 
+//class looking redundant right now
 public class CardIdentifier {
 	
-	public static unit returnUnit(Card card) {
+	public static void returnUnit(Card card) {
 		
 	}
 	

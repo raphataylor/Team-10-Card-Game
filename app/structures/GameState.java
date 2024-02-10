@@ -17,6 +17,9 @@ public class GameState {
 	//tracks if a player has a card current selected 
 	public boolean cardSelected = false;
 	
+	//tracks which card is being highlighted - if -1 then no card is currently highlighted 
+	public int currentCardSelected = -1;
+	
 	
 	
 }

@@ -27,7 +27,7 @@ public class CardClicked implements EventProcessor{
 		int handPosition = message.get("position").asInt();
 		
 		//bens testing ground
-		UnitSummonTest.cardClick(out, handPosition);
+		UnitSummonTest.cardClick(out, gameState, handPosition);
 		
 		
 	}

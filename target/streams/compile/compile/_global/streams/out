@@ -1,0 +1,3 @@
+[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\utils\UnitSummonTest.java:59:1: incompatible types: int cannot be converted to structures.basic.Card[0m
+[0m[[0m[31merror[0m] [0m[0mhandPosition[0m
+[0m[[0m[0minfo[0m] [0m[0mSome messages have been simplified; recompile with -Xdiags:verbose to get full output[0m

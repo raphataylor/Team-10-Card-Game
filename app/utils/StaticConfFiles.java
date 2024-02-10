@@ -27,7 +27,7 @@ public class StaticConfFiles {
 	public final static String f1_projectiles = "conf/gameconfs/effects/f1_projectiles.json";
 	public final static String f1_summon = "conf/gameconfs/effects/f1_summon.json";
 	
-	// Units
+	// Units - looking redundant with cardIdentifier right now
 	public final static String bad_omen = "conf/gameconfs/units/bad_omen.json";
 	public final static String bloodmoon_priestess = "conf/gameconfs/units/bloodmoon_priestess.json";
 	public final static String gloom_chaser = "conf/gameconfs/units/gloom_chaser.json";
