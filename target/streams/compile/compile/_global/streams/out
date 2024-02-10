@@ -1,3 +1,4 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\utils\UnitSummonTest.java:59:1: incompatible types: int cannot be converted to structures.basic.Card[0m
-[0m[[0m[31merror[0m] [0m[0mhandPosition[0m
-[0m[[0m[0minfo[0m] [0m[0mSome messages have been simplified; recompile with -Xdiags:verbose to get full output[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\utils\UnitSummonTest.java:42:1: variable tile is already defined in method givePlayerCard(akka.actor.ActorRef)[0m
+[0m[[0m[31merror[0m] [0m[0mTile tile = BasicObjectBuilders.loadTile(3, 3);[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\utils\UnitSummonTest.java:45:1: variable tile is already defined in method givePlayerCard(akka.actor.ActorRef)[0m
+[0m[[0m[31merror[0m] [0m[0mTile tile = BasicObjectBuilders.loadTile(3, 4);[0m

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import structures.GameState;
+import utils.UnitSummonTest;
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case a tile.
@@ -31,6 +32,10 @@ public class TileClicked implements EventProcessor{
 		if (gameState.something == true) {
 			// do some logic
 		}
+		
+		//bens testing ground
+		UnitSummonTest.summonUnit(out, gameState, tilex, tiley);
+		
 		
 	}
 

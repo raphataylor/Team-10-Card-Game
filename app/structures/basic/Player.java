@@ -28,6 +28,11 @@ public class Player {
 		this.health = health;
 		this.mana = mana;
 	}
+	
+	public void removeCardFromHand(int handPosition) {
+		playerHand.remove(handPosition);
+	}
+	
 	public int getHealth() {
 		return health;
 	}
