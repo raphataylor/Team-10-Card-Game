@@ -1,4 +1,12 @@
-[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\utils\UnitSummonTest.java:42:1: variable tile is already defined in method givePlayerCard(akka.actor.ActorRef)[0m
-[0m[[0m[31merror[0m] [0m[0mTile tile = BasicObjectBuilders.loadTile(3, 3);[0m
-[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\utils\UnitSummonTest.java:45:1: variable tile is already defined in method givePlayerCard(akka.actor.ActorRef)[0m
-[0m[[0m[31merror[0m] [0m[0mTile tile = BasicObjectBuilders.loadTile(3, 4);[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\structures\basic\Player.java:71:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   variable tile[0m
+[0m[[0m[31merror[0m] [0m[0m  location: class structures.basic.Player[0m
+[0m[[0m[31merror[0m] [0m[0mtile[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\structures\basic\Player.java:74:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   variable tile2[0m
+[0m[[0m[31merror[0m] [0m[0m  location: class structures.basic.Player[0m
+[0m[[0m[31merror[0m] [0m[0mtile2[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\Ben\Desktop\CARDGAME\Card Game T10\team-10-card-game\app\structures\basic\Player.java:77:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   variable tile3[0m
+[0m[[0m[31merror[0m] [0m[0m  location: class structures.basic.Player[0m
+[0m[[0m[31merror[0m] [0m[0mtile3[0m

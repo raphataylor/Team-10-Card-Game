@@ -4,6 +4,7 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import structures.Game;
 import structures.GameState;
 import utils.UnitSummonTest;
 
@@ -27,8 +28,9 @@ public class CardClicked implements EventProcessor{
 		int handPosition = message.get("position").asInt();
 		
 		//bens testing ground
-		UnitSummonTest.cardClick(out, gameState, handPosition);
-		
+		//UnitSummonTest.cardClick(out, gameState, handPosition);
+		//the new method for dealing with card clicked
+		Game.selectCard(out, gameState, handPosition);
 		
 	}
 

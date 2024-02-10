@@ -3,6 +3,10 @@ package structures.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import akka.actor.ActorRef;
+import commands.BasicCommands;
+import structures.GameState;
+
 /**
  * A basic representation of of the Player. A player
  * has health and mana.
@@ -18,6 +22,8 @@ public class Player {
 	//Holds the current players Cards in a hand
 	List<Card> playerHand = new ArrayList<Card>(6);
 	
+	List<Card> playerDeck = new ArrayList<Card>(20);
+	
 	public Player() {
 		super();
 		this.health = 20;
@@ -31,6 +37,34 @@ public class Player {
 	
 	public void removeCardFromHand(int handPosition) {
 		playerHand.remove(handPosition);
+	}
+	
+	//function for drawing cards
+	public void drawCard(ActorRef out) {
+		int handPosition = 0;
+		BasicCommands.drawCard(out, playerDeck.get(0), handPosition, 0);
+		setPlayerHandCard(handPosition, playerDeck.get(0));
+		handPosition++;
+		
+		BasicCommands.drawCard(out, playerDeck.get(1), handPosition, 0);
+		setPlayerHandCard(handPosition, playerDeck.get(1));
+		handPosition++;
+		
+		BasicCommands.drawCard(out, playerDeck.get(2), handPosition, 0);
+		setPlayerHandCard(handPosition, playerDeck.get(2));
+		handPosition++;
+		
+		BasicCommands.drawCard(out, playerDeck.get(3), handPosition, 0);
+		setPlayerHandCard(handPosition, playerDeck.get(3));
+		handPosition++;
+		
+		BasicCommands.drawCard(out, playerDeck.get(4), handPosition, 0);
+		setPlayerHandCard(handPosition, playerDeck.get(4));
+		handPosition++;
+	
+	
+		
+		
 	}
 	
 	public int getHealth() {
@@ -54,6 +88,13 @@ public class Player {
 		this.playerHand.add(handPosition, card);
 	}
 	
+	public List<Card> getPlayerDeck(){
+		return this.playerDeck;
+	}
+	
+	public void setPlayerDeck(List<Card> list) {
+		this.playerDeck = list;
+	}
 	
 	
 }
