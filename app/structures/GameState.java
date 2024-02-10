@@ -14,4 +14,9 @@ public class GameState {
 	
 	public boolean something = false;
 	
+	//tracks if a player has a card current selected 
+	public boolean cardSelected = false;
+	
+	
+	
 }

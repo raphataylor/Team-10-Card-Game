@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import structures.GameState;
+import utils.UnitSummonTest;
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case a card.
@@ -24,6 +25,9 @@ public class CardClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		int handPosition = message.get("position").asInt();
+		
+		//bens testing ground
+		UnitSummonTest.cardClick(out, handPosition);
 		
 		
 	}

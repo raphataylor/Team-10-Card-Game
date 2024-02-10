@@ -3,9 +3,13 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import commands.BasicCommands;
 import demo.CommandDemo;
 import demo.Loaders_2024_Check;
 import structures.GameState;
+import structures.basic.Tile;
+import utils.BasicObjectBuilders;
+import utils.UnitSummonTest;
 
 /**
  * Indicates that both the core game loop in the browser is starting, meaning
@@ -29,8 +33,10 @@ public class Initalize implements EventProcessor{
 		gameState.something = true;
 		
 		// User 1 makes a change
-		CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
+		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 		//Loaders_2024_Check.test(out);
+		
+		UnitSummonTest.givePlayerCard(out);
 	}
 
 }
