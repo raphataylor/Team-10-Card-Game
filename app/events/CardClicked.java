@@ -4,7 +4,9 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import structures.Game;
 import structures.GameState;
+import utils.UnitSummonTest;
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case a card.
@@ -25,6 +27,10 @@ public class CardClicked implements EventProcessor{
 		
 		int handPosition = message.get("position").asInt();
 		
+		//bens testing ground
+		//UnitSummonTest.cardClick(out, gameState, handPosition);
+		//the new method for dealing with card clicked
+		Game.selectCard(out, gameState, handPosition);
 		
 	}
 
