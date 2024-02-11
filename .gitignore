@@ -17,7 +17,6 @@ project/target/streams/_global/moduleSettings/
 project/target/streams/_global/projectDescriptors/
 project/target/streams/_global/scalaCompilerBridgeScope/
 project/target/streams/_global/update/
-target/
 target/scala-2.13/
 target/web/
 target/streams/_build/
