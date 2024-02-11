@@ -1,1 +1,4 @@
 app/assets/
+
+/target/
+/project/**/target/
