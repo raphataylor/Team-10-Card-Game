@@ -1,6 +1,7 @@
 package structures;
 
 import structures.basic.Player;
+import structures.Board;
 
 /**
  * This class can be used to hold information about the on-going game.
