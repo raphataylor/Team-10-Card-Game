@@ -1,0 +1,214 @@
+2024-02-10 22:27:44,851 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-6 - Slf4jLogger started
+2024-02-10 22:27:44,970 [INFO] from org.hibernate.validator.internal.util.Version in play-dev-mode-akka.actor.default-dispatcher-4 - HV000001: Hibernate Validator 6.1.0.Final
+2024-02-10 22:27:45,161 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-4 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+
+    play.filters.csrf.CSRFFilter
+    play.filters.headers.SecurityHeadersFilter
+    play.filters.hosts.AllowedHostsFilter
+    play.filters.csrf.CSRFFilter
+
+2024-02-10 22:27:45,177 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-4 - Application started (Dev) (no global state)
+2024-02-10 22:27:45,971 [ERROR] from akka.actor.OneForOneStrategy in application-akka.actor.default-dispatcher-9 - akka://application/user/$a/flowActor: exception during creation
+akka.actor.ActorInitializationException: akka://application/user/$a/flowActor: exception during creation
+	at akka.actor.ActorInitializationException$.apply(Actor.scala:195)
+	at akka.actor.ActorCell.create(ActorCell.scala:657)
+	at akka.actor.ActorCell.invokeAll$1(ActorCell.scala:509)
+	at akka.actor.ActorCell.systemInvoke(ActorCell.scala:531)
+	at akka.dispatch.Mailbox.processAllSystemMessages(Mailbox.scala:294)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:229)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:242)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+Caused by: java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at akka.util.Reflect$.instantiate(Reflect.scala:69)
+	at akka.actor.ArgsReflectConstructor.produce(IndirectActorProducer.scala:100)
+	at akka.actor.Props.newActor(Props.scala:226)
+	at akka.actor.ActorCell.newActor(ActorCell.scala:609)
+	at akka.actor.ActorCell.create(ActorCell.scala:635)
+	... 10 common frames omitted
+Caused by: java.lang.ExceptionInInitializerError: null
+	at actors.GameActor.<init>(GameActor.java:66)
+	... 19 common frames omitted
+Caused by: java.lang.ArrayIndexOutOfBoundsException: Index 9 out of bounds for length 9
+	at structures.Board.<init>(Board.java:18)
+	at structures.GameState.<clinit>(GameState.java:28)
+	... 20 common frames omitted
+2024-02-10 22:28:31,338 [ERROR] from akka.actor.OneForOneStrategy in application-akka.actor.default-dispatcher-11 - Could not initialize class structures.GameState
+akka.actor.ActorInitializationException: akka://application/user/$b/flowActor: exception during creation
+	at akka.actor.ActorInitializationException$.apply(Actor.scala:195)
+	at akka.actor.ActorCell.create(ActorCell.scala:657)
+	at akka.actor.ActorCell.invokeAll$1(ActorCell.scala:509)
+	at akka.actor.ActorCell.systemInvoke(ActorCell.scala:531)
+	at akka.dispatch.Mailbox.processAllSystemMessages(Mailbox.scala:294)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:229)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:242)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+Caused by: java.lang.reflect.InvocationTargetException: null
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at akka.util.Reflect$.instantiate(Reflect.scala:69)
+	at akka.actor.ArgsReflectConstructor.produce(IndirectActorProducer.scala:100)
+	at akka.actor.Props.newActor(Props.scala:226)
+	at akka.actor.ActorCell.newActor(ActorCell.scala:609)
+	at akka.actor.ActorCell.create(ActorCell.scala:635)
+	... 10 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: Could not initialize class structures.GameState
+	at actors.GameActor.<init>(GameActor.java:66)
+	... 19 common frames omitted
+2024-02-10 22:29:18,604 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-6 - Slf4jLogger started
+2024-02-10 22:29:18,653 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-8 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+
+    play.filters.csrf.CSRFFilter
+    play.filters.headers.SecurityHeadersFilter
+    play.filters.hosts.AllowedHostsFilter
+    play.filters.csrf.CSRFFilter
+
+2024-02-10 22:29:18,660 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-8 - Application started (Dev) (no global state)
+2024-02-10 22:29:57,802 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-6 - Slf4jLogger started
+2024-02-10 22:29:57,841 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-13 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+
+    play.filters.csrf.CSRFFilter
+    play.filters.headers.SecurityHeadersFilter
+    play.filters.hosts.AllowedHostsFilter
+    play.filters.csrf.CSRFFilter
+
+2024-02-10 22:29:57,844 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-13 - Application started (Dev) (no global state)
+2024-02-10 22:30:06,260 [ERROR] from akka.actor.OneForOneStrategy in application-akka.actor.default-dispatcher-6 - Index 2 out of bounds for length 0
+java.lang.IndexOutOfBoundsException: Index 2 out of bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:458)
+	at structures.basic.Player.getPlayerHandCard(Player.java:52)
+	at structures.Game.selectCard(Game.java:31)
+	at events.CardClicked.processEvent(CardClicked.java:33)
+	at actors.GameActor.processMessage(GameActor.java:110)
+	at actors.GameActor.lambda$createReceive$0(GameActor.java:90)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:187)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:186)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:241)
+	at akka.actor.Actor.aroundReceive(Actor.scala:534)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:532)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:573)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:543)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:269)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:230)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:242)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-02-10 22:35:26,558 [ERROR] from play.api.http.DefaultHttpErrorHandler in play-dev-mode-akka.actor.default-dispatcher-7 - 
+
+! @84fj2l4oh - Internal server error, for (GET) [/game] ->
+ 
+play.sbt.PlayExceptions$CompilationException: Compilation error[cannot find symbol
+  symbol:   variable tile
+  location: class structures.basic.Player]
+	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:34)
+	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:34)
+	at scala.Option.map(Option.scala:230)
+	at play.sbt.run.PlayReload$.$anonfun$taskFailureHandler$1(PlayReload.scala:40)
+	at scala.Option.map(Option.scala:230)
+	at play.sbt.run.PlayReload$.taskFailureHandler(PlayReload.scala:35)
+	at play.sbt.run.PlayReload$.compileFailure(PlayReload.scala:28)
+	at play.sbt.run.PlayReload$.$anonfun$compile$3(PlayReload.scala:63)
+	at scala.util.Either$LeftProjection.map(Either.scala:573)
+	at play.sbt.run.PlayReload$.compile(PlayReload.scala:63)
+	at play.sbt.run.PlayRun$.$anonfun$playRunTask$4(PlayRun.scala:78)
+	at play.runsupport.Reloader.$anonfun$reload$1(Reloader.scala:496)
+	at play.runsupport.Reloader$$anon$1.run(Reloader.scala:57)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at play.runsupport.Reloader$.play$runsupport$Reloader$$withReloaderContextClassLoader(Reloader.scala:63)
+	at play.runsupport.Reloader.reload(Reloader.scala:496)
+	at play.core.server.DevServerStart$$anon$1.get(DevServerStart.scala:141)
+	at play.core.server.AkkaHttpServer.handleRequest(AkkaHttpServer.scala:300)
+	at play.core.server.AkkaHttpServer.$anonfun$createServerBinding$1(AkkaHttpServer.scala:190)
+	at akka.stream.impl.fusing.MapAsync$$anon$30.onPush(Ops.scala:1289)
+	at akka.stream.impl.fusing.GraphInterpreter.processPush(GraphInterpreter.scala:541)
+	at akka.stream.impl.fusing.GraphInterpreter.execute(GraphInterpreter.scala:423)
+	at akka.stream.impl.fusing.GraphInterpreterShell.runBatch(ActorGraphInterpreter.scala:624)
+	at akka.stream.impl.fusing.GraphInterpreterShell$AsyncInput.execute(ActorGraphInterpreter.scala:501)
+	at akka.stream.impl.fusing.GraphInterpreterShell.processEvent(ActorGraphInterpreter.scala:599)
+	at akka.stream.impl.fusing.ActorGraphInterpreter.akka$stream$impl$fusing$ActorGraphInterpreter$$processEvent(ActorGraphInterpreter.scala:768)
+	at akka.stream.impl.fusing.ActorGraphInterpreter$$anonfun$receive$1.applyOrElse(ActorGraphInterpreter.scala:783)
+	at akka.actor.Actor.aroundReceive(Actor.scala:534)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:532)
+	at akka.stream.impl.fusing.ActorGraphInterpreter.aroundReceive(ActorGraphInterpreter.scala:690)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:573)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:543)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:269)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:230)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:242)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-02-10 22:36:08,109 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-6 - Slf4jLogger started
+2024-02-10 22:36:08,149 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-7 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+
+    play.filters.csrf.CSRFFilter
+    play.filters.headers.SecurityHeadersFilter
+    play.filters.hosts.AllowedHostsFilter
+    play.filters.csrf.CSRFFilter
+
+2024-02-10 22:36:08,152 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-7 - Application started (Dev) (no global state)
+2024-02-10 22:36:15,485 [ERROR] from akka.actor.OneForOneStrategy in application-akka.actor.default-dispatcher-10 - Index 0 out of bounds for length 0
+java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:458)
+	at structures.basic.Player.drawCard(Player.java:45)
+	at events.Initalize.processEvent(Initalize.java:43)
+	at actors.GameActor.processMessage(GameActor.java:110)
+	at actors.GameActor.lambda$createReceive$0(GameActor.java:90)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:187)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:186)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:241)
+	at akka.actor.Actor.aroundReceive(Actor.scala:534)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:532)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:573)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:543)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:269)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:230)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:242)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:177)
+2024-02-10 22:39:37,485 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-6 - Slf4jLogger started
+2024-02-10 22:39:37,545 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-7 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+
+    play.filters.csrf.CSRFFilter
+    play.filters.headers.SecurityHeadersFilter
+    play.filters.hosts.AllowedHostsFilter
+    play.filters.csrf.CSRFFilter
+
+2024-02-10 22:39:37,554 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-7 - Application started (Dev) (no global state)
