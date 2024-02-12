@@ -36,7 +36,7 @@ public class Initalize implements EventProcessor{
 		gameState.something = true;
 		//Game currentGame = new Game();
 		
-		Board board = new Board(out);
+		Game.createBoard(out);
 		
 		// User 1 makes a change
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution

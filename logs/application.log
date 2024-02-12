@@ -1,13 +1,70 @@
-2024-02-11 19:03:23,578 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-6 - Slf4jLogger started
-2024-02-11 19:03:23,643 [INFO] from org.hibernate.validator.internal.util.Version in play-dev-mode-akka.actor.default-dispatcher-5 - HV000001: Hibernate Validator 6.1.0.Final
-2024-02-11 19:03:23,744 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-5 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+2024-02-12 00:15:47,235 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-5 - Slf4jLogger started
+2024-02-12 00:15:47,299 [INFO] from org.hibernate.validator.internal.util.Version in play-dev-mode-akka.actor.default-dispatcher-5 - HV000001: Hibernate Validator 6.1.0.Final
+2024-02-12 00:15:47,391 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-5 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
 
     play.filters.csrf.CSRFFilter
     play.filters.headers.SecurityHeadersFilter
     play.filters.hosts.AllowedHostsFilter
     play.filters.csrf.CSRFFilter
 
-2024-02-11 19:03:23,747 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-5 - Application started (Dev) (no global state)
-2024-02-11 19:28:42,084 [INFO] from play.core.server.AkkaHttpServer in play-dev-mode-shutdown-hook-1 - Stopping Akka HTTP server...
-2024-02-11 19:28:42,089 [INFO] from play.core.server.AkkaHttpServer in play-dev-mode-akka.actor.internal-dispatcher-4 - Terminating server binding for /0:0:0:0:0:0:0:0:9000
-2024-02-11 19:28:42,103 [INFO] from play.core.server.AkkaHttpServer in play-dev-mode-akka.actor.internal-dispatcher-24 - Running provided shutdown stop hooks
+2024-02-12 00:15:47,394 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-5 - Application started (Dev) (no global state)
+2024-02-12 00:15:53,483 [ERROR] from akka.actor.OneForOneStrategy in application-akka.actor.default-dispatcher-7 - Index -1 out of bounds for length 5
+java.lang.IndexOutOfBoundsException: Index -1 out of bounds for length 5
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:374)
+	at java.base/java.util.ArrayList.get(ArrayList.java:459)
+	at structures.basic.Player.getPlayerHandCard(Player.java:84)
+	at structures.Game.summonUnit(Game.java:50)
+	at events.TileClicked.processEvent(TileClicked.java:41)
+	at actors.GameActor.processMessage(GameActor.java:110)
+	at actors.GameActor.lambda$createReceive$0(GameActor.java:90)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)
+	at akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)
+	at scala.PartialFunction.applyOrElse(PartialFunction.scala:187)
+	at scala.PartialFunction.applyOrElse$(PartialFunction.scala:186)
+	at akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)
+	at scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:241)
+	at akka.actor.Actor.aroundReceive(Actor.scala:534)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:532)
+	at akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:573)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:543)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:269)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:230)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:242)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:183)
+2024-02-12 00:16:03,839 [ERROR] from akka.stream.impl.ActorRefSource in application-akka.actor.default-dispatcher-11 - Failing because buffer is full and overflowStrategy is: [Fail] in stream [actorRefSource]
+2024-02-12 00:16:03,840 [ERROR] from play.core.server.common.WebSocketFlowHandler in play-dev-mode-akka.actor.default-dispatcher-11 - WebSocket flow threw exception
+akka.stream.BufferOverflowException: Buffer overflow (max capacity was: 16)!
+	at akka.stream.impl.ActorRefSource$$anon$1.$anonfun$ref$1(ActorRefSource.scala:132)
+	at akka.stream.impl.ActorRefSource$$anon$1.$anonfun$ref$1$adapted(ActorRefSource.scala:56)
+	at akka.stream.stage.GraphStageLogic$StageActor.internalReceive(GraphStage.scala:243)
+	at akka.stream.stage.GraphStageLogic$StageActor.$anonfun$callback$1(GraphStage.scala:202)
+	at akka.stream.stage.GraphStageLogic$StageActor.$anonfun$callback$1$adapted(GraphStage.scala:202)
+	at akka.stream.impl.fusing.GraphInterpreter.runAsyncInput(GraphInterpreter.scala:466)
+	at akka.stream.impl.fusing.GraphInterpreterShell$AsyncInput.execute(ActorGraphInterpreter.scala:497)
+	at akka.stream.impl.fusing.GraphInterpreterShell.processEvent(ActorGraphInterpreter.scala:599)
+	at akka.stream.impl.fusing.ActorGraphInterpreter.akka$stream$impl$fusing$ActorGraphInterpreter$$processEvent(ActorGraphInterpreter.scala:768)
+	at akka.stream.impl.fusing.ActorGraphInterpreter$$anonfun$receive$1.applyOrElse(ActorGraphInterpreter.scala:783)
+	at akka.actor.Actor.aroundReceive(Actor.scala:534)
+	at akka.actor.Actor.aroundReceive$(Actor.scala:532)
+	at akka.stream.impl.fusing.ActorGraphInterpreter.aroundReceive(ActorGraphInterpreter.scala:690)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:573)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:543)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:269)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:230)
+	at akka.dispatch.Mailbox.exec(Mailbox.scala:242)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:183)
+2024-02-12 00:16:08,301 [INFO] from play.core.server.AkkaHttpServer in play-dev-mode-shutdown-hook-1 - Stopping Akka HTTP server...
+2024-02-12 00:16:08,305 [INFO] from play.core.server.AkkaHttpServer in play-dev-mode-akka.actor.internal-dispatcher-2 - Terminating server binding for /0:0:0:0:0:0:0:0:9000
+2024-02-12 00:16:08,328 [INFO] from play.core.server.AkkaHttpServer in play-dev-mode-akka.actor.internal-dispatcher-38 - Running provided shutdown stop hooks
