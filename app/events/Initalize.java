@@ -9,7 +9,6 @@ import demo.Loaders_2024_Check;
 import structures.Game;
 import structures.GameState;
 import structures.basic.Tile;
-import structures.Board;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.UnitSummonTest;
@@ -36,8 +35,11 @@ public class Initalize implements EventProcessor{
 		gameState.something = true;
 		//Game currentGame = new Game();
 		
+<<<<<<< HEAD
 		Game.createBoard(out);
 		
+=======
+>>>>>>> main
 		// User 1 makes a change
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 		//Loaders_2024_Check.test(out);
