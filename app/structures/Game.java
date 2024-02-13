@@ -2,6 +2,7 @@ package structures;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import structures.Board;
 import structures.basic.Card;
 import structures.basic.Player;
 import structures.basic.Tile;
@@ -19,7 +20,9 @@ public class Game {
 		
 	}
 	
-	
+	public static void createBoard(ActorRef out) {
+		Board board = new Board(out);
+	}
 	
 	//STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
 	
