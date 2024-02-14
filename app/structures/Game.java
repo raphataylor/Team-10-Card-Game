@@ -13,7 +13,7 @@ import utils.OrderedCardLoader;
 //game logic will be stored here - contemplating just using GameState and making this whole concept redundant 
 public class Game {
 	
-	
+	private static Board board;
 	
 	
 	public Game() {
@@ -21,7 +21,7 @@ public class Game {
 	}
 	
 	public static void createBoard(ActorRef out) {
-		Board board = new Board(out);
+		board = new Board(out);
 	}
 	
 	//STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
@@ -29,6 +29,7 @@ public class Game {
 	//when the player selects a card this method is called - essentially has a highlight and dehighlight system in place 
 	public static void selectCard(ActorRef out, GameState gameState, int handPosition) {
 		if (!gameState.cardSelected) {
+			//creating a bandaid for now
 			BasicCommands.drawCard(out, GameState.player1.getPlayerHandCard(handPosition), handPosition, 1);
 			gameState.currentCardSelected = handPosition;
 			gameState.cardSelected = true;
@@ -46,13 +47,15 @@ public class Game {
 		}
 	}
 	
+	//work on later to handle non unit situations
+	//DO NOT ATTEMPT TO SUMMON A SPELL OR USE ONE - NOT IMPLEMENTED AND WILL CAUSE CRASH
 	public static void summonUnit(ActorRef out, GameState gameState, int x, int y) {
 		Card cardToPlayer = GameState.player1.getPlayerHandCard(gameState.currentCardSelected);
 		String cardJSONReference = cardToPlayer.getUnitConfig();
 		//make unit id static public attribute - where to track this? gameState again? is this the right place? 
 		
 		//example tile but needs the board class with populated tiles to work with this 
-		Tile tileSelected = BasicObjectBuilders.loadTile(3, 3);
+		Tile tileSelected = board.getTile(x, y);
 		
 		Unit unitTest = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
 		unitTest.setPositionByTile(tileSelected);
@@ -65,6 +68,9 @@ public class Game {
 		
 		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
 		BasicCommands.deleteCard(out, gameState.currentCardSelected);
+		
+		gameState.cardSelected = false;
+		gameState.currentCardSelected = -1;
 	}
 	
 

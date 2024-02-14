@@ -9,6 +9,8 @@ import akka.actor.ActorRef;
 //stores tiles
 public class Board {
 	private Tile[][] tiles;
+	private int rows = 9;
+	private int columns = 5;
 	
 	public Board(ActorRef out) {
 		tiles = createTiles();
@@ -16,9 +18,9 @@ public class Board {
 	}
 	
 	public Tile[][] createTiles() {
-		Tile[][] tiles = new Tile[9][5];
-		for(int i=0;i<9;i++) {
-			for(int j=0;j<5;j++) {
+		Tile[][] tiles = new Tile[rows][columns];
+		for(int i=0;i<rows;i++) {
+			for(int j=0;j<columns;j++) {
 				tiles[i][j] = BasicObjectBuilders.loadTile(i,j);
 			}
 		}
@@ -26,11 +28,17 @@ public class Board {
 	}
 	
 	public void drawBoard(ActorRef out, Tile[][] tiles) {
-		for(int i=0;i<9;i++) {
-			for(int j=0;j<5;j++) {
+		for(int i=0;i<rows;i++) {
+			for(int j=0;j<columns;j++) {
+				//multi thread this to prevent buffer overflow
 				BasicCommands.drawTile(out, tiles[i][j], 0);
 			}
 		}
+	}
+	
+	public Tile getTile(int x, int y) {
+		//double check x and y are in the right order
+		return tiles[x][y];
 	}
 	
 }

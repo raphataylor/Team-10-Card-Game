@@ -36,6 +36,8 @@ public class Player {
 	}
 	
 	public void removeCardFromHand(int handPosition) {
+		//test bandaid
+		playerHand.add(new Card());
 		playerHand.remove(handPosition);
 	}
 	
