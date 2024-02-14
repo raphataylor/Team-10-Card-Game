@@ -42,3 +42,4 @@ target/streams/_global/webReporter/
 .settings/
 logs/
 Get-ChildItem
+null/Coursier/cache/v1/https
