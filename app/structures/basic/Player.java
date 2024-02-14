@@ -48,9 +48,16 @@ public class Player {
 		}
 		for (int i = 0; i < cardsToDraw; i++) {
 			Card card = playerDeck.get(0);
-			BasicCommands.drawCard(out, card, 0, 0);
+			BasicCommands.drawCard(out, card, playerHand.size(), 0);
 			setPlayerHandCard(playerHand.size(), card);
 			removeCardFromDeck(0);
+		}
+
+	}
+
+	public void drawInitialHand(ActorRef out) {
+		if (!this.playerDeck.isEmpty()) {
+			this.drawCard(out, 3);
 		}
 	}
 

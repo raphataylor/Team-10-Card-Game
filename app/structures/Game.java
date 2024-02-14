@@ -23,6 +23,7 @@ public class Game {
 
 	public static void createPlayerDeck(ActorRef out, GameState gameState) {
 		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
+		gameState.player1.drawInitialHand(out);
 	}
 
 	// STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
