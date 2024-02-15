@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 2024-02-14 17:16:54,760 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-6 - Slf4jLogger started
 2024-02-14 17:16:54,918 [INFO] from org.hibernate.validator.internal.util.Version in play-dev-mode-akka.actor.default-dispatcher-8 - HV000001: Hibernate Validator 6.1.0.Final
 2024-02-14 17:16:55,035 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-8 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+=======
+2024-02-14 18:48:01,221 [INFO] from akka.event.slf4j.Slf4jLogger in application-akka.actor.default-dispatcher-4 - Slf4jLogger started
+2024-02-14 18:48:01,376 [INFO] from org.hibernate.validator.internal.util.Version in play-dev-mode-akka.actor.default-dispatcher-8 - HV000001: Hibernate Validator 6.1.0.Final
+2024-02-14 18:48:01,579 [INFO] from play.api.http.EnabledFilters in play-dev-mode-akka.actor.default-dispatcher-8 - Enabled Filters (see <https://www.playframework.com/documentation/latest/Filters>):
+>>>>>>> main
 
     play.filters.csrf.CSRFFilter
     play.filters.headers.SecurityHeadersFilter
     play.filters.hosts.AllowedHostsFilter
     play.filters.csrf.CSRFFilter
 
+<<<<<<< HEAD
 2024-02-14 17:16:55,039 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-8 - Application started (Dev) (no global state)
 2024-02-14 17:17:36,059 [ERROR] from akka.stream.impl.ActorRefSource in application-akka.actor.default-dispatcher-11 - Failing because buffer is full and overflowStrategy is: [Fail] in stream [actorRefSource]
 2024-02-14 17:17:36,063 [ERROR] from play.core.server.common.WebSocketFlowHandler in play-dev-mode-akka.actor.default-dispatcher-9 - WebSocket flow threw exception
@@ -243,3 +250,6 @@ akka.stream.BufferOverflowException: Buffer overflow (max capacity was: 16)!
 
 2024-02-14 17:41:45,938 [INFO] from play.api.Play in play-dev-mode-akka.actor.internal-dispatcher-24 - Application started (Dev) (no global state)
 2024-02-14 17:41:45,945 [INFO] from play.core.server.AkkaHttpServer in play-dev-mode-akka.actor.internal-dispatcher-12 - Running provided shutdown stop hooks
+=======
+2024-02-14 18:48:01,587 [INFO] from play.api.Play in play-dev-mode-akka.actor.default-dispatcher-8 - Application started (Dev) (no global state)
+>>>>>>> main

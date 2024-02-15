@@ -14,19 +14,24 @@ import utils.OrderedCardLoader;
 public class Game {
 	
 	private static Board board;
-	
-	
+
 	public Game() {
-		
+
 	}
-	
+
 	public static void createBoard(ActorRef out) {
 		board = new Board(out);
 	}
-	
-	//STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
-	
-	//when the player selects a card this method is called - essentially has a highlight and dehighlight system in place 
+
+	public static void createPlayerDeck(ActorRef out, GameState gameState) {
+		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
+		gameState.player1.drawInitialHand(out);
+	}
+
+	// STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
+
+	// when the player selects a card this method is called - essentially has a
+	// highlight and dehighlight system in place
 	public static void selectCard(ActorRef out, GameState gameState, int handPosition) {
 		if (!gameState.cardSelected) {
 			//creating a bandaid for now
@@ -35,15 +40,15 @@ public class Game {
 			gameState.cardSelected = true;
 			System.out.println("current selected card: " + String.valueOf(gameState.currentCardSelected));
 		}
-		
+
 		else {
 			Card currentSelectedCard = GameState.player1.getPlayerHandCard(gameState.currentCardSelected);
 			System.out.println("current selected card: " + String.valueOf(gameState.currentCardSelected));
 			BasicCommands.drawCard(out, currentSelectedCard, gameState.currentCardSelected, 0);
 			BasicCommands.drawCard(out, GameState.player1.getPlayerHandCard(handPosition), handPosition, 1);
 			gameState.currentCardSelected = handPosition;
-			gameState.cardSelected = true;		
-	
+			gameState.cardSelected = true;
+
 		}
 	}
 	
@@ -59,21 +64,23 @@ public class Game {
 		
 		Unit unitTest = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
 		unitTest.setPositionByTile(tileSelected);
-		
+
 		BasicCommands.drawUnit(out, unitTest, tileSelected);
-		//a delay is required from drawing to setting attack/hp or else it will not work
-		try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+		// a delay is required from drawing to setting attack/hp or else it will not
+		// work
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		BasicCommands.setUnitAttack(out, unitTest, 1);
 		BasicCommands.setUnitHealth(out, unitTest, 2);
-		
+
 		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
 		BasicCommands.deleteCard(out, gameState.currentCardSelected);
 		
 		gameState.cardSelected = false;
 		gameState.currentCardSelected = -1;
 	}
-	
-
-	
 
 }
