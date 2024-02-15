@@ -32,6 +32,7 @@ public class Board {
 			for(int j=0;j<columns;j++) {
 				//multi thread this to prevent buffer overflow
 				BasicCommands.drawTile(out, tiles[i][j], 0);
+				try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();} 
 			}
 		}
 	}
