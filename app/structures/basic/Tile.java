@@ -27,6 +27,7 @@ public class Tile {
 	int height;
 	int tilex;
 	int tiley;
+	Unit unit;
 	
 	public Tile() {}
 	
@@ -93,6 +94,14 @@ public class Tile {
 	}
 	public void setTiley(int tiley) {
 		this.tiley = tiley;
+	}
+	
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+	
+	public Unit getUnit() {
+		return this.unit;
 	}
 	
 	/**
