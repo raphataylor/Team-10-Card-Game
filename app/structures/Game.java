@@ -62,10 +62,11 @@ public class Game {
 		//example tile but needs the board class with populated tiles to work with this 
 		Tile tileSelected = board.getTile(x, y);
 		
-		Unit unitTest = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
-		unitTest.setPositionByTile(tileSelected);
+		Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
+		unitSummon.setPositionByTile(tileSelected);
+		tileSelected.setUnit(unitSummon);
 
-		BasicCommands.drawUnit(out, unitTest, tileSelected);
+		BasicCommands.drawUnit(out, unitSummon, tileSelected);
 		// a delay is required from drawing to setting attack/hp or else it will not
 		// work
 		try {
@@ -73,8 +74,10 @@ public class Game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		BasicCommands.setUnitAttack(out, unitTest, 1);
-		BasicCommands.setUnitHealth(out, unitTest, 2);
+		
+		//now grabs health and attack values from the card for drawing
+		BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
+		BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
 
 		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
 		BasicCommands.deleteCard(out, gameState.currentCardSelected);
