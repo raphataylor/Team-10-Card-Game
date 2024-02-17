@@ -91,6 +91,8 @@ public class Player {
 	}
 
 	public Card getPlayerHandCard(int handPosition) {
+		// handPosition returning -1 has been crashing the game
+		System.out.println(handPosition);
 		return this.playerHand.get(handPosition);
 	}
 

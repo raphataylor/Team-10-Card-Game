@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.ActorRef;
 import structures.Game;
 import structures.GameState;
+import structures.basic.Tile;
 import utils.UnitSummonTest;
 
 /**
@@ -29,6 +30,8 @@ public class TileClicked implements EventProcessor{
 
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
+		Tile clickedTile = Game.getBoard().getTile(tilex, tiley);
+		Tile[][] tiles = Game.getBoard().getTiles();
 		
 		if (gameState.something == true) {
 			// do some logic
@@ -38,7 +41,17 @@ public class TileClicked implements EventProcessor{
 		//UnitSummonTest.summonUnit(out, gameState, tilex, tiley);
 		
 		//the new method for summoning a unit - does not consider potential move or anything like that yet - be prepared to adjust to funnel to correct method
-		Game.summonUnit(out, gameState, tilex, tiley);
+		if(gameState.cardSelected) {
+			Game.summonUnit(out, gameState, tilex, tiley);	
+		}
+		
+		//If a human unit is clicked, display potential movement tiles
+		//need to add filter to exclude AI units
+		if(clickedTile.getUnit() != null) {
+			Game.showValidMovement(out, tiles, clickedTile, 2);
+		}
+		
+		
 		
 		
 	}

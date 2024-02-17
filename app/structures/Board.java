@@ -3,6 +3,10 @@ package structures;
 import commands.BasicCommands;
 import utils.BasicObjectBuilders;
 import structures.basic.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import akka.actor.ActorRef;
 
 
@@ -15,6 +19,7 @@ public class Board {
 	public Board(ActorRef out) {
 		tiles = createTiles();
 		drawBoard(out, tiles);
+		highlightedTiles = new ArrayList<>();
 	}
 	
 	public Tile[][] createTiles() {
@@ -41,5 +46,10 @@ public class Board {
 		//double check x and y are in the right order
 		return tiles[x][y];
 	}
+	
+	public Tile[][] getTiles(){
+		return this.tiles;
+	}
+
 	
 }
