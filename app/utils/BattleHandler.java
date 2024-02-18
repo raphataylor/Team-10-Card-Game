@@ -10,7 +10,7 @@ import structures.basic.UnitAnimationType;
 
 public class BattleHandler {
 	
-	public static void attackUnit(ActorRef out, Unit attacker, Unit defender) {
+	public static void attackUnit(ActorRef out, Unit attacker, Unit defender, GameState gameState) {
 		
 
 		System.out.println("defender: " + String.valueOf(defender.getPosition()));
@@ -23,7 +23,7 @@ public class BattleHandler {
 		int defenderPostCombatHealth = defender.getHealth() - attacker.getAttack();
 		
 		//the basicCommands only seem to effecting the latest drawn unit but the units being referenced are correct
-		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
+		BasicCommands.setUnitHealth(out, gameState.previousSelectedTile.getUnit(), defenderPostCombatHealth);
 		BasicCommands.playUnitAnimation(out, attacker, UnitAnimationType.attack);
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		

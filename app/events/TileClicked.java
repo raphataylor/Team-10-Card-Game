@@ -59,7 +59,7 @@ public class TileClicked implements EventProcessor{
 		//need to find a way to check if unit occupies square (.getunit() gives error)
 		//Game.getBoard().getPlayer2Units().contains(selectedUnit) does not work - why? 
 		if (selectedUnit != null && gameState.previousSelectedTile != null && gameState.isTileSelected && gameState.previousSelectedTile != clickedTile) {
-			BattleHandler.attackUnit(out, gameState.previousSelectedTile.getUnit(), selectedUnit);
+			BattleHandler.attackUnit(out, gameState.previousSelectedTile.getUnit(), selectedUnit, gameState);
 			gameState.previousSelectedTile = null;
 			gameState.isTileSelected = false;
 		}
