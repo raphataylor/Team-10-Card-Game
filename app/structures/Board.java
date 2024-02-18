@@ -3,6 +3,11 @@ package structures;
 import commands.BasicCommands;
 import utils.BasicObjectBuilders;
 import structures.basic.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import akka.actor.ActorRef;
 
 
@@ -12,9 +17,14 @@ public class Board {
 	private int rows = 9;
 	private int columns = 5;
 	
+    private List<Unit> player1Units;
+    private List<Unit> player2Units;
+	
 	public Board(ActorRef out) {
 		tiles = createTiles();
 		drawBoard(out, tiles);
+        player1Units = new ArrayList<>();
+        player2Units = new ArrayList<>();
 	}
 	
 	public Tile[][] createTiles() {
@@ -41,5 +51,43 @@ public class Board {
 		//double check x and y are in the right order
 		return tiles[x][y];
 	}
+	
+	public Tile[][] getTiles(){
+		return this.tiles;
+	}
+	
+	public void setPlayer1Units(List<Unit> player1Units) {
+	    this.player1Units = player1Units;
+	}
+
+	public List<Unit> getPlayer1Units() {
+	    return player1Units;
+	}
+
+	public void addPlayer1Unit(Unit unit) {
+	    player1Units.add(unit);
+	}
+
+	public void removePlayer1Unit(Unit unit) {
+	    player1Units.remove(unit);
+	}
+
+	public void setPlayer2Units(List<Unit> player2Units) {
+	    this.player2Units = player2Units;
+	}
+
+	public List<Unit> getPlayer2Units() {
+	    return player2Units;
+	}
+
+	public void addPlayer2Unit(Unit unit) {
+	    player2Units.add(unit);
+	}
+
+	public void removePlayer2Unit(Unit unit) {
+	    player2Units.remove(unit);
+	}
+
+
 	
 }

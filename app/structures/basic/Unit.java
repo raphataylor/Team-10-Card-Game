@@ -26,6 +26,9 @@ public class Unit {
 	UnitAnimationSet animations;
 	ImageCorrection correction;
 	
+	protected boolean hasMoved = false;
+	protected boolean hasAttacked = false;
+	
 	public Unit() {}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction) {
@@ -96,6 +99,16 @@ public class Unit {
 	public void setAnimations(UnitAnimationSet animations) {
 		this.animations = animations;
 	}
+	
+	public void setHasMoved(boolean hasMoved) {
+	    this.hasMoved = hasMoved;
+	}
+	
+	public boolean getHasMoved() {
+	    return this.hasMoved;
+	}
+
+
 	
 	/**
 	 * This command sets the position of the Unit to a specified
