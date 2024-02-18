@@ -14,7 +14,7 @@ import structures.basic.Unit;
 public class GameState {
 
 	
-	public boolean gameInitalised = false;
+	public static boolean gameInitalised = false;
 	
 	public boolean something = false;
 	
@@ -23,6 +23,9 @@ public class GameState {
 	
 	//tracks the unit on tile
 	public Tile unitCurrentTile = null;
+	
+	//tracks the turn of the game
+	public static int turn = 0;
 
 	//tracks the current tile the unit was on, before the movement
     public Unit currentSelectedUnit = null;
@@ -33,6 +36,9 @@ public class GameState {
 	//keeping track of the state of the game statically here as required - maybe move over to game class however this really can be static as its the only instance of its kind
 	public static Player player1 = new Player();
 	public static Player player2 = new Player();
+	
+	public static Player currentPlayer = player1;
+
 	
 	
 }

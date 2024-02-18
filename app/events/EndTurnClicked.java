@@ -25,6 +25,24 @@ public class EndTurnClicked implements EventProcessor {
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
+		
+		if(gameState.currentPlayer == gameState.player1) {
+			
+			Game.resetMana(out, gameState);
+			gameState.currentPlayer = gameState.player2;
+			
+			Game.setManaOnStartTurn(out, gameState);
+			
+		}else {
+			//for testing AI player
+			
+			//code logic for AI player end turn will be placed here 
+			//Game.resetMana(out, gameState);
+			//gameState.currentPlayer = gameState.player1;
+			//Game.setManaOnStartTurn(out, gameState);
+			
+		}
+
 		gameState.player1.drawCardAtTurnEnd(out);
 		
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
