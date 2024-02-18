@@ -23,7 +23,7 @@ public class BattleHandler {
 		int defenderPostCombatHealth = defender.getHealth() - attacker.getAttack();
 		
 		//the basicCommands only seem to effecting the latest drawn unit but the units being referenced are correct
-		BasicCommands.setUnitHealth(out, gameState.previousSelectedTile.getUnit(), defenderPostCombatHealth);
+		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
 		BasicCommands.playUnitAnimation(out, attacker, UnitAnimationType.attack);
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		

@@ -116,7 +116,7 @@ public class UnitSummonTest {
 		Card testCard = testcards.get(0);
 		Tile testtile = Game.getBoard().getTile(4, 4);
 		
-		Unit testunit = BasicObjectBuilders.loadUnit(testCard.getUnitConfig(), 0, Unit.class);
+		Unit testunit = BasicObjectBuilders.loadUnit(testCard.getUnitConfig(), 1, Unit.class);
 		testunit.setPositionByTile(testtile);
 		
 		Game.getBoard().addPlayer2Unit(testunit);
