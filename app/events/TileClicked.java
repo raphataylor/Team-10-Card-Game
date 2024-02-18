@@ -58,7 +58,7 @@ public class TileClicked implements EventProcessor {
 			BasicCommands.addPlayer1Notification(out, "move by clicking on tiles", 3);
 			gameState.currentSelectedUnit = tileSelected.getUnit();
 			gameState.unitCurrentTile = tileSelected;
-			
+			Game.showValidMovement(out, tiles, clickedTile, 2);
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
