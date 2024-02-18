@@ -7,6 +7,7 @@ import akka.actor.ActorRef;
 import structures.Game;
 import structures.GameState;
 import structures.basic.Tile;
+import structures.basic.Unit;
 import utils.UnitSummonTest;
 
 /**
@@ -32,6 +33,7 @@ public class TileClicked implements EventProcessor{
 		int tiley = message.get("tiley").asInt();
 		Tile clickedTile = Game.getBoard().getTile(tilex, tiley);
 		Tile[][] tiles = Game.getBoard().getTiles();
+		Unit selectedUnit = clickedTile.getUnit();
 		
 		if (gameState.something == true) {
 			// do some logic
@@ -47,7 +49,7 @@ public class TileClicked implements EventProcessor{
 		
 		//If a human unit is clicked, display potential movement tiles
 		//need to add filter to exclude AI units
-		if(clickedTile.getUnit() != null) {
+		if(selectedUnit != null && selectedUnit.getHasMoved() == false) {
 			Game.showValidMovement(out, tiles, clickedTile, 2);
 		}
 		

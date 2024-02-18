@@ -15,8 +15,8 @@ public class Game {
 	
 	private static Board board;
 
-	public Game() {
-
+	public Game(ActorRef out) {
+		createBoard(out);
 	}
 
 	public static void createBoard(ActorRef out) {
@@ -58,6 +58,7 @@ public class Game {
 	
 	//work on later to handle non unit situations
 	//DO NOT ATTEMPT TO SUMMON A SPELL OR USE ONE - NOT IMPLEMENTED AND WILL CAUSE CRASH
+	// this method only does player 1 summoning?
 	public static void summonUnit(ActorRef out, GameState gameState, int x, int y) {
 		Card cardToPlayer = GameState.player1.getPlayerHandCard(gameState.currentCardSelected);
 		String cardJSONReference = cardToPlayer.getUnitConfig();
@@ -69,8 +70,15 @@ public class Game {
 		Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
 		unitSummon.setPositionByTile(tileSelected);
 		tileSelected.setUnit(unitSummon);
+		
+		// add unit summon to player 1 unit array
+		board.addPlayer1Unit(unitSummon);
+		System.out.println(board.getPlayer1Units());
 
 		BasicCommands.drawUnit(out, unitSummon, tileSelected);
+		// stops tiles from highlighting after summon
+		unitSummon.setHasMoved(true);
+		
 		// a delay is required from drawing to setting attack/hp or else it will not
 		// work
 		try {
