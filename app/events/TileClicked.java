@@ -51,6 +51,9 @@ public class TileClicked implements EventProcessor{
 		//need to add filter to exclude AI units
 		if(selectedUnit != null && selectedUnit.getHasMoved() == false) {
 			Game.showValidMovement(out, tiles, clickedTile, 2);
+			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();} 
+			Game.getBoard().drawBoard(out, tiles);
+			
 		}
 		
 		
