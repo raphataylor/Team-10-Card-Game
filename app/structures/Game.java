@@ -87,31 +87,15 @@ public class Game {
 	}
 
 	//Sprint 1 VIS08 & VIS07
-	public static void setPlayer1Health(ActorRef out, Player player) {
-		ObjectNode message = Json.newObject(); // Create a JSON message to update player 1's health on the UI.
-		message.put("command", "UpdatePlayer1Health");
-		message.put("health", player.getHealth());
-		out.tell(message, ActorRef.noSender());
+	// Method to update and display health for both players
+	public static void updateHealthVisual(ActorRef out, Player player1, Player player2) {
+		BasicCommands.setPlayer1Health(out, player1); // Update player 1's health
+		BasicCommands.setPlayer2Health(out, player2); // Update player 2's health
 	}
 
-	public static void setPlayer1Mana(ActorRef out, Player player) {
-		ObjectNode message = Json.newObject(); // Create a JSON message to update player 1's mana on the UI.
-		message.put("command", "UpdatePlayer1Mana");
-		message.put("mana", player.getMana());
-		out.tell(message, ActorRef.noSender());
-	}
-
-	public static void setPlayer2Health(ActorRef out, Player player) {
-		ObjectNode message = Json.newObject(); // Create a JSON message to update player 2's health on the UI.
-		message.put("command", "UpdatePlayer2Health");
-		message.put("health", player.getHealth());
-		out.tell(message, ActorRef.noSender());
-	}
-
-	public static void setPlayer2Mana(ActorRef out, Player player) {
-		ObjectNode message = Json.newObject(); // Create a JSON message to update player 2's mana on the UI.
-		message.put("command", "UpdatePlayer2Mana");
-		message.put("mana", player.getMana());
-		out.tell(message, ActorRef.noSender());
+	// Method to update and display mana for both players
+	public static void updateManaVisual(ActorRef out, Player player1, Player player2) {
+		BasicCommands.setPlayer1Mana(out, player1); // Update player 1's mana
+		BasicCommands.setPlayer2Mana(out, player2); // Update player 2's mana
 	}
 }
