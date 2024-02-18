@@ -10,9 +10,6 @@ import structures.basic.Unit;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 
 //game logic will be stored here - contemplating just using GameState and making this whole concept redundant 
 public class Game {

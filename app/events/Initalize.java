@@ -37,10 +37,7 @@ public class Initalize implements EventProcessor {
 
 		gameState.something = true;
 		// Game currentGame = new Game();
-		
-		//gameState.player1 = new Player();
-		//gameState.player2 = new Player();
-		
+				
 		gameState.turn = 1; 
 
 		Game.createBoard(out);

@@ -36,7 +36,7 @@ public class EndTurnClicked implements EventProcessor {
 		}else {
 			//for testing AI player
 			
-			//code logic for AI player end turn will be placed here 
+			//code logic for AI player end turn will be placed her 
 			//Game.resetMana(out, gameState);
 			//gameState.currentPlayer = gameState.player1;
 			//Game.setManaOnStartTurn(out, gameState);
