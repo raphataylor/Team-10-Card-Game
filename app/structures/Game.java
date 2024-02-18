@@ -9,6 +9,9 @@ import structures.basic.Tile;
 import structures.basic.Unit;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
+import com.fasterxml.jackson.databind.node.ObjectNode; //VIS08 & VIS07
+import play.libs.Json; //VIS08 & VIS07
+
 
 //game logic will be stored here - contemplating just using GameState and making this whole concept redundant 
 public class Game {
@@ -83,4 +86,32 @@ public class Game {
 		gameState.currentCardSelected = -1;
 	}
 
+	//Sprint 1 VIS08 & VIS07
+	public static void setPlayer1Health(ActorRef out, Player player) {
+		ObjectNode message = Json.newObject(); // Create a JSON message to update player 1's health on the UI.
+		message.put("command", "UpdatePlayer1Health");
+		message.put("health", player.getHealth());
+		out.tell(message, ActorRef.noSender());
+	}
+
+	public static void setPlayer1Mana(ActorRef out, Player player) {
+		ObjectNode message = Json.newObject(); // Create a JSON message to update player 1's mana on the UI.
+		message.put("command", "UpdatePlayer1Mana");
+		message.put("mana", player.getMana());
+		out.tell(message, ActorRef.noSender());
+	}
+
+	public static void setPlayer2Health(ActorRef out, Player player) {
+		ObjectNode message = Json.newObject(); // Create a JSON message to update player 2's health on the UI.
+		message.put("command", "UpdatePlayer2Health");
+		message.put("health", player.getHealth());
+		out.tell(message, ActorRef.noSender());
+	}
+
+	public static void setPlayer2Mana(ActorRef out, Player player) {
+		ObjectNode message = Json.newObject(); // Create a JSON message to update player 2's mana on the UI.
+		message.put("command", "UpdatePlayer2Mana");
+		message.put("mana", player.getMana());
+		out.tell(message, ActorRef.noSender());
+	}
 }

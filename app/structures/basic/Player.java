@@ -105,6 +105,19 @@ public class Player {
 		this.playerDeck = list;
 	}
 
-	//comment added
+	//Sprint 1 VIS08 & VIS07
+	//Methods to update health and mana and reflect these changes in the UI.
+
+	public void updateHealth(ActorRef out, int newHealth) {
+		this.health = Math.max(newHealth, 0); // Ensure health does not go below 0.
+		BasicCommands.setPlayer1Health(out, this); // Update the player's health on the UI. 
+		BasicCommands.setPlayer2Health(out, this);
+	}
+
+	public void updateMana(ActorRef out, int newMana) {
+		this.mana = Math.max(newMana, 0); // Ensure mana does not go below 0.
+		BasicCommands.setPlayer1Mana(out, this); // Update the player's Mana on the UI. 
+		BasicCommands.setPlayer2Mana(out, this);
+	}
 
 }
