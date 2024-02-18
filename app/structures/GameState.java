@@ -1,6 +1,8 @@
 package structures;
 
 import structures.basic.Player;
+import structures.basic.Tile;
+import structures.basic.Unit;
 
 /**
  * This class can be used to hold information about the on-going game.
@@ -19,6 +21,12 @@ public class GameState {
 	//tracks if a player has a card current selected 
 	public boolean cardSelected = false;
 	
+	//tracks the unit on tile
+	public Tile unitCurrentTile = null;
+
+	//tracks the current tile the unit was on, before the movement
+    public Unit currentSelectedUnit = null;
+
 	//tracks which card is being highlighted - if -1 then no card is currently highlighted 
 	public int currentCardSelected = -1;
 	
