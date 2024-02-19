@@ -120,10 +120,6 @@ public class Tile {
 		this.hasUnit = unit == null ? false : true;
 	}
 
-	public boolean hasUnit() {
-		return this.hasUnit;
-	}
-
 	public Unit getUnit() {
 		return this.unit;
 	}
