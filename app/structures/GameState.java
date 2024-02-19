@@ -41,10 +41,6 @@ public class GameState {
 	//used for keeping track of if a tile has been selected and if so then which one
 	public Tile previousSelectedTile = null;
 	public boolean isTileSelected = false;
-
-	public Unit currentSelectedUnit;
-
-	public Tile unitCurrentTile;
 	
 	public static Player currentPlayer = player1;
 
