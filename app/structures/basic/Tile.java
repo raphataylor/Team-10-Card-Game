@@ -122,6 +122,14 @@ public class Tile {
 		return null;
 		
 	}
+
+	public boolean hasUnit() {
+		if (this.unit != null) {
+			return true;
+		}
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 	
