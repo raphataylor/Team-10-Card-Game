@@ -14,6 +14,9 @@ import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.UnitSummonTest;
 
+import structures.basic.Player;
+
+
 /**
  * Indicates that both the core game loop in the browser is starting, meaning
  * that it is ready to recieve commands from the back-end.
@@ -35,10 +38,11 @@ public class Initalize implements EventProcessor {
 
 		gameState.something = true;
 		// Game currentGame = new Game();
-		gameState.player1 = new Player();
-		gameState.player1 = new Player();
+				
+		gameState.turn = 1; 
 
 		Game.createBoard(out);
+		Game.setManaOnStartTurn(out, gameState);
 		Game.createPlayerDeck(out, gameState);
 
 		// User 1 makes a change

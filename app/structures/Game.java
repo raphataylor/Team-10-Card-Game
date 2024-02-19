@@ -10,6 +10,7 @@ import structures.basic.Unit;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 
+
 //game logic will be stored here - contemplating just using GameState and making this whole concept redundant 
 public class Game {
 	
@@ -31,6 +32,45 @@ public class Game {
 		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
 		gameState.player1.drawInitialHand(out);
 	}
+	
+	public static void setManaOnStartTurn(ActorRef out, GameState gameState) {
+	        			
+		if(gameState.gameInitalised) {
+														
+			gameState.currentPlayer.setMana(gameState.turn+1);	
+				
+			if(gameState.currentPlayer == gameState.player1) {
+				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
+			}else {
+				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
+			}
+
+		}
+		
+	}
+	
+	public static void resetMana(ActorRef out, GameState gameState) {
+		
+		try {
+		
+			Thread.sleep(300);
+			gameState.currentPlayer.setMana(0);
+			
+			if(gameState.currentPlayer == gameState.player1) {
+				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
+			}else {
+				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
+				gameState.turn += 1;
+								
+			}
+			
+		
+		} catch (InterruptedException e) {e.printStackTrace();}
+		
+		
+	}
+
+
 
 	// STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
 

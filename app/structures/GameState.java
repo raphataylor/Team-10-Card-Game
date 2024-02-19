@@ -15,13 +15,22 @@ import structures.basic.Unit;
 public class GameState {
 
 	
-	public boolean gameInitalised = false;
+	public static boolean gameInitalised = false;
 	
 	public boolean something = false;
 	
 	//tracks if a player has a card current selected 
 	public boolean cardSelected = false;
 	
+	//tracks the unit on tile
+	public Tile unitCurrentTile = null;
+	
+	//tracks the turn of the game
+	public static int turn = 0;
+
+	//tracks the current tile the unit was on, before the movement
+    public Unit currentSelectedUnit = null;
+
 	//tracks which card is being highlighted - if -1 then no card is currently highlighted 
 	public int currentCardSelected = -1;
 	
@@ -36,6 +45,9 @@ public class GameState {
 	public Unit currentSelectedUnit;
 
 	public Tile unitCurrentTile;
+	
+	public static Player currentPlayer = player1;
+
 	
 	
 }
