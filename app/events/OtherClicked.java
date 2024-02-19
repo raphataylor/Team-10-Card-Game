@@ -20,7 +20,9 @@ public class OtherClicked implements EventProcessor{
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		
+		//prevents any potential issues by resetting tile selection state
+		gameState.previousSelectedTile = null;
+		gameState.isTileSelected = false;
 		
 	}
 

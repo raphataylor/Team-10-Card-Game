@@ -49,7 +49,11 @@ public class EndTurnClicked implements EventProcessor {
 		
 		for (Unit unit : player1Units) {
 		    unit.setHasMoved(false);
+		    unit.setHasAttacked(false);
 		}
+		
+		gameState.previousSelectedTile = null;
+		gameState.isTileSelected = false;
 
 		
 	}

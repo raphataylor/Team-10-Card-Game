@@ -8,6 +8,7 @@ import demo.CommandDemo;
 import demo.Loaders_2024_Check;
 import structures.Game;
 import structures.GameState;
+import structures.basic.Player;
 import structures.basic.Tile;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
@@ -51,6 +52,8 @@ public class Initalize implements EventProcessor {
 
 		// replace this with the initialisation method from the game class
 		// UnitSummonTest.givePlayerCard(out);
+		
+		UnitSummonTest.summonEnemyUnitTest(out);
 	}
 
 }

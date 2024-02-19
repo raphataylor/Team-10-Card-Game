@@ -122,14 +122,23 @@ public class Game {
 		// a delay is required from drawing to setting attack/hp or else it will not
 		// work
 		try {
-			Thread.sleep(10);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
+		
+		int healthVal = cardToPlayer.getHealth();
+		int attackVal = cardToPlayer.getAttack();
+		
+		
+		unitSummon.setHealth(healthVal);
+		unitSummon.setAttack(attackVal);
+		
 		//now grabs health and attack values from the card for drawing
-		BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
 		BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
+		BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
+		
 
 		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
 		BasicCommands.deleteCard(out, gameState.currentCardSelected);
