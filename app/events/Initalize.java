@@ -8,10 +8,14 @@ import demo.CommandDemo;
 import demo.Loaders_2024_Check;
 import structures.Game;
 import structures.GameState;
+import structures.basic.Player;
 import structures.basic.Tile;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.UnitSummonTest;
+
+import structures.basic.Player;
+
 
 /**
  * Indicates that both the core game loop in the browser is starting, meaning
@@ -34,8 +38,11 @@ public class Initalize implements EventProcessor {
 
 		gameState.something = true;
 		// Game currentGame = new Game();
+				
+		gameState.turn = 1; 
 
 		Game.createBoard(out);
+		Game.setManaOnStartTurn(out, gameState);
 		Game.createPlayerDeck(out, gameState);
 
 		// User 1 makes a change
@@ -45,6 +52,8 @@ public class Initalize implements EventProcessor {
 
 		// replace this with the initialisation method from the game class
 		// UnitSummonTest.givePlayerCard(out);
+		
+		UnitSummonTest.summonEnemyUnitTest(out);
 	}
 
 }

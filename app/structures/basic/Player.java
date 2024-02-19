@@ -20,6 +20,7 @@ public class Player {
 	int mana;
 
 	// Holds the current players Cards in a hand
+	//CHANGE HAND TO ARRAY AND TEST LATER
 	List<Card> playerHand = new ArrayList<Card>(6);
 
 	List<Card> playerDeck = new ArrayList<Card>(20);
@@ -90,6 +91,8 @@ public class Player {
 	}
 
 	public Card getPlayerHandCard(int handPosition) {
+		// handPosition returning -1 has been crashing the game
+		System.out.println(handPosition);
 		return this.playerHand.get(handPosition);
 	}
 

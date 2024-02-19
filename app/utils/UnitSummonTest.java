@@ -4,6 +4,8 @@ import java.util.List;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import structures.Board;
+import structures.Game;
 import structures.GameState;
 import structures.basic.Card;
 import structures.basic.Player;
@@ -17,6 +19,8 @@ public class UnitSummonTest {
 	static Tile tile = BasicObjectBuilders.loadTile(3, 2);
 	static Tile tile2 = BasicObjectBuilders.loadTile(3, 3);
 	static Tile tile3 = BasicObjectBuilders.loadTile(3, 4);
+	
+	
 	
 	public static void givePlayerCard(ActorRef out) {
 		
@@ -106,5 +110,34 @@ public class UnitSummonTest {
 		BasicCommands.setUnitAttack(out, unitTest, 1);
 		BasicCommands.setUnitHealth(out, unitTest, 2);
 	}
+	
+	public static void summonEnemyUnitTest(ActorRef out) {
+		List<Card> testcards = OrderedCardLoader.getPlayer2Cards(1);
+		Card testCard = testcards.get(0);
+		Tile testtile = Game.getBoard().getTile(4, 4);
+		
+		Unit testunit = BasicObjectBuilders.loadUnit(testCard.getUnitConfig(), 1, Unit.class);
+		testunit.setPositionByTile(testtile);
+		
+		Game.getBoard().addPlayer2Unit(testunit);
+		BasicCommands.drawUnit(out, testunit, testtile);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		//now grabs health and attack values from the card for drawing
+		BasicCommands.setUnitAttack(out, testunit, testCard.getAttack());
+		BasicCommands.setUnitHealth(out, testunit, testCard.getHealth());
+		
+		testunit.setAttack(testCard.getAttack());
+		testunit.setHealth(testCard.getHealth());
+		
+		testtile.setUnit(testunit);
+
+	}
+	
+
 
 }

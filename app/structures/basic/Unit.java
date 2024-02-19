@@ -26,6 +26,13 @@ public class Unit {
 	UnitAnimationSet animations;
 	ImageCorrection correction;
 	
+	protected boolean hasMoved = false;
+	protected boolean hasAttacked = false;
+	
+	//attributes required for combat
+	int health;
+	int attack;
+	
 	public Unit() {}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction) {
@@ -96,6 +103,42 @@ public class Unit {
 	public void setAnimations(UnitAnimationSet animations) {
 		this.animations = animations;
 	}
+	
+	public void setHasMoved(boolean hasMoved) {
+	    this.hasMoved = hasMoved;
+	}
+	
+	public boolean getHasMoved() {
+	    return this.hasMoved;
+	}
+	
+	public void setHasAttacked(boolean hasAttacked) {
+		this.hasAttacked = hasAttacked;
+	}
+	
+	public boolean getHasAttacked() {
+		return this.hasAttacked;
+	}
+	
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
+	public int getHealth() {
+		return this.health;
+	}
+	
+	public void setAttack(int attack) {
+		this.attack = attack;
+	}
+	
+	public int getAttack() {
+		return this.attack;
+	}
+	
+
+
+
 	
 	/**
 	 * This command sets the position of the Unit to a specified

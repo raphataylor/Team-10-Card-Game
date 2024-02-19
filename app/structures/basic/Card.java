@@ -34,6 +34,7 @@ public class Card {
 		this.bigCard = bigCard;
 		this.isCreature = isCreature;
 		this.unitConfig = unitConfig;
+		
 	}
 	
 	public int getId() {
@@ -83,6 +84,16 @@ public class Card {
 	}
 	public void setUnitConfig(String unitConfig) {
 		this.unitConfig = unitConfig;
+	}
+	
+	//gets attack and health from big card
+	
+	public int getAttack() {
+		return bigCard.attack;
+	}
+	
+	public int getHealth() {
+		return bigCard.health;
 	}
 
 	
