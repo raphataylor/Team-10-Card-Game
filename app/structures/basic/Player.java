@@ -107,5 +107,4 @@ public class Player {
 	public void setPlayerDeck(List<Card> list) {
 		this.playerDeck = list;
 	}
-
 }
