@@ -47,13 +47,7 @@ public class Initalize implements EventProcessor {
 		gameState.player2 = new Player();
 		gameState.currentPlayer = player1;
 		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("begin");
+
 		
 		Game.createBoard(out);
 		Game.setManaOnStartTurn(out, gameState);
