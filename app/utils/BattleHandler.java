@@ -7,6 +7,7 @@ import structures.GameState;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
+import structures.units.DeathAbilityUnit;
 
 public class BattleHandler {
 	
@@ -44,6 +45,8 @@ public class BattleHandler {
 			//1500 seems like an initial good time from animation to delete but experiment to find most
 			//appropriate
 			try {Thread.sleep(1500);} catch (InterruptedException e) {e.printStackTrace();}
+			unitDeathwatchAbilityCheck(out);
+			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.deleteUnit(out, defender);
 		}
 		attacker.setHasAttacked(true);
@@ -59,12 +62,21 @@ public class BattleHandler {
 		if (defenderPostCombatHealth <= 0 ) {
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			try {Thread.sleep(1500);} catch (InterruptedException e) {e.printStackTrace();}
+			unitDeathwatchAbilityCheck(out);
+			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.deleteUnit(out, defender);
 		}
 		else {
 			defender.setHealth(defenderPostCombatHealth);
 		}
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
+	
+	//will now loop over all units on the board
+	public static void unitDeathwatchAbilityCheck(ActorRef out) {
+		//logic for checking if it has death ability or not 
+		
 	}
 
 }

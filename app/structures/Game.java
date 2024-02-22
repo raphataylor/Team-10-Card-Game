@@ -128,12 +128,15 @@ public class Game {
 		}
 		
 		
+		//consider building upon existing constructor in Unit class when time permits to strengthen and create a safer class with invariants!
 		int healthVal = cardToPlayer.getHealth();
 		int attackVal = cardToPlayer.getAttack();
 		
-		
 		unitSummon.setHealth(healthVal);
 		unitSummon.setAttack(attackVal);
+		
+		String name = cardToPlayer.getCardname();
+		unitSummon.setName(name);
 		
 		//now grabs health and attack values from the card for drawing
 		BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
