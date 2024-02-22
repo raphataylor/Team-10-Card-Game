@@ -40,7 +40,21 @@ public class Initalize implements EventProcessor {
 		// Game currentGame = new Game();
 				
 		gameState.turn = 1; 
-
+		
+		//This is required for the mana system code to run successfully 
+		Player player1 = new Player();
+		gameState.player1 = player1;
+		gameState.player2 = new Player();
+		gameState.currentPlayer = player1;
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("begin");
+		
 		Game.createBoard(out);
 		Game.setManaOnStartTurn(out, gameState);
 		Game.createPlayerDeck(out, gameState);
