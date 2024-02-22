@@ -10,9 +10,10 @@ import structures.basic.UnitAnimationType;
 
 public class BattleHandler {
 	
+	//WHEN AI IS IMPLEMENTED PLEASE PLEASE DO A CHECK ON IF IT IS THE RIGHT PLAYERS TURN AND 
+	//ENSURE FRIENDLY FIRE IS FIXED!!!!
 	public static void attackUnit(ActorRef out, Unit attacker, Unit defender, GameState gameState) {
-		
-
+		//debugging code to ensure positions and values are intended 
 		System.out.println("defender: " + String.valueOf(defender.getPosition()));
 		System.out.println(String.valueOf(defender.getAttack()));
 		System.out.println(String.valueOf(defender.getHealth()));
@@ -35,17 +36,35 @@ public class BattleHandler {
 
 		
 		if (defenderPostCombatHealth > 0) {
-			//counterattack logic goes here
+			counterAttack(out, defender, attacker);
+			defender.setHealth(defenderPostCombatHealth);
 		}
 		else {
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
-			try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-			//BasicCommands.deleteUnit(out, defendingUnit);
+			//1500 seems like an initial good time from animation to delete but experiment to find most
+			//appropriate
+			try {Thread.sleep(1500);} catch (InterruptedException e) {e.printStackTrace();}
+			BasicCommands.deleteUnit(out, defender);
 		}
-		
 		attacker.setHasAttacked(true);
+	}
+	
+	public static void counterAttack(ActorRef out, Unit counterAttacker, Unit defender) {
+		int defenderPostCombatHealth = defender.getHealth() - counterAttacker.getAttack();
+		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
+		BasicCommands.playUnitAnimation(out, counterAttacker, UnitAnimationType.attack);
 		
+		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		
+		if (defenderPostCombatHealth <= 0 ) {
+			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
+			try {Thread.sleep(1500);} catch (InterruptedException e) {e.printStackTrace();}
+			BasicCommands.deleteUnit(out, defender);
+		}
+		else {
+			defender.setHealth(defenderPostCombatHealth);
+		}
+		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
 }

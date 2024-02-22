@@ -15,7 +15,7 @@ import structures.basic.Unit;
 public class GameState {
 
 	
-	public static boolean gameInitalised = false;
+	public boolean gameInitalised = false;
 	
 	public boolean something = false;
 	
