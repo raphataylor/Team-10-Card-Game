@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.List;
+
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.Game;
@@ -7,6 +9,8 @@ import structures.GameState;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
+import structures.units.DeathAbilityUnit;
+import structures.units.DeathwatchAbilityUnit;
 
 public class BattleHandler {
 	
@@ -20,10 +24,12 @@ public class BattleHandler {
 		System.out.println("attacker: " + String.valueOf(attacker.getPosition()));
 		System.out.println(String.valueOf(attacker.getAttack()));
 		System.out.println(String.valueOf(attacker.getHealth()));
-	
+		System.out.println(defender.getName() + " is defending");
+		System.out.println(attacker.getName() + " is attacking");
 		int defenderPostCombatHealth = defender.getHealth() - attacker.getAttack();
 		
 		//the basicCommands only seem to effecting the latest drawn unit but the units being referenced are correct
+		System.out.println(attacker.getName() + " is playing the attack animation");
 		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
 		BasicCommands.playUnitAnimation(out, attacker, UnitAnimationType.attack);
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
@@ -39,11 +45,14 @@ public class BattleHandler {
 			counterAttack(out, defender, attacker);
 			defender.setHealth(defenderPostCombatHealth);
 		}
+		
 		else {
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			//1500 seems like an initial good time from animation to delete but experiment to find most
 			//appropriate
 			try {Thread.sleep(1500);} catch (InterruptedException e) {e.printStackTrace();}
+			unitDeathwatchAbilityCheck(out);
+			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.deleteUnit(out, defender);
 		}
 		attacker.setHasAttacked(true);
@@ -59,12 +68,32 @@ public class BattleHandler {
 		if (defenderPostCombatHealth <= 0 ) {
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			try {Thread.sleep(1500);} catch (InterruptedException e) {e.printStackTrace();}
+			unitDeathwatchAbilityCheck(out);
+			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.deleteUnit(out, defender);
 		}
 		else {
 			defender.setHealth(defenderPostCombatHealth);
 		}
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
+	
+	//will now loop over all units on the board
+	public static void unitDeathwatchAbilityCheck(ActorRef out) {
+		System.out.println("checking for deathwatch ability");
+		//logic for checking if it has death ability or not 
+		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
+		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
+		
+		for (int i = 0; i < player1Units.size(); i++) {
+			Unit unit = player1Units.get(i);
+			if (unit instanceof DeathwatchAbilityUnit) {
+				System.out.println(unit.getName() + " is a deathwatch unit and its ability will go off");
+				((DeathwatchAbilityUnit) unit).deathwatchAbility(out);
+			}
+		}
+		
 	}
 
 }

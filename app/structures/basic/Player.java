@@ -18,6 +18,7 @@ public class Player {
 
 	int health;
 	int mana;
+	Unit avatar;
 
 	// Holds the current players Cards in a hand
 	//CHANGE HAND TO ARRAY AND TEST LATER
@@ -25,10 +26,11 @@ public class Player {
 
 	List<Card> playerDeck = new ArrayList<Card>(20);
 
-	public Player() {
+	public Player(Unit avatar) {
 		super();
 		this.health = 20;
 		this.mana = 0;
+		this.avatar = avatar;
 	}
 
 	public Player(int health, int mana) {
@@ -107,5 +109,10 @@ public class Player {
 	public void setPlayerDeck(List<Card> list) {
 		this.playerDeck = list;
 	}
+	
+	public Unit getAvatar() {
+		return this.avatar;
+	}
+	
 
 }

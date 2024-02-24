@@ -7,8 +7,11 @@ import structures.basic.Card;
 import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.units.Avatar;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
+import utils.StaticConfFiles;
+import utils.SubUnitCreator;
 
 
 //game logic will be stored here - contemplating just using GameState and making this whole concept redundant 
@@ -107,7 +110,9 @@ public class Game {
 		//example tile but needs the board class with populated tiles to work with this 
 		Tile tileSelected = board.getTile(x, y);
 		
-		Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
+		//Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
+		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference);
+		
 		unitSummon.setPositionByTile(tileSelected);
 		tileSelected.setUnit(unitSummon);
 		
@@ -128,12 +133,15 @@ public class Game {
 		}
 		
 		
+		//consider building upon existing constructor in Unit class when time permits to strengthen and create a safer class with invariants!
 		int healthVal = cardToPlayer.getHealth();
 		int attackVal = cardToPlayer.getAttack();
 		
-		
 		unitSummon.setHealth(healthVal);
 		unitSummon.setAttack(attackVal);
+		
+		String name = cardToPlayer.getCardname();
+		unitSummon.setName(name);
 		
 		//now grabs health and attack values from the card for drawing
 		BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
@@ -145,6 +153,58 @@ public class Game {
 		
 		gameState.cardSelected = false;
 		gameState.currentCardSelected = -1;
+	}
+	
+	//requires the correct coordinates for tile locations for both avatars
+	public static Unit[] avatarSummonSetup(ActorRef out, int x, int y, int x2, int y2) {
+		//stores an array of the two units
+		Unit[] avatars = new Unit[2];
+		Unit humanAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Avatar.class);
+		Tile humanAvatarStartTile = board.getTile(2, 2);
+		humanAvatar.setPositionByTile(humanAvatarStartTile);
+		humanAvatarStartTile.setUnit(humanAvatar);
+		BasicCommands.drawUnit(out, humanAvatar, humanAvatarStartTile);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		humanAvatar.setAttack(0);
+		humanAvatar.setHealth(20);
+		
+		BasicCommands.setPlayer1Health(out, GameState.player1);
+		BasicCommands.setUnitHealth(out, humanAvatar, 20);
+		BasicCommands.setUnitAttack(out, humanAvatar, 0);
+		avatars[0] = humanAvatar;
+		//not sure if this is appropriate but its required for effect checking "technically" 
+		board.addPlayer1Unit(humanAvatar);
+		
+		Unit aiAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Avatar.class);
+		Tile aiAvatarStartTile = board.getTile(6, 2);
+		aiAvatarStartTile.setUnit(aiAvatar);
+		aiAvatar.setPositionByTile(aiAvatarStartTile);
+		BasicCommands.drawUnit(out, aiAvatar, aiAvatarStartTile);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		aiAvatar.setAttack(0);
+		aiAvatar.setHealth(20);
+		
+		BasicCommands.setPlayer2Health(out, GameState.player2);
+		BasicCommands.setUnitHealth(out, aiAvatar, 20);
+		BasicCommands.setUnitAttack(out, aiAvatar, 0);
+		avatars[1] = aiAvatar;
+		//not sure if this is appropriate but its required for effect checking "technically" 
+		board.addPlayer2Unit(aiAvatar);
+		
+		return avatars;
+		
+		
+		
 	}
 	
 	

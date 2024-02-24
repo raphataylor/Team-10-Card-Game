@@ -10,6 +10,7 @@ import structures.Game;
 import structures.GameState;
 import structures.basic.Player;
 import structures.basic.Tile;
+import structures.basic.Unit;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.UnitSummonTest;
@@ -41,18 +42,22 @@ public class Initalize implements EventProcessor {
 				
 		gameState.turn = 1; 
 		
+		Game.createBoard(out);
+		
+		
+		//to add correct coordinates when identified 
+		Unit[] avatars = Game.avatarSummonSetup(out, 0, 0, 0, 0);
+		
 		//This is required for the mana system code to run successfully 
-		Player player1 = new Player();
+		Player player1 = new Player(avatars[0]);
 		gameState.player1 = player1;
-		gameState.player2 = new Player();
+		gameState.player2 = new Player(avatars[1]);
 		gameState.currentPlayer = player1;
 		
+		Game.createPlayerDeck(out, gameState);
+		Game.setManaOnStartTurn(out, gameState);
 
 		
-		Game.createBoard(out);
-		Game.setManaOnStartTurn(out, gameState);
-		Game.createPlayerDeck(out, gameState);
-
 		// User 1 makes a change
 		// CommandDemo.executeDemo(out); // this executes the command demo, comment out
 		// this when implementing your solution
@@ -62,6 +67,7 @@ public class Initalize implements EventProcessor {
 		// UnitSummonTest.givePlayerCard(out);
 		
 		UnitSummonTest.summonEnemyUnitTest(out);
+		UnitSummonTest.deathwatcherUnitTest(out);
 	}
 
 }

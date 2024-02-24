@@ -28,7 +28,7 @@ import utils.UnitSummonTest;
  * @author Dr. Richard McCreadie
  *
  */
-public class TileClicked implements EventProcessor {
+public class TileClicked implements EventProcessor{
 
     @Override
     public void processEvent(ActorRef out, GameState gameState, JsonNode message) {

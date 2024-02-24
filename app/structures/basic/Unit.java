@@ -33,6 +33,10 @@ public class Unit {
 	int health;
 	int attack;
 	
+	//checks if the unit has an ability 
+	private boolean hasAbility = false;
+	private String name;
+	
 	public Unit() {}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction) {
@@ -136,6 +140,13 @@ public class Unit {
 		return this.attack;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
 
 
 
