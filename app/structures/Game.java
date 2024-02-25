@@ -5,6 +5,7 @@ import commands.BasicCommands;
 import structures.Board;
 import structures.basic.Card;
 import structures.basic.Player;
+import structures.basic.Position;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.units.Avatar;
@@ -114,15 +115,17 @@ public class Game {
 
 		// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
 		// Unit.class);
-		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference);
-		if (unitSummon instanceof DeathwatchAbilityUnit) {
-			System.out.println(unitSummon.getHealth() + " is a deathwatch unit and its ability will go off");
-			((DeathwatchAbilityUnit) unitSummon).deathwatchAbility(out);
-		} else if (unitSummon instanceof OpeningGambitAbilityUnit) {
-			((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out, x, y, gameState, unitSummon);
-		}
+		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference, x, y);
+		// unitSummon.setPosition(new Position(0, 0, x, y));
+		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tileSelected);
 		tileSelected.setUnit(unitSummon);
+		if (unitSummon instanceof DeathwatchAbilityUnit) {
+			System.out.println(unitSummon.getName() + " is a deathwatch unit and its ability will go off");
+			((DeathwatchAbilityUnit) unitSummon).deathwatchAbility(out);
+		} else if (unitSummon instanceof OpeningGambitAbilityUnit) {
+			((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
+		}
 
 		// add unit summon to player 1 unit array
 		board.addPlayer1Unit(unitSummon);

@@ -15,11 +15,6 @@ public class ShadowWatcher extends Unit implements DeathwatchAbilityUnit {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		BasicCommands.setUnitHealth(out, this, this.getHealth());
 		try {
 			Thread.sleep(1000);

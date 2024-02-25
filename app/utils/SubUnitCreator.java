@@ -29,7 +29,7 @@ public class SubUnitCreator {
 	// aims to identify unit if it has an ability. Will return null if the unit has
 	// no ability
 	// currently
-	public static Unit identifyUnitTypeAndSummon(String unitName, String jsonConfig) {
+	public static Unit identifyUnitTypeAndSummon(String unitName, String jsonConfig, int x, int y) {
 		if (unitMap.containsKey(unitName)) {
 			Class<? extends Unit> classType = unitMap.get(unitName);
 			return BasicObjectBuilders.loadUnit(jsonConfig, 0, classType);

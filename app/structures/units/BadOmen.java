@@ -14,6 +14,7 @@ public class BadOmen extends Unit implements DeathwatchAbilityUnit {
 
 	@Override
 	public void deathwatchAbility(ActorRef out) {
+		System.out.println("TILE: " + this.getPosition().getTilex() + "," + this.getPosition().getTiley());
 		this.setAttack(getAttack() + 1);
 		try {
 			Thread.sleep(1000);

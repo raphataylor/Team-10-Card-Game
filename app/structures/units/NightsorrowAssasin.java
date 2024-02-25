@@ -7,18 +7,19 @@ import structures.basic.UnitAnimationType;
 import structures.Board;
 import structures.Game;
 import structures.GameState;
+import structures.basic.Position;
 import structures.basic.Tile;
 
 public class NightsorrowAssasin extends Unit implements OpeningGambitAbilityUnit {
 
-    public void openingGambitAbility(ActorRef out, int tilex, int tiley, GameState gameState,
-            Unit summonedUnit) {
+    public void openingGambitAbility(ActorRef out) {
         Tile[][] board = Game.getBoard().getTiles();
-
+        Position unitPosition = this.getPosition();
+        int tilex = unitPosition.getTilex();
+        int tiley = unitPosition.getTiley();
         Unit clickedUnit = Game.getBoard().getTile(tilex, tiley).getUnit();
         int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
         int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
-        int unitHealth = summonedUnit.getHealth();
         // Iterate over adjacent tiles
         for (int i = 0; i < 8; i++) {
             int x = tilex + dx[i];
@@ -28,7 +29,7 @@ public class NightsorrowAssasin extends Unit implements OpeningGambitAbilityUnit
             if (x >= 0 && x < board.length && y >= 0 && y < board[0].length) {
                 // Check if there's an AI unit on this tile with health less that player's unit
                 Unit adjacentUnit = board[x][y].getUnit();
-                if (adjacentUnit != null && adjacentUnit.getHealth() < summonedUnit.getHealth()) {
+                if (adjacentUnit != null && adjacentUnit.getHealth() < this.getHealth()) {
                     adjacentUnit.setHealth(0);
                     System.out.println("DEATH ANIMATION");
                     board[x][y].setUnit(null);
