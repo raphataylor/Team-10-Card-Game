@@ -116,7 +116,6 @@ public class Game {
 		// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
 		// Unit.class);
 		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference, x, y);
-		// unitSummon.setPosition(new Position(0, 0, x, y));
 		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tileSelected);
 		tileSelected.setUnit(unitSummon);
