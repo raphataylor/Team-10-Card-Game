@@ -1,5 +1,7 @@
 package structures.units;
 
+import java.util.List;
+
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.basic.Unit;
@@ -18,6 +20,8 @@ public class NightsorrowAssasin extends Unit implements OpeningGambitAbilityUnit
         int tilex = unitPosition.getTilex();
         int tiley = unitPosition.getTiley();
         Unit clickedUnit = Game.getBoard().getTile(tilex, tiley).getUnit();
+        List<Unit> player2Units = Game.getBoard().getPlayer2Units();
+
         int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
         int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
         // Iterate over adjacent tiles
@@ -29,7 +33,8 @@ public class NightsorrowAssasin extends Unit implements OpeningGambitAbilityUnit
             if (x >= 0 && x < board.length && y >= 0 && y < board[0].length) {
                 // Check if there's an AI unit on this tile with health less that player's unit
                 Unit adjacentUnit = board[x][y].getUnit();
-                if (adjacentUnit != null && adjacentUnit.getHealth() < this.getHealth()) {
+                if (adjacentUnit != null && player2Units.contains(adjacentUnit)
+                        && adjacentUnit.getHealth() < this.getHealth()) {
                     adjacentUnit.setHealth(0);
                     System.out.println("DEATH ANIMATION");
                     board[x][y].setUnit(null);

@@ -17,8 +17,17 @@ public class BloodmoonPriestess extends Unit implements DeathwatchAbilityUnit {
 		// summon wraithling logic will come with spell i hope
 		Tile[][] board = Game.getBoard().getTiles();
 		Position unitPosition = this.getPosition();
-
-		int[][] shuffledArray = BattleHandler.shuffleArray();
+		int[][] array = { // array for obtaining tiles around and adjecent to the unit tile
+				{ -1, -1 },
+				{ -1, 0 },
+				{ -1, 1 },
+				{ 0, -1 },
+				{ 0, 1 },
+				{ 1, -1 },
+				{ 1, 0 },
+				{ 1, 1 },
+		};
+		int[][] shuffledArray = BattleHandler.shuffleArray(array);
 		for (int i = 0; i < shuffledArray.length; i++) {
 			int x = unitPosition.getTilex() + shuffledArray[i][0];
 			int y = unitPosition.getTiley() + shuffledArray[i][1];

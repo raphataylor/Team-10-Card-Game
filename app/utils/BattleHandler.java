@@ -126,28 +126,16 @@ public class BattleHandler {
 
 	}
 
-	public static int[][] shuffleArray() {
-		int[][] array = {
-				{ -1, -1 },
-				{ -1, 0 },
-				{ -1, 1 },
-				{ 0, -1 },
-				{ 0, 1 },
-				{ 1, -1 },
-				{ 1, 0 },
-				{ 1, 1 },
-		};
+	public static int[][] shuffleArray(int[][] array) {
 		Random random = new Random();
 
 		// Shuffle the array
 		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[i].length; j++) {
-				int randomIndex1 = random.nextInt(array.length);
-				int randomIndex2 = random.nextInt(array[0].length);
-				int temp = array[i][j];
-				array[i][j] = array[randomIndex1][randomIndex2];
-				array[randomIndex1][randomIndex2] = temp;
-			}
+			// Swap with a random row
+			int randomIndex = random.nextInt(array.length);
+			int[] temp = array[i];
+			array[i] = array[randomIndex];
+			array[randomIndex] = temp;
 		}
 		return array;
 	}

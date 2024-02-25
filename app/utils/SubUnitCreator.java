@@ -10,6 +10,7 @@ import structures.units.BloodmoonPriestess;
 import structures.units.GloomChaser;
 import structures.units.ShadowWatcher;
 import structures.units.Shadowdancer;
+import structures.units.SilverguardSquire;
 import structures.units.NightsorrowAssasin;
 
 public class SubUnitCreator {
@@ -22,6 +23,7 @@ public class SubUnitCreator {
 			put("Shadow Watcher", ShadowWatcher.class);
 			put("Nightsorrow Assassin", NightsorrowAssasin.class);
 			put("Gloom Chaser", GloomChaser.class);
+			put("Silverguard Squire", SilverguardSquire.class);
 
 		}
 	};

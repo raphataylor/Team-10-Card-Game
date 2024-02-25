@@ -84,6 +84,7 @@ public class TileClicked implements EventProcessor {
 			gameState.unitCurrentTile.setUnit(null); // remove unit reference from previous tile before moving to new
 			// tile
 			gameState.currentSelectedUnit.setPositionByTile(tileSelected);
+			tileSelected.setUnit(gameState.currentSelectedUnit);
 			BasicCommands.addPlayer1Notification(out, "moveUnitToTile", 3);
 			BasicCommands.moveUnitToTile(out, gameState.currentSelectedUnit, tileSelected);
 			try {
