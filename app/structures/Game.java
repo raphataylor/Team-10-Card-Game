@@ -208,21 +208,31 @@ public class Game {
 	}
 	
 	
-	public static void showValidMovement(ActorRef out, Tile[][] board, Tile tile, int distance) {
+	public static void showValidMovement(ActorRef out, Tile[][] grid, Tile tile, int distance) {
 		
 		int X = tile.getTilex();
 		int Y = tile.getTiley();
 		Unit clickedUnit = tile.getUnit();
 		
 	    // Iterate over the board to find tiles within the specified distance.
-	    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, board.length - 1); x++) {
-	        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, board[0].length - 1); y++) {
+	    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
+	        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
+	        	Tile checkedTile = Game.getBoard().getTile(x, y);
+	            System.out.println(checkedTile);
 	            // Calculate the Manhattan distance to the unit.
 	            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
 	            if (manhattanDistance <= distance) {
 	                // Highlight this tile.
-					BasicCommands.drawTile(out, board[x][y], 1);
-					try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+	            	if(!checkedTile.hasUnit()) {
+						BasicCommands.drawTile(out, grid[x][y], 1);
+						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+	            	}
+                    Unit unitOnTile = checkedTile.getUnit();
+                    // Check if the unit belongs to player 2
+                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
+                    	BasicCommands.drawTile(out, grid[x][y], 2);
+						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+                    }
 	            }
 	        }
 	    }
