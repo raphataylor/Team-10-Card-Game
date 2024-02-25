@@ -5,18 +5,21 @@ import commands.BasicCommands;
 import structures.Board;
 import structures.basic.Card;
 import structures.basic.Player;
+import structures.basic.Position;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.units.Avatar;
+import structures.units.DeathwatchAbilityUnit;
+import structures.units.NightsorrowAssasin;
+import structures.units.OpeningGambitAbilityUnit;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
 import utils.SubUnitCreator;
 
-
 //game logic will be stored here - contemplating just using GameState and making this whole concept redundant 
 public class Game {
-	
+
 	private static Board board;
 
 	public Game(ActorRef out) {
@@ -26,7 +29,7 @@ public class Game {
 	public static void createBoard(ActorRef out) {
 		board = new Board(out);
 	}
-	
+
 	public static Board getBoard() {
 		return board;
 	}
@@ -35,45 +38,43 @@ public class Game {
 		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
 		gameState.player1.drawInitialHand(out);
 	}
-	
+
 	public static void setManaOnStartTurn(ActorRef out, GameState gameState) {
-	        			
-		if(gameState.gameInitalised) {
-														
-			gameState.currentPlayer.setMana(gameState.turn+1);	
-				
-			if(gameState.currentPlayer == gameState.player1) {
+
+		if (gameState.gameInitalised) {
+
+			gameState.currentPlayer.setMana(gameState.turn + 1);
+
+			if (gameState.currentPlayer == gameState.player1) {
 				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
-			}else {
+			} else {
 				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
 			}
 
 		}
-		
+
 	}
-	
+
 	public static void resetMana(ActorRef out, GameState gameState) {
-		
+
 		try {
-		
+
 			Thread.sleep(300);
 			gameState.currentPlayer.setMana(0);
-			
-			if(gameState.currentPlayer == gameState.player1) {
+
+			if (gameState.currentPlayer == gameState.player1) {
 				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
-			}else {
+			} else {
 				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
 				gameState.turn += 1;
-								
+
 			}
-			
-		
-		} catch (InterruptedException e) {e.printStackTrace();}
-		
-		
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
-
-
 
 	// STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
 
@@ -81,7 +82,7 @@ public class Game {
 	// highlight and dehighlight system in place
 	public static void selectCard(ActorRef out, GameState gameState, int handPosition) {
 		if (!gameState.cardSelected) {
-			//creating a bandaid for now
+			// creating a bandaid for now
 			BasicCommands.drawCard(out, GameState.player1.getPlayerHandCard(handPosition), handPosition, 1);
 			gameState.currentCardSelected = handPosition;
 			gameState.cardSelected = true;
@@ -98,32 +99,41 @@ public class Game {
 
 		}
 	}
-	
-	//work on later to handle non unit situations
-	//DO NOT ATTEMPT TO SUMMON A SPELL OR USE ONE - NOT IMPLEMENTED AND WILL CAUSE CRASH
+
+	// work on later to handle non unit situations
+	// DO NOT ATTEMPT TO SUMMON A SPELL OR USE ONE - NOT IMPLEMENTED AND WILL CAUSE
+	// CRASH
 	// this method only does player 1 summoning?
 	public static void summonUnit(ActorRef out, GameState gameState, int x, int y) {
 		Card cardToPlayer = GameState.player1.getPlayerHandCard(gameState.currentCardSelected);
 		String cardJSONReference = cardToPlayer.getUnitConfig();
-		//make unit id static public attribute - where to track this? gameState again? is this the right place? 
-		
-		//example tile but needs the board class with populated tiles to work with this 
+		// make unit id static public attribute - where to track this? gameState again?
+		// is this the right place?
+
+		// example tile but needs the board class with populated tiles to work with this
 		Tile tileSelected = board.getTile(x, y);
-		
-		//Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0, Unit.class);
-		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference);
-		
+
+		// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
+		// Unit.class);
+		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference, x, y);
+		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tileSelected);
 		tileSelected.setUnit(unitSummon);
-		
+		if (unitSummon instanceof DeathwatchAbilityUnit) {
+			System.out.println(unitSummon.getName() + " is a deathwatch unit and its ability will go off");
+			((DeathwatchAbilityUnit) unitSummon).deathwatchAbility(out);
+		} else if (unitSummon instanceof OpeningGambitAbilityUnit) {
+			((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
+		}
+
 		// add unit summon to player 1 unit array
 		board.addPlayer1Unit(unitSummon);
-		System.out.println(board.getPlayer1Units());
+		// System.out.println(board.getPlayer1Units());
 
 		BasicCommands.drawUnit(out, unitSummon, tileSelected);
 		// stops tiles from highlighting after summon
 		unitSummon.setHasMoved(true);
-		
+
 		// a delay is required from drawing to setting attack/hp or else it will not
 		// work
 		try {
@@ -131,33 +141,32 @@ public class Game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		//consider building upon existing constructor in Unit class when time permits to strengthen and create a safer class with invariants!
+
+		// consider building upon existing constructor in Unit class when time permits
+		// to strengthen and create a safer class with invariants!
 		int healthVal = cardToPlayer.getHealth();
 		int attackVal = cardToPlayer.getAttack();
-		
+
 		unitSummon.setHealth(healthVal);
 		unitSummon.setAttack(attackVal);
-		
+
 		String name = cardToPlayer.getCardname();
 		unitSummon.setName(name);
-		
-		//now grabs health and attack values from the card for drawing
+
+		// now grabs health and attack values from the card for drawing
 		BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
 		BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
-		
 
 		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
 		BasicCommands.deleteCard(out, gameState.currentCardSelected);
-		
+
 		gameState.cardSelected = false;
 		gameState.currentCardSelected = -1;
 	}
-	
-	//requires the correct coordinates for tile locations for both avatars
+
+	// requires the correct coordinates for tile locations for both avatars
 	public static Unit[] avatarSummonSetup(ActorRef out, int x, int y, int x2, int y2) {
-		//stores an array of the two units
+		// stores an array of the two units
 		Unit[] avatars = new Unit[2];
 		Unit humanAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Avatar.class);
 		Tile humanAvatarStartTile = board.getTile(2, 2);
@@ -169,17 +178,18 @@ public class Game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		humanAvatar.setAttack(0);
 		humanAvatar.setHealth(20);
-		
+
 		BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setUnitHealth(out, humanAvatar, 20);
 		BasicCommands.setUnitAttack(out, humanAvatar, 0);
 		avatars[0] = humanAvatar;
-		//not sure if this is appropriate but its required for effect checking "technically" 
+		// not sure if this is appropriate but its required for effect checking
+		// "technically"
 		board.addPlayer1Unit(humanAvatar);
-		
+
 		Unit aiAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Avatar.class);
 		Tile aiAvatarStartTile = board.getTile(6, 2);
 		aiAvatarStartTile.setUnit(aiAvatar);
@@ -190,21 +200,20 @@ public class Game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		aiAvatar.setAttack(0);
 		aiAvatar.setHealth(20);
-		
+
 		BasicCommands.setPlayer2Health(out, GameState.player2);
 		BasicCommands.setUnitHealth(out, aiAvatar, 20);
 		BasicCommands.setUnitAttack(out, aiAvatar, 0);
 		avatars[1] = aiAvatar;
-		//not sure if this is appropriate but its required for effect checking "technically" 
+		// not sure if this is appropriate but its required for effect checking
+		// "technically"
 		board.addPlayer2Unit(aiAvatar);
-		
+
 		return avatars;
-		
-		
-		
+
 	}
 	
 	
@@ -238,7 +247,7 @@ public class Game {
 	    }
 	}
 
-	//Sprint 1 VIS08 & VIS07
+	// Sprint 1 VIS08 & VIS07
 	// Method to update and display health for both players
 	public static void updateHealthVisual(ActorRef out, Player player1, Player player2) {
 		BasicCommands.setPlayer1Health(out, player1); // Update player 1's health
