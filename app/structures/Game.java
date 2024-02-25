@@ -247,7 +247,7 @@ public class Game {
 	    }
 	}
 
-	// Sprint 1 VIS08 & VIS07
+	// Sprint 1 [VIS08] & [VIS07]
 	// Method to update and display health for both players
 	public static void updateHealthVisual(ActorRef out, Player player1, Player player2) {
 		BasicCommands.setPlayer1Health(out, player1); // Update player 1's health
@@ -259,4 +259,45 @@ public class Game {
 		BasicCommands.setPlayer1Mana(out, player1); // Update player 1's mana
 		BasicCommands.setPlayer2Mana(out, player2); // Update player 2's mana
 	}
+
+	//Sprint 2 [SPELL01]
+	// This method handles the casting of spells by the player
+	public static void castSpell(ActorRef out, GameState gameState, int x, int y) {		
+
+		// Retrieve the selected card from the player's hand
+		Card cardToCast = gameState.player1.getPlayerHandCard(gameState.currentCardSelected); 
+		
+		// Retrieve the targeted tile from the board
+		Tile tileSelected = board.getTile(x, y); 
+		
+		// Check if the selected card is indeed a spell and the player has enough mana
+		if (!cardToCast.isCreature() && gameState.player1.getMana() >= cardToCast.getManacost()) {
+			
+			// Implement spell effects based on the type of spell
+			applySpellEffect(out, gameState, tileSelected, cardToCast);
+
+			// Deduct the mana cost of the spell from the player's mana pool
+			gameState.player1.setMana(gameState.player1.getMana() - cardToCast.getManacost());
+			BasicCommands.setPlayer1Mana(out, gameState.player1);
+
+			// Remove the spell card from the player's hand
+			gameState.player1.removeCardFromHand(gameState.currentCardSelected);
+			BasicCommands.deleteCard(out, gameState.currentCardSelected);
+
+			// Reset selected card state in the game state
+			gameState.cardSelected = false;
+			gameState.currentCardSelected = -1;
+
+			// Add a notification to indicate the spell has been successfully cast
+			BasicCommands.addPlayer1Notification(out, "Casted " + cardToCast.getCardname(), 2);
+		} else {
+			// If the card is not a spell or not enough mana, notify the player
+			BasicCommands.addPlayer1Notification(out, "Cannot cast " + cardToCast.getCardname(), 2);
+		}
+	}
+
+	// This method would contain the logic for applying the effects of the spell
+	private static void applySpellEffect(ActorRef out, GameState gameState, Tile tile, Card spellCard) {
+	}
+
 }
