@@ -31,13 +31,6 @@ public class SilverguardSquire extends Unit implements OpeningGambitAbilityUnit 
             int x = unitPosition.getTilex() + shuffledArray[i][0];
             int y = unitPosition.getTiley() + shuffledArray[i][1];
             Tile adjacentTile = board[x][y];
-            BasicCommands.drawTile(out, board[x][y], 1);
-            System.out.println("adsfdf:  " + adjacentTile.hasUnit());
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             // condition to find allied units
             if (adjacentTile.hasUnit() && player1Units.contains(adjacentTile.getUnit())) {
                 Unit adjacentUnit = adjacentTile.getUnit();
