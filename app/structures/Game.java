@@ -259,5 +259,18 @@ public class Game {
 		BasicCommands.setPlayer1Mana(out, player1); // Update player 1's mana
 		BasicCommands.setPlayer2Mana(out, player2); // Update player 2's mana
 	}
+	
+	/* method to update the attack of an unit or avatar summoned on the board
+	
+	* to be modified when dependent features will get implemented like cast spells/AI summoned units
+	*/
+	public static void gainAttack(ActorRef out, Unit unit) {
+		BasicCommands.setUnitAttack(out, unit, 2); //assigning the value 2, the unit identification and depending on it the value of attack would vary
+	}
+	
+	// method to update the health of an unit or avatar summoned on the board
+	public static void gainHealthUnit(ActorRef out, Unit unit) {
+		BasicCommands.setUnitHealth(out, unit, 2);	//assigning the value 2, the unit identification and depending on it the value of attack would vary
+	}
 
 }
