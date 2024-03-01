@@ -6,6 +6,7 @@ import java.util.List;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.GameState;
+import utils.OrderedCardLoader;
 
 /**
  * A basic representation of of the Player. A player
@@ -21,7 +22,7 @@ public class Player {
 	Unit avatar;
 
 	// Holds the current players Cards in a hand
-	//CHANGE HAND TO ARRAY AND TEST LATER
+	// CHANGE HAND TO ARRAY AND TEST LATER
 	List<Card> playerHand = new ArrayList<Card>(6);
 
 	List<Card> playerDeck = new ArrayList<Card>(20);
@@ -40,7 +41,7 @@ public class Player {
 	}
 
 	public void removeCardFromHand(int handPosition) {
-		//test bandaid
+		// test bandaid
 		playerHand.add(new Card());
 		playerHand.remove(handPosition);
 	}
@@ -67,9 +68,12 @@ public class Player {
 	}
 
 	public void drawCardAtTurnEnd(ActorRef out) {
-		if (!this.playerDeck.isEmpty()) {
-			drawCard(out, this.playerHand.size() >= 6 ? 0 : 1);
+		if (this.playerDeck.isEmpty()) {
+			System.out.println("Card Deck Empty. Deck Reshuffled!");
+			BasicCommands.addPlayer1Notification(out, "Card Deck Empty. Deck Reshfulled", 5);
+			setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
 		}
+		drawCard(out, this.playerHand.size() >= 6 ? 0 : 1);
 	}
 
 	public void removeCardFromDeck(int handPosition) {
@@ -109,10 +113,9 @@ public class Player {
 	public void setPlayerDeck(List<Card> list) {
 		this.playerDeck = list;
 	}
-	
+
 	public Unit getAvatar() {
 		return this.avatar;
 	}
-	
 
 }
