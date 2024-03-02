@@ -47,6 +47,24 @@ public class Board {
 		}
 	}
 	
+	//returns all adjacent tiles from an incoming tile
+	public List<Tile> getAdjacentTiles(Tile middleTile){
+		
+		List<Tile> adjTiles = new ArrayList<Tile>();
+		int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        int x = middleTile.getTilex();
+        int y = middleTile.getTiley();
+        // Iterate over adjacent tiles
+        for (int i = 0; i < 8; i++) {
+            int adjx = x + dx[i];
+            int adjy = y + dy[i];
+            adjTiles.add(getTile(adjx, adjy));
+        }
+        return adjTiles;
+        
+	}
+	
 	public Tile getTile(int x, int y) {
 		//double check x and y are in the right order
 		return tiles[x][y];
