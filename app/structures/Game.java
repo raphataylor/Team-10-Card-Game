@@ -119,10 +119,8 @@ public class Game {
 		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tileSelected);
 		tileSelected.setUnit(unitSummon);
-		if (unitSummon instanceof DeathwatchAbilityUnit) {
-			System.out.println(unitSummon.getName() + " is a deathwatch unit and its ability will go off");
-			((DeathwatchAbilityUnit) unitSummon).deathwatchAbility(out);
-		} else if (unitSummon instanceof OpeningGambitAbilityUnit) {
+		
+		if (unitSummon instanceof OpeningGambitAbilityUnit) {
 			((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
 		}
 

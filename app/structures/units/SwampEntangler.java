@@ -1,5 +1,7 @@
 package structures.units;
 
-public class SwampEntangler implements ProvokeAbilityUnit{
+import structures.basic.Unit;
+
+public class SwampEntangler extends Unit implements ProvokeAbilityUnit{
 
 }

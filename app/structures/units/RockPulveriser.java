@@ -1,5 +1,7 @@
 package structures.units;
 
-public class RockPulveriser implements ProvokeAbilityUnit{
+import structures.basic.Unit;
+
+public class RockPulveriser extends Unit implements ProvokeAbilityUnit{
 
 }

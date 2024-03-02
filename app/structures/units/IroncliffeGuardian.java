@@ -1,5 +1,7 @@
 package structures.units;
 
-public class IroncliffeGuardian implements ProvokeAbilityUnit{
+import structures.basic.Unit;
+
+public class IroncliffeGuardian extends Unit implements ProvokeAbilityUnit{
 
 }
