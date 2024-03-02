@@ -37,6 +37,10 @@ public class Game {
 	public static void createPlayerDeck(ActorRef out, GameState gameState) {
 		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
 		gameState.player1.drawInitialHand(out);
+		
+		//get AI cards and draw initial cards for AI
+		gameState.player2.setPlayerDeck(OrderedCardLoader.getPlayer2Cards(1));
+		gameState.player2.drawInitialHandAI(out);
 	}
 
 	public static void setManaOnStartTurn(ActorRef out, GameState gameState) {

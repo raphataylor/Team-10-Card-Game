@@ -56,13 +56,40 @@ public class Player {
 			BasicCommands.drawCard(out, card, playerHand.size(), 0);
 			setPlayerHandCard(playerHand.size(), card);
 			removeCardFromDeck(0);
+			}
+				
 		}
-
+	
+	
+	//could be added to the AI child class extending Player -- drawCard could be made abstract class which will be derived in both Player1 and player2 class extending player class
+	public void drawAICard(ActorRef out, int cardsToDraw) {
+		if (cardsToDraw <= 0) {
+			removeCardFromDeck(0);
+			return;
+		}
+		
+		for (int i = 0; i < cardsToDraw; i++) {
+			Card card = playerDeck.get(0);
+			
+			setPlayerHandCard(playerHand.size(), card);
+			System.out.println("AI card : "+playerHand.size());
+			removeCardFromDeck(0);
+				
+		}
+		
+		
 	}
 
 	public void drawInitialHand(ActorRef out) {
 		if (!this.playerDeck.isEmpty()) {
 			this.drawCard(out, 3);
+		}
+	}
+	
+	//could be added to the AI child class extending Player
+	public void drawInitialHandAI(ActorRef out) {
+		if (!this.playerDeck.isEmpty()) {
+			this.drawAICard(out, 3);
 		}
 	}
 
