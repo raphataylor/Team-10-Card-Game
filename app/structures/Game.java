@@ -1,5 +1,7 @@
 package structures;
 
+import java.util.List;
+
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.Board;
@@ -12,6 +14,7 @@ import structures.units.Avatar;
 import structures.units.DeathwatchAbilityUnit;
 import structures.units.NightsorrowAssasin;
 import structures.units.OpeningGambitAbilityUnit;
+import structures.units.ProvokeAbilityUnit;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
@@ -123,10 +126,8 @@ public class Game {
 		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tileSelected);
 		tileSelected.setUnit(unitSummon);
-		if (unitSummon instanceof DeathwatchAbilityUnit) {
-			System.out.println(unitSummon.getName() + " is a deathwatch unit and its ability will go off");
-			((DeathwatchAbilityUnit) unitSummon).deathwatchAbility(out);
-		} else if (unitSummon instanceof OpeningGambitAbilityUnit) {
+		
+		if (unitSummon instanceof OpeningGambitAbilityUnit) {
 			((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
 		}
 
@@ -227,28 +228,49 @@ public class Game {
 		int Y = tile.getTiley();
 		Unit clickedUnit = tile.getUnit();
 		
-	    // Iterate over the board to find tiles within the specified distance.
-	    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
-	        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
-	        	Tile checkedTile = Game.getBoard().getTile(x, y);
-	            System.out.println(checkedTile);
-	            // Calculate the Manhattan distance to the unit.
-	            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
-	            if (manhattanDistance <= distance) {
-	                // Highlight this tile.
-	            	if(!checkedTile.hasUnit()) {
-						BasicCommands.drawTile(out, grid[x][y], 1);
-						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-	            	}
-                    Unit unitOnTile = checkedTile.getUnit();
-                    // Check if the unit belongs to player 2
-                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
-                    	BasicCommands.drawTile(out, grid[x][y], 2);
-						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-                    }
-	            }
-	        }
-	    }
+		//checks adjacent tiles for any units with provoke and draws red square if present
+		List<Tile> adjTiles = board.getAdjacentTiles(tile);
+		for (int i = 0; i < adjTiles.size(); i++) {
+			if (adjTiles.get(i).hasUnit()) {
+				if (adjTiles.get(i).getUnit() instanceof ProvokeAbilityUnit) {
+					BasicCommands.drawTile(out, adjTiles.get(i), 2);
+				}
+				else {
+					// Iterate over the board to find tiles within the specified distance.
+				    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
+				        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
+				        	Tile checkedTile = Game.getBoard().getTile(x, y);
+				            System.out.println(checkedTile);
+				            // Calculate the Manhattan distance to the unit.
+				            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
+				            if (manhattanDistance <= distance) {
+				                // Highlight this tile.
+				            	if(!checkedTile.hasUnit()) {
+									BasicCommands.drawTile(out, grid[x][y], 1);
+									//sets the tile to be actionable
+						            grid[x][y].setIsActionableTile(true);
+									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+				            	}
+			                    Unit unitOnTile = checkedTile.getUnit();
+			                    // Check if the unit belongs to player 2
+			                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
+			                    	BasicCommands.drawTile(out, grid[x][y], 2);
+			                    	//sets the tile to be actionable
+						            grid[x][y].setIsActionableTile(true);
+									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+			                    }
+				            }
+				            
+				        }
+				    }
+					
+					//
+				}
+			}
+		}
+		
+		
+	    
 	}
 
 	// Sprint 1 [VIS08] & [VIS07]

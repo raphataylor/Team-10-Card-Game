@@ -12,6 +12,7 @@ import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.units.DeathwatchAbilityUnit;
+import structures.units.IroncliffGuardian;
 import structures.units.Shadowdancer;
 
 public class UnitSummonTest {
@@ -143,6 +144,28 @@ public class UnitSummonTest {
 	public static void deathwatcherUnitTest(ActorRef out) {
 		Unit testunit = BasicObjectBuilders.loadUnit(StaticConfFiles.shadowdancer, 0, Shadowdancer.class);
 		Tile testtile = Game.getBoard().getTile(0, 1);
+		testunit.setPositionByTile(testtile);
+		Game.getBoard().addPlayer1Unit(testunit);
+		BasicCommands.drawUnit(out, testunit, testtile);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		//now grabs health and attack values from the card for drawing
+		BasicCommands.setUnitAttack(out, testunit, 4);
+		BasicCommands.setUnitHealth(out, testunit, 1);
+		
+		testunit.setAttack(4);
+		testunit.setHealth(1);
+		
+		testtile.setUnit(testunit);
+	}
+	
+	public static void provokeUnitTest(ActorRef out) {
+		Unit testunit = BasicObjectBuilders.loadUnit(StaticConfFiles.ironcliff_guardian, 0, IroncliffGuardian.class);
+		Tile testtile = Game.getBoard().getTile(1, 2);
 		testunit.setPositionByTile(testtile);
 		Game.getBoard().addPlayer1Unit(testunit);
 		BasicCommands.drawUnit(out, testunit, testtile);
