@@ -68,6 +68,7 @@ public class Initalize implements EventProcessor {
 		
 		UnitSummonTest.summonEnemyUnitTest(out);
 		UnitSummonTest.deathwatcherUnitTest(out);
+		UnitSummonTest.provokeUnitTest(out);
 	}
 
 }

@@ -32,6 +32,10 @@ public class Tile {
 	int tiley;
 	Unit unit;
 	private boolean hasUnit = false;
+	
+	//states if the tile can be moved to / unit on tile be attacked
+	private boolean isActionableTile = false;
+
 
 	public Tile() {
 	}
@@ -150,6 +154,14 @@ public class Tile {
 		}
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public void setIsActionableTile(boolean isActionable) {
+		this.isActionableTile = isActionable;
+	}
+	
+	public boolean getIsActionableTile() {
+		return this.isActionableTile;
 	}
 	
 	
