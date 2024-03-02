@@ -80,32 +80,38 @@ public class TileClicked implements EventProcessor {
 																					// is clicked, move the
 			// unit to that tile (valid move not implemented, for now it
 			// just moves)
-			BasicCommands.addPlayer1Notification(out, "moved", 3);
-			gameState.unitCurrentTile.setUnit(null); // remove unit reference from previous tile before moving to new
-			// tile
-			gameState.currentSelectedUnit.setPositionByTile(tileSelected);
-			tileSelected.setUnit(gameState.currentSelectedUnit);
-			BasicCommands.addPlayer1Notification(out, "moveUnitToTile", 3);
-			BasicCommands.moveUnitToTile(out, gameState.currentSelectedUnit, tileSelected);
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if (tileSelected.getIsActionableTile()) {
+				System.out.println("able to move");
+				BasicCommands.addPlayer1Notification(out, "moved", 3);
+				gameState.unitCurrentTile.setUnit(null); // remove unit reference from previous tile before moving to new
+				// tile
+				gameState.currentSelectedUnit.setPositionByTile(tileSelected);
+				tileSelected.setUnit(gameState.currentSelectedUnit);
+				BasicCommands.addPlayer1Notification(out, "moveUnitToTile", 3);
+				BasicCommands.moveUnitToTile(out, gameState.currentSelectedUnit, tileSelected);
+				try {
+					Thread.sleep(4000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+			
 			// Reset conditions after performing a move
 			gameState.currentSelectedUnit = null;
 			gameState.unitCurrentTile = null;
 			gameState.isTileSelected = false;
+			board.resetAllTiles();
 			return;
 		}
 		if (gameState.unitCurrentTile != tileSelected && gameState.isTileSelected &&
-				gameState.unitCurrentTile != null) {
+				gameState.unitCurrentTile != null && tileSelected.getIsActionableTile()) {
 			BattleHandler.attackUnit(out, gameState.currentSelectedUnit, selectedUnit, gameState);
 
 			// Reset conditions after combat
 			gameState.isTileSelected = false;
 			gameState.currentSelectedUnit = null;
 			gameState.unitCurrentTile = null;
+			board.resetAllTiles();
 		}
 
 	}
