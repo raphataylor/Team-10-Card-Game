@@ -59,7 +59,13 @@ public class Board {
         for (int i = 0; i < 8; i++) {
             int adjx = x + dx[i];
             int adjy = y + dy[i];
-            adjTiles.add(getTile(adjx, adjy));
+            if (adjx >= 9 || adjy >= 5) {
+            	continue;
+            }
+            else {
+            	adjTiles.add(getTile(adjx, adjy));
+            }
+            
         }
         return adjTiles;
         
