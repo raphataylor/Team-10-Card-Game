@@ -243,15 +243,20 @@ public class Game {
 				                // Highlight this tile.
 				            	if(!checkedTile.hasUnit()) {
 									BasicCommands.drawTile(out, grid[x][y], 1);
+									//sets the tile to be actionable
+						            grid[x][y].setIsActionableTile(true);
 									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 				            	}
 			                    Unit unitOnTile = checkedTile.getUnit();
 			                    // Check if the unit belongs to player 2
 			                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
 			                    	BasicCommands.drawTile(out, grid[x][y], 2);
+			                    	//sets the tile to be actionable
+						            grid[x][y].setIsActionableTile(true);
 									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 			                    }
 				            }
+				            
 				        }
 				    }
 					

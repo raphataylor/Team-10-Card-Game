@@ -71,6 +71,15 @@ public class Board {
         
 	}
 	
+	//makes all tiles unactionable
+	public void resetAllTiles() {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				tiles[i][j].setIsActionableTile(false);
+			}
+		}
+	}
+	
 	public Tile getTile(int x, int y) {
 		//double check x and y are in the right order
 		return tiles[x][y];
