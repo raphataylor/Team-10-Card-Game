@@ -278,7 +278,7 @@ public class Game {
 				if(checkedTile.hasUnit()) {
 					Unit unitOnTile = checkedTile.getUnit();
 					if(player2units.contains(unitOnTile)) {
-						BasicCommands.drawTile(out, tiles[i][j], 0);
+						BasicCommands.drawTile(out, tiles[i][j], 2);
 						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();} 
 					}
 				}

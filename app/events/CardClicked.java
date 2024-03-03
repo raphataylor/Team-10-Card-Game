@@ -34,7 +34,6 @@ public class CardClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		int handPosition = message.get("position").asInt();
-		Card clickedCard = GameState.player1.getHand().get(handPosition-1);
 		
 		//bens testing ground
 		//UnitSummonTest.cardClick(out, gameState, handPosition);
@@ -53,6 +52,8 @@ public class CardClicked implements EventProcessor{
 			}
 			Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
 		}
+		
+		Card clickedCard = GameState.player1.getPlayerHandCard(handPosition);
 		
 		if (false) {// replace to check if it's a dark terminus card
 			Game.showDarkTerminusHighlighing(out);
