@@ -52,7 +52,7 @@ public class Game {
 
 		if (gameState.gameInitalised) {
 
-			gameState.currentPlayer.setMana(gameState.turn + 4);
+			gameState.currentPlayer.setMana(gameState.turn + 1);
 
 			if (gameState.currentPlayer == gameState.player1) {
 				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
