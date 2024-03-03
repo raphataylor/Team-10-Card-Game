@@ -8,5 +8,4 @@ public interface Spell {
 	
 	public static void spell(ActorRef out, GameState gameState, Tile tile){
     }
- 
 }

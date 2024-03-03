@@ -235,8 +235,4 @@ public class CommandDemo {
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		Loaders_2024_Check.test(out); // moved 2024 tests in here
 		
-
-
-	}
-
 }

@@ -1,9 +1,11 @@
 package structures.spells;
  
 import akka.actor.ActorRef;
+import commands.BasicCommands;
 import structures.GameState;
 import structures.basic.Card;
 import structures.basic.Tile;
+import structures.basic.Unit;
  
 /*
 * Spell Name - BeamShock
@@ -13,8 +15,14 @@ import structures.basic.Tile;
 * */
  
 public class BeamShock extends Card implements Spell {
-	
-	public void spell(ActorRef out, GameState gameState, Tile tile){
+    public void spell(ActorRef out, GameState gameState, Tile tile){
+        // Check if there is a unit on the targeted tile
+        if (tile.hasUnit()) {
+            Unit targetUnit = tile.getUnit();
+            // Stun the unit, preventing it from moving or attacking next turn
+            targetUnit.setStunned(true);
+            // Display notification that the unit is stunned
+            BasicCommands.addPlayer1Notification(out, targetUnit.getName() + " is stunned!", 2);
+        }
     }
- 
 }
