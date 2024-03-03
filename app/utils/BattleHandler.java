@@ -55,6 +55,19 @@ public class BattleHandler {
 		}
 
 		else {
+			
+			// check for end game condition
+			if(defender.getClass() == Avatar) {
+				if(defender == gameState.player1.getAvatar()) {
+					Player player1 = gameState.player1;
+					gameOver(out, player1, gameState);
+				}
+				else {
+					Player player2 = gameState.player2;
+					gameOver(out, player2, gameState);
+				}
+			}
+			
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			// 1500 seems like an initial good time from animation to delete but experiment
 			// to find most
