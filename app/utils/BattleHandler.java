@@ -7,6 +7,7 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.Game;
 import structures.GameState;
+import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
@@ -138,6 +139,16 @@ public class BattleHandler {
 			array[randomIndex] = temp;
 		}
 		return array;
+	}
+	
+	public static void gameOver(ActorRef out, Player winner, GameState gamestate) {
+		if(winner == GameState.player1) {
+            BasicCommands.addPlayer1Notification(out, "you win", 10000);
+		}
+		else {
+            BasicCommands.addPlayer1Notification(out, "you lose", 10000);
+		}
+		GameState.gameOver = true;
 	}
 
 }
