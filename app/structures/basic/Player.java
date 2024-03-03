@@ -22,9 +22,9 @@ public class Player {
 
 	// Holds the current players Cards in a hand
 	//CHANGE HAND TO ARRAY AND TEST LATER
-	List<Card> playerHand = new ArrayList<Card>(6);
+	public List<Card> playerHand = new ArrayList<Card>(6);
 
-	List<Card> playerDeck = new ArrayList<Card>(20);
+	public List<Card> playerDeck = new ArrayList<Card>(20);
 
 	public Player(Unit avatar) {
 		super();
@@ -72,7 +72,7 @@ public class Player {
 			Card card = playerDeck.get(0);
 			
 			setPlayerHandCard(playerHand.size(), card);
-			System.out.println("AI card : "+playerHand.size());
+			System.out.println("AI card : "+playerHand.get(i).cardname);
 			removeCardFromDeck(0);
 				
 		}

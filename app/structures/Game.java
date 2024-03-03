@@ -20,6 +20,8 @@ import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
 import utils.SubUnitCreator;
 
+import java.util.*;
+
 //game logic will be stored here - contemplating just using GameState and making this whole concept redundant 
 public class Game {
 
@@ -50,7 +52,7 @@ public class Game {
 
 		if (gameState.gameInitalised) {
 
-			gameState.currentPlayer.setMana(gameState.turn + 1);
+			gameState.currentPlayer.setMana(gameState.turn + 4);
 
 			if (gameState.currentPlayer == gameState.player1) {
 				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
@@ -298,5 +300,149 @@ public class Game {
 	public static void gainHealthUnit(ActorRef out, Unit unit) {
 		BasicCommands.setUnitHealth(out, unit, 2);	//assigning the value 2, the unit identification and depending on it the value of attack would vary
 	}
+	
+    public static void selectAICardToPlay(ActorRef out, GameState gameState) {
+        
+    	// to find playable cards (creature)
+    	List<Card> playableCards = getPlayableAICards(gameState);
+    	System.out.println("playableAI cards : "+playableCards.size());
+    	
+        int remainingMana = gameState.player2.getMana();
+
+
+        if (!playableCards.isEmpty()) {
+        	
+        	for(int i=0; i < playableCards.size(); i++) {
+        		
+        		if (remainingMana >= playableCards.get(i).getManacost()) {
+        			Card cardToPlay = playableCards.get(i);
+                    remainingMana -= playableCards.get(i).getManacost();
+                    
+                    Tile targetTile = selectTileForSummoning(gameState); 
+                    
+                    System.out.println("tile selected "+targetTile.getTilex());
+                    System.out.println("tile selected "+targetTile.getTiley());
+                    
+                    summonAICard(out, gameState, targetTile, cardToPlay);
+                    
+                    gameState.player2.playerHand.remove(i);
+                    
+                    //after removing the card arraylist PlayerHand have to be sorted - remove empty spaces
+                    
+                    
+                } else {
+                    break; 
+                }	
+        		
+        	}
+            
+        }else {
+        	//logic to move the avatar/other units already placed, attack(if it can attack) and end turn
+        }
+
+    }
+    
+    private static Tile selectTileForSummoning(GameState gameState) {
+    	
+        Position avatarPosition = gameState.player2.getAvatar().getPosition();
+        
+        int X = avatarPosition.getTilex();
+        System.out.println("tile X avatar "+X);
+        
+		int Y = avatarPosition.getTiley();
+		System.out.println("tile Y avatar "+Y);
+		
+        Tile avatarTile = getBoard().getTile(X, Y); 
+        
+        List<Tile> adjacentTiles = getBoard().getAdjacentTiles(avatarTile);
+
+        // Assuming adjacentTiles is not empty
+        Random random = new Random();
+        Boolean findEmptyTile = false;
+        int randomIndex = 0;
+        
+        while(!findEmptyTile){
+        	
+        	randomIndex = random.nextInt(adjacentTiles.size());
+        	if(!adjacentTiles.get(randomIndex).hasUnit()) {
+        		findEmptyTile = true;
+        		return adjacentTiles.get(randomIndex); 
+        	}
+       
+        }
+        
+        return adjacentTiles.get(randomIndex); 
+        
+    }
+    
+    private static List<Card> getPlayableAICards(GameState gameState) {
+                
+        List<Card> playableCreatures = getPlayableCreatureCards(gameState);
+        
+        // Sort by mana cost
+        playableCreatures.sort(Comparator.comparing(Card::getManacost)); 
+
+        
+        return playableCreatures;
+    }
+    
+    private static List<Card> getPlayableCreatureCards(GameState gameState) {
+    	
+        List<Card> playable = new ArrayList<>();
+        
+        for (Card card : gameState.player2.playerHand) {
+        	//add playable creature cards
+            if (card.isCreature() == true && gameState.player2.getMana() >= card.getManacost()) {
+                playable.add(card);
+            }
+            
+            //add playable spell cards
+            if(card.isCreature() == false && gameState.player2.getMana() >= card.getManacost()) {
+            	//placeholder for logic 
+            }
+        }
+        return playable;
+    }
+    
+    private static void summonAICard(ActorRef out, GameState gameState, Tile tile, Card card) {
+    	
+		String cardJSONReference = card.getUnitConfig();
+		
+		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(card.getCardname(), cardJSONReference, tile.getTilex(), tile.getTiley());
+		
+		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
+		unitSummon.setPositionByTile(tile);
+		tile.setUnit(unitSummon);
+		
+		// add unit summon to player 1 unit array
+		board.addPlayer2Unit(unitSummon); 
+		
+		System.out.println(board.getPlayer2Units());
+
+		BasicCommands.drawUnit(out, unitSummon, tile);
+		// stops tiles from highlighting after summon
+		unitSummon.setHasMoved(true);
+		unitSummon.setName(card.getCardname());
+		
+		// a delay is required from drawing to setting attack/hp or else it will not
+		// work
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// consider building upon existing constructor in Unit class when time permits
+		// to strengthen and create a safer class with invariants!
+		//int healthVal = card.getHealth();
+		//int attackVal = card.getAttack();
+		
+		// now grabs health and attack values from the card for drawing
+		BasicCommands.setUnitHealth(out, unitSummon, card.getHealth());
+		BasicCommands.setUnitAttack(out, unitSummon, card.getAttack());
+		
+		
+		
+    }
 
 }
