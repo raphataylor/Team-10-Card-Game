@@ -13,7 +13,7 @@ import structures.basic.Tile;
  			Summon 3 Wraithlings in sequence.
  * */
 
-public class WraithlingSwarm extends Card implements Spell{
+public class WraithlingSwarm extends Card implements SpellAbility{
 	
 	public void spell(ActorRef out, GameState gameState, Tile tile){
     }

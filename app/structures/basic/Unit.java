@@ -25,7 +25,7 @@ public class Unit {
 	Position position;
 	UnitAnimationSet animations;
 	ImageCorrection correction;
-	
+	    
 	protected boolean hasMoved = false;
 	protected boolean hasAttacked = false;
 	
@@ -148,8 +148,6 @@ public class Unit {
 		return this.name;
 	}
 
-
-
 	
 	/**
 	 * This command sets the position of the Unit to a specified
@@ -160,6 +158,7 @@ public class Unit {
 	public void setPositionByTile(Tile tile) {
 		position = new Position(tile.getXpos(),tile.getYpos(),tile.getTilex(),tile.getTiley());
 	}
+	
 	
 	
 }

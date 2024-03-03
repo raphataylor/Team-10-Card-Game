@@ -14,7 +14,7 @@ import structures.basic.Tile;
  * 			Summon a Wraithling on the tile of the destroyed creature
  * */
 
-public class DarkTerminus extends Card implements Spell {
+public class DarkTerminus extends Card implements SpellAbility {
 	
 	public void spell(ActorRef out, GameState gameState, Tile tile){
     }

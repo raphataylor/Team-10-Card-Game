@@ -19,6 +19,7 @@ import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
 import utils.SubUnitCreator;
+import utils.BattleHandler;
 
 import java.util.*;
 
@@ -326,9 +327,7 @@ public class Game {
                     summonAICard(out, gameState, targetTile, cardToPlay);
                     
                     gameState.player2.playerHand.remove(i);
-                    
-                    //after removing the card arraylist PlayerHand have to be sorted - remove empty spaces
-                    
+                                        
                     
                 } else {
                     break; 
@@ -431,11 +430,6 @@ public class Game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		// consider building upon existing constructor in Unit class when time permits
-		// to strengthen and create a safer class with invariants!
-		//int healthVal = card.getHealth();
-		//int attackVal = card.getAttack();
 		
 		// now grabs health and attack values from the card for drawing
 		BasicCommands.setUnitHealth(out, unitSummon, card.getHealth());
@@ -444,5 +438,47 @@ public class Game {
 		
 		
     }
+    
+    /*
+    private Tile findOptimalMoveTile(Unit myUnit, GameState gameState) {
+        Tile bestTile = null;
+        int closestDistance = Integer.MAX_VALUE; 
+
+        for (Tile tile : getTilesWithinMoveRange(myUnit)) {
+            if (tileHasEnemyUnit(tile, gameState) && isValidAttack(myUnit, tile.getUnit())) {
+                return tile; // Immediate attack opportunity
+            }
+        }
+
+        // Minimize Distance Otherwise
+        for (Tile tile : getTilesWithinMoveRange(myUnit)) {
+            Unit enemy = findClosestEnemyUnit(myUnit, gameState);
+            int distance = calculateDistance(tile, enemy.getPosition());
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                bestTile = tile;
+            }
+        }
+
+        return bestTile;
+    }
+
+    private List<Tile> getTilesWithinMoveRange(Unit myUnit) {
+        //  logic to get tiles within a maximum of 2 tiles distance
+    }
+
+    private boolean tileHasEnemyUnit(Tile tile, GameState gameState) {
+        // Check if the tile has an enemy unit
+    }*/
+    
+    public static void selectAIUnitToAttack(ActorRef out, GameState gameState) {
+    	List<Unit> targetEnemy = board.getPlayer1Units();
+    	List<Unit> friendlyUnits = board.getPlayer2Units();
+        if (targetEnemy.size() > 0) {
+            BattleHandler.attackUnit(out, friendlyUnits.get(0), targetEnemy.get(0), gameState); 
+        }
+    }
+    
 
 }

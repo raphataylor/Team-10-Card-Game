@@ -12,7 +12,7 @@ import structures.basic.Tile;
  * Effects: Heal allied unit for 4 health (this does not increase its maximum health)
  * */
 
-public class SundropElixir extends Card implements Spell{
+public class SundropElixir extends Card implements SpellAbility{
 	
 	public void spell(ActorRef out, GameState gameState, Tile tile){
     }

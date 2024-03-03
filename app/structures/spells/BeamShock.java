@@ -12,7 +12,7 @@ import structures.basic.Tile;
  * Effects: Stun (the target unit cannot move or attack next turn) target enemy non-avatar unit.
  * */
 
-public class BeamShock extends Card implements Spell {
+public class BeamShock extends Card implements SpellAbility {
 	
 	public void spell(ActorRef out, GameState gameState, Tile tile){
     }

@@ -21,7 +21,7 @@ import structures.basic.Tile;
 			unoccupied tiles, then this ability has no effect.
  **/
 
-public class HornOfTheForsaken extends Card implements Spell {
+public class HornOfTheForsaken extends Card implements SpellAbility {
 	
 	public void spell(ActorRef out, GameState gameState, Tile tile){
     }
