@@ -34,11 +34,17 @@ public class CardClicked implements EventProcessor{
 		Game.selectCard(out, gameState, handPosition);
 		
 
-		// Highlight potential tiles
-		Avatar player1Avatar = (Avatar) gameState.player1.getAvatar();
-		player1Avatar.highlightAdjacentTiles(out, Game.getBoard().getTiles());
-		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-        Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
+		if (!GameState.gameOver) {
+			// Highlight potential tiles
+			Avatar player1Avatar = (Avatar) gameState.player1.getAvatar();
+			player1Avatar.highlightAdjacentTiles(out, Game.getBoard().getTiles());
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
+		}
 	}
 
 }
