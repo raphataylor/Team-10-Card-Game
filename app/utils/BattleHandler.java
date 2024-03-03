@@ -7,11 +7,13 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.Game;
 import structures.GameState;
+import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
 import structures.units.DeathAbilityUnit;
 import structures.units.DeathwatchAbilityUnit;
+import structures.units.Avatar;
 
 public class BattleHandler {
 
@@ -54,6 +56,19 @@ public class BattleHandler {
 		}
 
 		else {
+			
+			// check for end game condition
+			if(defender instanceof Avatar) {
+				if(defender == gameState.player1.getAvatar()) {
+					Player player1 = gameState.player1;
+					gameOver(out, player1, gameState);
+				}
+				else {
+					Player player2 = gameState.player2;
+					gameOver(out, player2, gameState);
+				}
+			}
+			
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			// 1500 seems like an initial good time from animation to delete but experiment
 			// to find most
@@ -138,6 +153,16 @@ public class BattleHandler {
 			array[randomIndex] = temp;
 		}
 		return array;
+	}
+	
+	public static void gameOver(ActorRef out, Player winner, GameState gamestate) {
+		if(winner == GameState.player1) {
+            BasicCommands.addPlayer1Notification(out, "you win", 10000);
+		}
+		else {
+            BasicCommands.addPlayer1Notification(out, "you lose", 10000);
+		}
+		GameState.gameOver = true;
 	}
 
 }
