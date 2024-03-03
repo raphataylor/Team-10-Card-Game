@@ -13,6 +13,7 @@ import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
 import structures.units.DeathAbilityUnit;
 import structures.units.DeathwatchAbilityUnit;
+import structures.units.Avatar;
 
 public class BattleHandler {
 
@@ -57,7 +58,7 @@ public class BattleHandler {
 		else {
 			
 			// check for end game condition
-			if(defender.getClass() == Avatar) {
+			if(defender instanceof Avatar) {
 				if(defender == gameState.player1.getAvatar()) {
 					Player player1 = gameState.player1;
 					gameOver(out, player1, gameState);
