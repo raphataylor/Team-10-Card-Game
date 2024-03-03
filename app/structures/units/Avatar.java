@@ -20,7 +20,7 @@ public class Avatar extends Unit{
 	            if (x != X || y != Y) { // Skip the central tile itself
 	            	// highlight tile if empty
 	            	if (!Game.getBoard().getTile(x, y).hasUnit()) {
-					BasicCommands.drawTile(out, grid[x][y], 1); // Or any method that highlights or shows the tile
+					BasicCommands.drawTile(out, grid[x][y], 1); 
 					try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 	            	}
 	            }

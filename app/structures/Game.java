@@ -277,7 +277,7 @@ public class Game {
 				Tile checkedTile = Game.getBoard().getTile(i, j);
 				if(checkedTile.hasUnit()) {
 					Unit unitOnTile = checkedTile.getUnit();
-					if(player2units.contains(unitOnTile)) {
+					if(player2units.contains(unitOnTile) && !(unitOnTile instanceof Avatar)) {
 						BasicCommands.drawTile(out, tiles[i][j], 2);
 						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();} 
 					}

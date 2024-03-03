@@ -53,6 +53,7 @@ public class CardClicked implements EventProcessor{
 			Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
 		}
 		
+		// get current card clicked
 		Card clickedCard = GameState.player1.getPlayerHandCard(handPosition);
 		
 		if (false) {// replace to check if it's a dark terminus card
