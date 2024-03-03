@@ -1,12 +1,18 @@
 package events;
 
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import commands.BasicCommands;
 import structures.Board;
 import structures.Game;
 import structures.GameState;
+import structures.basic.Card;
+import structures.basic.Tile;
+import structures.basic.Unit;
 import structures.units.Avatar;
 import utils.UnitSummonTest;
 
@@ -28,6 +34,7 @@ public class CardClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		int handPosition = message.get("position").asInt();
+		Card clickedCard = GameState.player1.getHand().get(handPosition-1);
 		
 		//bens testing ground
 		//UnitSummonTest.cardClick(out, gameState, handPosition);
@@ -47,13 +54,10 @@ public class CardClicked implements EventProcessor{
 			Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
 		}
 		
-		if (true) {// replace to check if it's a spell card
-			Board board = Game.getBoard();
-			//hello
-			
+		if (false) {// replace to check if it's a dark terminus card
+			Game.showDarkTerminusHighlighing(out);
 		}
-        
-        
+		
 	}
 
 }
