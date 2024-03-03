@@ -23,6 +23,6 @@ import structures.basic.Tile;
 
 public class HornOfTheForsaken extends Card implements SpellAbility {
 	
-	public void spell(ActorRef out, GameState gameState, Tile tile){
+	public void spellAbility(ActorRef out, GameState gameState, Tile tile){
     }
 }

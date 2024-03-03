@@ -4,9 +4,9 @@ import akka.actor.ActorRef;
 import structures.GameState;
 import structures.basic.Tile;
 
-public interface SpellAbility {
+public interface Spell {
 	
-	public static void spell(ActorRef out, GameState gameState, Tile tile){
+	public static void spellAbility(ActorRef out, GameState gameState, Tile tile){
     }
 
 }

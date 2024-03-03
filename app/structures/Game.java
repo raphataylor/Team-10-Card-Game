@@ -439,39 +439,6 @@ public class Game {
 		
     }
     
-    /*
-    private Tile findOptimalMoveTile(Unit myUnit, GameState gameState) {
-        Tile bestTile = null;
-        int closestDistance = Integer.MAX_VALUE; 
-
-        for (Tile tile : getTilesWithinMoveRange(myUnit)) {
-            if (tileHasEnemyUnit(tile, gameState) && isValidAttack(myUnit, tile.getUnit())) {
-                return tile; // Immediate attack opportunity
-            }
-        }
-
-        // Minimize Distance Otherwise
-        for (Tile tile : getTilesWithinMoveRange(myUnit)) {
-            Unit enemy = findClosestEnemyUnit(myUnit, gameState);
-            int distance = calculateDistance(tile, enemy.getPosition());
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                bestTile = tile;
-            }
-        }
-
-        return bestTile;
-    }
-
-    private List<Tile> getTilesWithinMoveRange(Unit myUnit) {
-        //  logic to get tiles within a maximum of 2 tiles distance
-    }
-
-    private boolean tileHasEnemyUnit(Tile tile, GameState gameState) {
-        // Check if the tile has an enemy unit
-    }*/
-    
     public static void selectAIUnitToAttack(ActorRef out, GameState gameState) {
     	List<Unit> targetEnemy = board.getPlayer1Units();
     	List<Unit> friendlyUnits = board.getPlayer2Units();
