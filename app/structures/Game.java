@@ -271,9 +271,26 @@ public class Game {
 				}
 			}
 		}
-		
-		
-	    
+	}
+	// highlight all enemy creatures on board
+	public static void showDarkTerminusHighlighing(ActorRef out) {
+		Board board = Game.getBoard();
+		List<Unit> player2units = board.getPlayer2Units();
+		Tile[][] tiles = board.getTiles();
+		int rows = board.getRows();
+		int columns = board.getColumns();
+		for(int i=0;i<rows;i++) {
+			for(int j=0;j<columns;j++) {
+				Tile checkedTile = Game.getBoard().getTile(i, j);
+				if(checkedTile.hasUnit()) {
+					Unit unitOnTile = checkedTile.getUnit();
+					if(player2units.contains(unitOnTile) && !(unitOnTile instanceof Avatar)) {
+						BasicCommands.drawTile(out, tiles[i][j], 2);
+						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();} 
+					}
+				}
+			}
+		}
 	}
 
 	// Sprint 1 [VIS08] & [VIS07]

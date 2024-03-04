@@ -121,6 +121,13 @@ public class Board {
 	    player2Units.remove(unit);
 	}
 
+	public int getRows() {
+		return rows;
+	}
+
+	public int getColumns() {
+		return columns;
+	}
 
 	
 }
