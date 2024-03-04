@@ -40,8 +40,10 @@ public class CardClicked implements EventProcessor{
 		//the new method for dealing with card clicked
 		Game.selectCard(out, gameState, handPosition);
 		
+		// get current card clicked
+		Card clickedCard = GameState.player1.getPlayerHandCard(handPosition);
 
-		if (true) {// replace with check to see if card is creature
+		if (clickedCard.getIsCreature()) {// replace with check to see if card is creature
 			// Highlight potential summoning tiles
 			Avatar player1Avatar = (Avatar) gameState.player1.getAvatar();
 			player1Avatar.highlightAdjacentTiles(out, Game.getBoard().getTiles());
@@ -52,11 +54,10 @@ public class CardClicked implements EventProcessor{
 			}
 			Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
 		}
+
 		
-		// get current card clicked
-		Card clickedCard = GameState.player1.getPlayerHandCard(handPosition);
-		
-		if (false) {// replace to check if it's a dark terminus card
+		if (clickedCard.getCardname().equalsIgnoreCase("dark terminus")) {// replace to check if it's a dark terminus card
+			System.out.println("clicked card is dark terminus");
 			Game.showDarkTerminusHighlighing(out);
 		}
 		
