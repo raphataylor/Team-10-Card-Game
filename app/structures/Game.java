@@ -1,5 +1,6 @@
 package structures;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import akka.actor.ActorRef;
@@ -10,6 +11,9 @@ import structures.basic.Player;
 import structures.basic.Position;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.spells.BeamShock;
+import structures.spells.DarkTerminus;
+import structures.spells.WraithlingSwarm;
 import structures.units.Avatar;
 import structures.units.DeathwatchAbilityUnit;
 import structures.units.NightsorrowAssasin;
@@ -465,4 +469,51 @@ public class Game {
     }
     
 
+	//SPELL01 CAST SPELL
+    public static void castSpell(ActorRef out, GameState gameState, int x, int y) {
+
+        // Retrieve the selected card from the player's hand
+        Card cardToCast = gameState.player1.getPlayerHandCard(gameState.currentCardSelected);
+       
+        // Retrieve the targeted tile from the board
+        Tile tileSelected = board.getTile(x, y);
+       
+        // Check if the selected card is indeed a spell and the player has enough mana
+        if (!cardToCast.isCreature() && gameState.player1.getMana() >= cardToCast.getManacost()) {
+
+
+            // Implement spell effects based on the type of spell
+            applySpellEffect(out, gameState, tileSelected, cardToCast);
+           
+            // Deduct the mana cost of the spell from the player's mana pool
+            gameState.player1.setMana(gameState.player1.getMana() - cardToCast.getManacost());
+            BasicCommands.setPlayer1Mana(out, gameState.player1);
+           
+            // Remove the spell card from the player's hand
+            gameState.player1.removeCardFromHand(gameState.currentCardSelected);
+            BasicCommands.deleteCard(out, gameState.currentCardSelected);
+           
+            // Reset selected card state in the game state
+            gameState.cardSelected = false;
+            gameState.currentCardSelected = -1;
+           
+            // Add a notification to indicate the spell has been successfully cast
+            BasicCommands.addPlayer1Notification(out, "Casted " + cardToCast.getCardname(), 2);
+
+        } else {
+            // If the card is not a spell or not enough mana, notify the player
+            BasicCommands.addPlayer1Notification(out, "Cannot cast " + cardToCast.getCardname(), 2);
+        }
+    }
+
+	private static void applySpellEffect(ActorRef out, GameState gameState, Tile tile, Card spellCard) {
+		// Check the type of spell and apply the corresponding effect
+		if (spellCard instanceof BeamShock) {
+			((BeamShock)spellCard).spell(out, gameState, tile);
+		} else if (spellCard instanceof DarkTerminus) {
+			((DarkTerminus)spellCard).spell(out, gameState, tile);
+		} else if (spellCard instanceof WraithlingSwarm) {
+			((WraithlingSwarm)spellCard).spell(out, gameState, tile);
+		}
+	}
 }
