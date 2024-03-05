@@ -49,7 +49,8 @@ public class CardClicked implements EventProcessor{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
+			//Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
+			Game.getBoard().resetAllTiles(out);
 		}
 
 		

@@ -200,7 +200,7 @@ public class Game {
 		humanAvatarStartTile.setUnit(humanAvatar);
 		BasicCommands.drawUnit(out, humanAvatar, humanAvatarStartTile);
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -270,7 +270,7 @@ public class Game {
 									BasicCommands.drawTile(out, grid[x][y], 1);
 									//sets the tile to be actionable
 						            grid[x][y].setIsActionableTile(true);
-									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+									//try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 				            	}
 			                    Unit unitOnTile = checkedTile.getUnit();
 			                    // Check if the unit belongs to player 2
@@ -527,5 +527,23 @@ public class Game {
 		} else if (spellCard instanceof WraithlingSwarm) {
 			((WraithlingSwarm)spellCard).spell(out, gameState, tile);
 		}
+	}
+	
+	public static void resetGameState(ActorRef out, GameState gameState) {
+		
+		if (gameState.currentPlayer == gameState.player1) {
+			if (gameState.currentCardSelected != -1) {
+				Card currentCardHighlighted = gameState.player1.getPlayerHandCard(gameState.currentCardSelected);
+				BasicCommands.drawCard(out, currentCardHighlighted, gameState.currentCardSelected, 0);
+			}
+			
+		}
+		gameState.previousSelectedTile = null;
+		gameState.isTileSelected = false;
+		gameState.cardSelected = false;
+		getBoard().resetAllTiles(out);
+		
+		
+		
 	}
 }

@@ -72,10 +72,11 @@ public class Board {
 	}
 	
 	//makes all tiles unactionable
-	public void resetAllTiles() {
+	public void resetAllTiles(ActorRef out) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				tiles[i][j].setIsActionableTile(false);
+				BasicCommands.drawTile(out, tiles[i][j], 0);
 			}
 		}
 	}

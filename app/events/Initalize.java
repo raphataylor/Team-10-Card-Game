@@ -66,8 +66,8 @@ public class Initalize implements EventProcessor {
 		// replace this with the initialisation method from the game class
 		// UnitSummonTest.givePlayerCard(out);
 		
-		UnitSummonTest.summonEnemyUnitTest(out);
-		UnitSummonTest.deathwatcherUnitTest(out);
+//		UnitSummonTest.summonEnemyUnitTest(out);
+//		UnitSummonTest.deathwatcherUnitTest(out);
 		UnitSummonTest.provokeUnitTest(out);
 	}
 

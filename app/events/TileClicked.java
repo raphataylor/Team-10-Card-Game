@@ -75,7 +75,8 @@ public class TileClicked implements EventProcessor {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				Game.getBoard().drawBoard(out, tiles);
+				//Game.getBoard().drawBoard(out, tiles);
+				board.resetAllTiles(out);
 				return;
 			} else if (gameState.currentSelectedUnit != null && selectedUnit == null) {// if a tile is clicked after a unit
 																						// is clicked, move the
@@ -101,7 +102,7 @@ public class TileClicked implements EventProcessor {
 				gameState.currentSelectedUnit = null;
 				gameState.unitCurrentTile = null;
 				gameState.isTileSelected = false;
-				board.resetAllTiles();
+				board.resetAllTiles(out);
 				return;
 			}
 			if (gameState.unitCurrentTile != tileSelected && gameState.isTileSelected
@@ -112,7 +113,7 @@ public class TileClicked implements EventProcessor {
 				gameState.isTileSelected = false;
 				gameState.currentSelectedUnit = null;
 				gameState.unitCurrentTile = null;
-				board.resetAllTiles();
+				board.resetAllTiles(out);
 			} 
 		}
 
