@@ -39,6 +39,9 @@ public class TileClicked implements EventProcessor {
 		Tile clickedTile = Game.getBoard().getTile(tilex, tiley);
 		Tile[][] tiles = Game.getBoard().getTiles();
 		Unit selectedUnit = clickedTile.getUnit();
+		
+		System.out.println(selectedUnit);
+
 
 		if (gameState.something == true) {
 			// do some logic
@@ -104,13 +107,16 @@ public class TileClicked implements EventProcessor {
 			}
 			if (gameState.unitCurrentTile != tileSelected && gameState.isTileSelected
 					&& gameState.unitCurrentTile != null && tileSelected.getIsActionableTile()) {
+				System.out.println("performing combat");
+				System.out.println(selectedUnit.getName());
 				BattleHandler.attackUnit(out, gameState.currentSelectedUnit, selectedUnit, gameState);
 
+				return;
 				// Reset conditions after combat
-				gameState.isTileSelected = false;
-				gameState.currentSelectedUnit = null;
-				gameState.unitCurrentTile = null;
-				board.resetAllTiles(out);
+//				gameState.isTileSelected = false;
+//				gameState.currentSelectedUnit = null;
+//				gameState.unitCurrentTile = null;
+//				board.resetAllTiles(out);
 			} 
 		}
 

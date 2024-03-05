@@ -157,7 +157,6 @@ public class Tile {
 	}
 	
 	public void setIsActionableTile(boolean isActionable) {
-		System.out.println("setting actionable state");
 		this.isActionableTile = isActionable;
 	}
 	

@@ -17,6 +17,7 @@ import structures.units.NightsorrowAssasin;
 import structures.units.RockPulveriser;
 
 public class SubUnitCreator {
+	static int globalUnitID = 0;
 
 	final static Map<String, Class<? extends Unit>> unitMap = new HashMap<String, Class<? extends Unit>>() {
 		{
@@ -45,12 +46,14 @@ public class SubUnitCreator {
 	public static Unit identifyUnitTypeAndSummon(String unitName, String jsonConfig, int x, int y) {
 		if (unitMap.containsKey(unitName)) {
 			Class<? extends Unit> classType = unitMap.get(unitName);
-			return BasicObjectBuilders.loadUnit(jsonConfig, 0, classType);
+			globalUnitID++;
+			return BasicObjectBuilders.loadUnit(jsonConfig, globalUnitID, classType);
 		}
 		// If the unit is not a deathwatch type then it will just be constructed as a
 		// normal unit
 		else {
-			return BasicObjectBuilders.loadUnit(jsonConfig, 0, Unit.class);
+			globalUnitID++;
+			return BasicObjectBuilders.loadUnit(jsonConfig, globalUnitID, Unit.class);
 		}
 	}
 

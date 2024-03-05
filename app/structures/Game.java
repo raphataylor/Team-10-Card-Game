@@ -267,13 +267,13 @@ public class Game {
 			if (adjTiles.get(i).hasUnit()) {
 				if (adjTiles.get(i).getUnit() instanceof ProvokeAbilityUnit) {
 					BasicCommands.drawTile(out, adjTiles.get(i), 2);
+					adjTiles.get(i).setIsActionableTile(true);
 				}
 				else {
 					// Iterate over the board to find tiles within the specified distance.
 				    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
 				        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
 				        	Tile checkedTile = Game.getBoard().getTile(x, y);
-				            System.out.println(checkedTile);
 				            // Calculate the Manhattan distance to the unit.
 				            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
 				            if (manhattanDistance <= distance) {

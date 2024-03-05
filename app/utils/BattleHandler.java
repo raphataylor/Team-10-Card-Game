@@ -21,16 +21,32 @@ public class BattleHandler {
 	// TURN AND
 	// ENSURE FRIENDLY FIRE IS FIXED!!!!
 	public static void attackUnit(ActorRef out, Unit attacker, Unit defender, GameState gameState) {
+		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
+		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
+		
+		
+		//a simple and somewhat ugly solution to friendly fire checks
+		//MAY NOT BE NEEDED SO TEST THIS 
+//		if (player1Units.contains(attacker) && player1Units.contains(defender)) {
+//			System.out.println("CANNOT ATTACK FRIENDLY FIRE");
+//			return;
+//		}
+//		
+//		else if (player2Units.contains(attacker) && player2Units.contains(defender)) {
+//			System.out.println("CANNOT ATTACK FRIENDLY FIRE");
+//			return; 
+//		}
+//		
+		
 		// debugging code to ensure positions and values are intended
 		System.out.println("defender: " + String.valueOf(defender.getPosition()));
-		System.out.println(String.valueOf(defender.getAttack()));
-		System.out.println(String.valueOf(defender.getHealth()));
 		System.out.println("attacker: " + String.valueOf(attacker.getPosition()));
-		System.out.println(String.valueOf(attacker.getAttack()));
-		System.out.println(String.valueOf(attacker.getHealth()));
 		System.out.println(defender.getName() + " is defending");
 		System.out.println(attacker.getName() + " is attacking");
 		int defenderPostCombatHealth = defender.getHealth() - attacker.getAttack();
+		defender.setHealth(defenderPostCombatHealth);
+		
+		
 
 		// the basicCommands only seem to effecting the latest drawn unit but the units
 		// being referenced are correct
@@ -52,9 +68,7 @@ public class BattleHandler {
 
 		if (defenderPostCombatHealth > 0) {
 			counterAttack(out, defender, attacker);
-			defender.setHealth(defenderPostCombatHealth);
 		}
-
 		else {
 			
 			// check for end game condition

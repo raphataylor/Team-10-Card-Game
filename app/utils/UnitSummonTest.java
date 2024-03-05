@@ -164,10 +164,12 @@ public class UnitSummonTest {
 	}
 	
 	public static void provokeUnitTest(ActorRef out) {
-		Unit testunit = BasicObjectBuilders.loadUnit(StaticConfFiles.ironcliff_guardian, 0, IroncliffGuardian.class);
+		
+		
+		Card testCard = BasicObjectBuilders.loadCard("conf/gameconfs/cards/1_1_c_u_bad_omen.json", 2, Card.class);
+		Unit testunit = BasicObjectBuilders.loadUnit(testCard.getUnitConfig(), 5, Unit.class);
 		Tile testtile = Game.getBoard().getTile(1, 2);
 		testunit.setPositionByTile(testtile);
-		Game.getBoard().addPlayer1Unit(testunit);
 		BasicCommands.drawUnit(out, testunit, testtile);
 		try {
 			Thread.sleep(100);
@@ -176,13 +178,14 @@ public class UnitSummonTest {
 		}
 		
 		//now grabs health and attack values from the card for drawing
-		BasicCommands.setUnitAttack(out, testunit, 4);
-		BasicCommands.setUnitHealth(out, testunit, 1);
+		BasicCommands.setUnitAttack(out, testunit, testCard.getAttack());
+		BasicCommands.setUnitHealth(out, testunit, testCard.getHealth());
 		
-		testunit.setAttack(4);
-		testunit.setHealth(1);
+		testunit.setAttack(testCard.getAttack());
+		testunit.setHealth(testCard.getHealth());
 		
 		testtile.setUnit(testunit);
+		Game.getBoard().addPlayer2Unit(testunit);
 	}
 	
 
