@@ -48,7 +48,7 @@ public class EndTurnClicked implements EventProcessor {
 //			
 //		}
 
-		gameState.player1.drawCardAtTurnEnd(out);
+		//gameState.player1.drawCardAtTurnEnd(out);
 		
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
 		

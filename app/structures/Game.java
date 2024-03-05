@@ -56,15 +56,25 @@ public class Game {
 	public static void setManaOnStartTurn(ActorRef out, GameState gameState) {
 
 		if (gameState.gameInitalised) {
-
-			gameState.currentPlayer.setMana(gameState.turn + 1);
+			System.out.println("updatign mana");
+			
+			
+			//checks for turn number, if it is greater than 8 then every turn after will give the current player 9 mana.
+			if (gameState.turn <= 8) {
+				gameState.currentPlayer.setMana(gameState.turn + 1);
+			}
+			else {
+				gameState.currentPlayer.setMana(9);
+			}
+			
+			//utilises a method created for this purpose rather than making additional work
 			updateManaVisual(out, gameState.currentPlayer);
 
-			if (gameState.currentPlayer == gameState.player1) {
-				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
-			} else {
-				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
-			}
+//			if (gameState.currentPlayer == gameState.player1) {
+//				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
+//			} else {
+//				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
+//			}
 
 		}
 
@@ -548,8 +558,10 @@ public class Game {
 	}
 	
 	public static void beginNewTurn(ActorRef out, GameState gameState) {
+		
+		gameState.turn++; 
 		if (gameState.currentPlayer == gameState.player1) {
-			updateManaVisual(out, gameState.player1);
+			setManaOnStartTurn(out, gameState);
 			gameState.player1.drawCardAtTurnEnd(out);
 		}
 		
