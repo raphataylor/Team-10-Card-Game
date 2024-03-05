@@ -440,17 +440,22 @@ public class Game {
     	
         List<Card> playable = new ArrayList<>();
         
-        for (Card card : gameState.player2.playerHand) {
-        	//add playable creature cards
-            if (card.isCreature() == true && gameState.player2.getMana() >= card.getManacost()) {
-                playable.add(card);
-            }
-            
-            //add playable spell cards
-            if(card.isCreature() == false && gameState.player2.getMana() >= card.getManacost()) {
-            	//placeholder for logic 
-            }
-        }
+        for (int i = 0; i < gameState.player2.playerHand.length; i++) {
+			if (gameState.player2.playerHand[i] instanceof Card) {
+				
+				//add playable creature cards
+	            if (gameState.player2.playerHand[i].isCreature() == true && gameState.player2.getMana() >= gameState.player2.playerHand[i].getManacost()) {
+	                playable.add(gameState.player2.playerHand[i]);
+	            }
+	            
+	          //add playable spell cards
+	            if(gameState.player2.playerHand[i].isCreature() == false && gameState.player2.getMana() >= gameState.player2.playerHand[i].getManacost()) {
+	            	//placeholder for logic 
+	            }
+			}
+			
+		}
+        
         return playable;
     }
     
