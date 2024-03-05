@@ -204,6 +204,8 @@ public class Game {
 
 	// requires the correct coordinates for tile locations for both avatars
 	public static Unit[] avatarSummonSetup(ActorRef out, int x, int y, int x2, int y2) {
+		
+		
 		// stores an array of the two units
 		Unit[] avatars = new Unit[2];
 		Unit humanAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Avatar.class);
@@ -217,12 +219,12 @@ public class Game {
 			e.printStackTrace();
 		}
 
-		humanAvatar.setAttack(0);
+		humanAvatar.setAttack(2);
 		humanAvatar.setHealth(20);
 
 		BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setUnitHealth(out, humanAvatar, 20);
-		BasicCommands.setUnitAttack(out, humanAvatar, 0);
+		BasicCommands.setUnitAttack(out, humanAvatar, 2);
 		avatars[0] = humanAvatar;
 		// not sure if this is appropriate but its required for effect checking
 		// "technically"
@@ -239,12 +241,12 @@ public class Game {
 			e.printStackTrace();
 		}
 
-		aiAvatar.setAttack(0);
+		aiAvatar.setAttack(2);
 		aiAvatar.setHealth(20);
 
 		BasicCommands.setPlayer2Health(out, GameState.player2);
 		BasicCommands.setUnitHealth(out, aiAvatar, 20);
-		BasicCommands.setUnitAttack(out, aiAvatar, 0);
+		BasicCommands.setUnitAttack(out, aiAvatar, 2);
 		avatars[1] = aiAvatar;
 		// not sure if this is appropriate but its required for effect checking
 		// "technically"
