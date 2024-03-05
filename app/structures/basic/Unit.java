@@ -3,6 +3,7 @@ package structures.basic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.GameState;
 
@@ -172,17 +173,17 @@ public class Unit {
 	}
 
 	// Method to set the unit's stunned state
-	public void setStunned(boolean stunned) {
+	public void setStunned(ActorRef out, boolean stunned) {
 		this.stunned = stunned;
 		if (stunned) {
-			BasicCommands.addPlayer1Notification(out, this.unitName + " is stunned and cannot move or attack!", 2); 
+			BasicCommands.addPlayer1Notification(out, this.name + " is stunned and cannot move or attack!", 2); 
 		}
 	}
 
 	//Check if a unit is stunned before allowing it to move or attack
 	public void performAction(ActorRef out, GameState gameState) {
 		if (this.isStunned()) {
-			BasicCommands.addPlayer1Notification(out, this.unitName + " is stunned and cannot act this turn.", 2);
+			BasicCommands.addPlayer1Notification(out, this.name + " is stunned and cannot act this turn.", 2);
 		} else {
 			// Normal action handling here
 		}

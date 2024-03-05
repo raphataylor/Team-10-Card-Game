@@ -21,6 +21,7 @@ public class Avatar extends Unit{
 	            	// highlight tile if empty
 	            	if (!Game.getBoard().getTile(x, y).hasUnit()) {
 					BasicCommands.drawTile(out, grid[x][y], 1); 
+					grid[x][y].setIsActionableTile(true);
 					try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 	            	}
 	            }

@@ -25,27 +25,28 @@ public class EndTurnClicked implements EventProcessor {
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
+		//commented out for now to troubleshoot stuff, please bring back when testing ai implementation 
 		
-		if(gameState.currentPlayer == gameState.player1) {
-			
-			Game.resetMana(out, gameState);
-			gameState.currentPlayer = gameState.player2;
-			
-			Game.setManaOnStartTurn(out, gameState);
-			
-			Game.selectAICardToPlay(out, gameState);
-			
-			Game.selectAIUnitToAttack(out, gameState);
-			
-		}else {
-			//for testing AI player
-			
-			//code logic for AI player end turn will be placed her 
-			//Game.resetMana(out, gameState);
-			//gameState.currentPlayer = gameState.player1;
-			//Game.setManaOnStartTurn(out, gameState);
-			
-		}
+//		if(gameState.currentPlayer == gameState.player1) {
+//			
+//			Game.resetMana(out, gameState);
+//			gameState.currentPlayer = gameState.player2;
+//			
+//			Game.setManaOnStartTurn(out, gameState);
+//			
+//			Game.selectAICardToPlay(out, gameState);
+//			
+//			Game.selectAIUnitToAttack(out, gameState);
+//			
+//		}else {
+//			//for testing AI player
+//			
+//			//code logic for AI player end turn will be placed her 
+//			//Game.resetMana(out, gameState);
+//			//gameState.currentPlayer = gameState.player1;
+//			//Game.setManaOnStartTurn(out, gameState);
+//			
+//		}
 
 		gameState.player1.drawCardAtTurnEnd(out);
 		

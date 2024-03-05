@@ -58,6 +58,7 @@ public class Game {
 		if (gameState.gameInitalised) {
 
 			gameState.currentPlayer.setMana(gameState.turn + 1);
+			updateManaVisual(out, gameState.currentPlayer);
 
 			if (gameState.currentPlayer == gameState.player1) {
 				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
@@ -75,6 +76,7 @@ public class Game {
 
 			Thread.sleep(300);
 			gameState.currentPlayer.setMana(0);
+			updateManaVisual(out, gameState.currentPlayer);
 
 			if (gameState.currentPlayer == gameState.player1) {
 				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
@@ -124,53 +126,65 @@ public class Game {
 		// make unit id static public attribute - where to track this? gameState again?
 		// is this the right place?
 
-		// example tile but needs the board class with populated tiles to work with this
 		Tile tileSelected = board.getTile(x, y);
+		if (tileSelected.getIsActionableTile()) {
+			//mana cost check to ensure the player attempting to summon the unit has enough mana 
+			if (gameState.currentPlayer.getMana() - cardToPlayer.getManacost() < 0) {
+				BasicCommands.addPlayer1Notification(out, "NOT ENOUGH MANA", 3);
+			}
+			else {
+				// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
+				// Unit.class);
+				Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference, x, y);
+				System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
+				unitSummon.setPositionByTile(tileSelected);
+				tileSelected.setUnit(unitSummon);
+				
+				if (unitSummon instanceof OpeningGambitAbilityUnit) {
+					((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
+				}
 
-		// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
-		// Unit.class);
-		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference, x, y);
-		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
-		unitSummon.setPositionByTile(tileSelected);
-		tileSelected.setUnit(unitSummon);
-		
-		if (unitSummon instanceof OpeningGambitAbilityUnit) {
-			((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
+				// add unit summon to player 1 unit array
+				board.addPlayer1Unit(unitSummon);
+				// System.out.println(board.getPlayer1Units());
+
+				BasicCommands.drawUnit(out, unitSummon, tileSelected);
+				// stops tiles from highlighting after summon
+				unitSummon.setHasMoved(true);
+
+				// a delay is required from drawing to setting attack/hp or else it will not
+				// work
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				// consider building upon existing constructor in Unit class when time permits
+				// to strengthen and create a safer class with invariants!
+				int healthVal = cardToPlayer.getHealth();
+				int attackVal = cardToPlayer.getAttack();
+
+				unitSummon.setHealth(healthVal);
+				unitSummon.setAttack(attackVal);
+
+				String name = cardToPlayer.getCardname();
+				unitSummon.setName(name);
+
+				// now grabs health and attack values from the card for drawing
+				BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
+				BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
+
+				GameState.player1.removeCardFromHand(gameState.currentCardSelected);
+				BasicCommands.deleteCard(out, gameState.currentCardSelected);
+				GameState.player1.setMana(GameState.player1.getMana() - cardToPlayer.getManacost());
+				updateManaVisual(out, gameState.player1);
+			}
+
 		}
-
-		// add unit summon to player 1 unit array
-		board.addPlayer1Unit(unitSummon);
-		// System.out.println(board.getPlayer1Units());
-
-		BasicCommands.drawUnit(out, unitSummon, tileSelected);
-		// stops tiles from highlighting after summon
-		unitSummon.setHasMoved(true);
-
-		// a delay is required from drawing to setting attack/hp or else it will not
-		// work
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		else {
+			BasicCommands.addPlayer1Notification(out, "CANNOT PLACE UNIT THERE", 3);
 		}
-
-		// consider building upon existing constructor in Unit class when time permits
-		// to strengthen and create a safer class with invariants!
-		int healthVal = cardToPlayer.getHealth();
-		int attackVal = cardToPlayer.getAttack();
-
-		unitSummon.setHealth(healthVal);
-		unitSummon.setAttack(attackVal);
-
-		String name = cardToPlayer.getCardname();
-		unitSummon.setName(name);
-
-		// now grabs health and attack values from the card for drawing
-		BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
-		BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
-
-		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
-		BasicCommands.deleteCard(out, gameState.currentCardSelected);
 
 		gameState.cardSelected = false;
 		gameState.currentCardSelected = -1;
@@ -299,15 +313,13 @@ public class Game {
 
 	// Sprint 1 [VIS08] & [VIS07]
 	// Method to update and display health for both players
-	public static void updateHealthVisual(ActorRef out, Player player1, Player player2) {
-		BasicCommands.setPlayer1Health(out, player1); // Update player 1's health
-		BasicCommands.setPlayer2Health(out, player2); // Update player 2's health
+	public static void updateHealthVisual(ActorRef out, Player player) {
+		BasicCommands.setPlayer1Health(out, player); // Update player 1's health
 	}
 
 	// Method to update and display mana for both players
-	public static void updateManaVisual(ActorRef out, Player player1, Player player2) {
-		BasicCommands.setPlayer1Mana(out, player1); // Update player 1's mana
-		BasicCommands.setPlayer2Mana(out, player2); // Update player 2's mana
+	public static void updateManaVisual(ActorRef out, Player player) {
+		BasicCommands.setPlayer1Mana(out, player); // Update player 1's mana
 	}
 	
 	/* method to update the attack of an unit or avatar summoned on the board
@@ -347,7 +359,7 @@ public class Game {
                     
                     summonAICard(out, gameState, targetTile, cardToPlay);
                     
-                    gameState.player2.playerHand.remove(i);
+                    gameState.player2.playerHand[i] = null;
                                         
                     
                 } else {
@@ -487,7 +499,7 @@ public class Game {
            
             // Deduct the mana cost of the spell from the player's mana pool
             gameState.player1.setMana(gameState.player1.getMana() - cardToCast.getManacost());
-            BasicCommands.setPlayer1Mana(out, gameState.player1);
+            updateManaVisual(out, gameState.currentPlayer);
            
             // Remove the spell card from the player's hand
             gameState.player1.removeCardFromHand(gameState.currentCardSelected);
