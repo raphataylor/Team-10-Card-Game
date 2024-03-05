@@ -46,5 +46,7 @@ public class GameState {
 	public boolean isTileSelected = false;
 
 	public static Player currentPlayer = player1;
+	
+	public static boolean gameOver = false;
 
 }

@@ -47,6 +47,39 @@ public class Board {
 		}
 	}
 	
+	//returns all adjacent tiles from an incoming tile
+	public List<Tile> getAdjacentTiles(Tile middleTile){
+		
+		List<Tile> adjTiles = new ArrayList<Tile>();
+		int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        int x = middleTile.getTilex();
+        int y = middleTile.getTiley();
+        // Iterate over adjacent tiles
+        for (int i = 0; i < 8; i++) {
+            int adjx = x + dx[i];
+            int adjy = y + dy[i];
+            if (adjx >= 9 || adjy >= 5) {
+            	continue;
+            }
+            else {
+            	adjTiles.add(getTile(adjx, adjy));
+            }
+            
+        }
+        return adjTiles;
+        
+	}
+	
+	//makes all tiles unactionable
+	public void resetAllTiles() {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				tiles[i][j].setIsActionableTile(false);
+			}
+		}
+	}
+	
 	public Tile getTile(int x, int y) {
 		//double check x and y are in the right order
 		return tiles[x][y];
@@ -88,6 +121,13 @@ public class Board {
 	    player2Units.remove(unit);
 	}
 
+	public int getRows() {
+		return rows;
+	}
+
+	public int getColumns() {
+		return columns;
+	}
 
 	
 }

@@ -33,6 +33,10 @@ public class EndTurnClicked implements EventProcessor {
 			
 			Game.setManaOnStartTurn(out, gameState);
 			
+			Game.selectAICardToPlay(out, gameState);
+			
+			Game.selectAIUnitToAttack(out, gameState);
+			
 		}else {
 			//for testing AI player
 			

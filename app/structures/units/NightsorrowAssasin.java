@@ -22,6 +22,8 @@ public class NightsorrowAssasin extends Unit implements OpeningGambitAbilityUnit
         Unit clickedUnit = Game.getBoard().getTile(tilex, tiley).getUnit();
         List<Unit> player2Units = Game.getBoard().getPlayer2Units();
 
+        
+        //can we make a general version of this method in the board since it will be needed for more than just this class?
         int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
         int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
         // Iterate over adjacent tiles

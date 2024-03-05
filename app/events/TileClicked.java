@@ -47,65 +47,73 @@ public class TileClicked implements EventProcessor {
 		// bens testing ground
 		// UnitSummonTest.summonUnit(out, gameState, tilex, tiley);
 
-		// the new method for summoning a unit - does not consider potential move or
-		// anything like that yet - be prepared to adjust to funnel to correct method
-		Board board = Game.getBoard();
-		Tile tileSelected = board.getTile(tilex, tiley);
-		if (gameState.cardSelected) { // tile clicked after card is selected, summon that card unit on the tile
-			BasicCommands.addPlayer1Notification(out, "card selected", 3);
-			gameState.currentSelectedUnit = null;
-			gameState.unitCurrentTile = null;
-			// new changes to account for tracking whether a tile is clicked or not
-			// previouslySelectedTile is used for combat under the assumption it is
-			// referring to a unit thats
-			// going to declare an attack
-			gameState.isTileSelected = false;
-			Game.summonUnit(out, gameState, tilex, tiley);
-		} else if (tileSelected.hasUnit() && !gameState.isTileSelected) { // if the tile clicked has unit on it show
-																			// valid moves
-			BasicCommands.addPlayer1Notification(out, "move by clicking on tiles", 3);
-			gameState.currentSelectedUnit = tileSelected.getUnit();
-			gameState.unitCurrentTile = tileSelected;
-			// the selected unit is now in a position to either move or perform combat
-			gameState.isTileSelected = true;
-			Game.showValidMovement(out, tiles, clickedTile, 2);
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			Game.getBoard().drawBoard(out, tiles);
-			return;
-		} else if (gameState.currentSelectedUnit != null && selectedUnit == null) {// if a tile is clicked after a unit
-																					// is clicked, move the
-			// unit to that tile (valid move not implemented, for now it
-			// just moves)
-			BasicCommands.addPlayer1Notification(out, "moved", 3);
-			gameState.unitCurrentTile.setUnit(null); // remove unit reference from previous tile before moving to new
-			// tile
-			gameState.currentSelectedUnit.setPositionByTile(tileSelected);
-			tileSelected.setUnit(gameState.currentSelectedUnit);
-			BasicCommands.addPlayer1Notification(out, "moveUnitToTile", 3);
-			BasicCommands.moveUnitToTile(out, gameState.currentSelectedUnit, tileSelected);
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			// Reset conditions after performing a move
-			gameState.currentSelectedUnit = null;
-			gameState.unitCurrentTile = null;
-			gameState.isTileSelected = false;
-			return;
-		}
-		if (gameState.unitCurrentTile != tileSelected && gameState.isTileSelected &&
-				gameState.unitCurrentTile != null) {
-			BattleHandler.attackUnit(out, gameState.currentSelectedUnit, selectedUnit, gameState);
+		if (!gameState.gameOver) {
+			// the new method for summoning a unit - does not consider potential move or
+			// anything like that yet - be prepared to adjust to funnel to correct method
+			Board board = Game.getBoard();
+			Tile tileSelected = board.getTile(tilex, tiley);
+			if (gameState.cardSelected) { // tile clicked after card is selected, summon that card unit on the tile
+				BasicCommands.addPlayer1Notification(out, "card selected", 3);
+				gameState.currentSelectedUnit = null;
+				gameState.unitCurrentTile = null;
+				// new changes to account for tracking whether a tile is clicked or not
+				// previouslySelectedTile is used for combat under the assumption it is
+				// referring to a unit thats
+				// going to declare an attack
+				gameState.isTileSelected = false;
+				Game.summonUnit(out, gameState, tilex, tiley);
+			} else if (tileSelected.hasUnit() && !gameState.isTileSelected) { // if the tile clicked has unit on it show
+																				// valid moves
+				BasicCommands.addPlayer1Notification(out, "move by clicking on tiles", 3);
+				gameState.currentSelectedUnit = tileSelected.getUnit();
+				gameState.unitCurrentTile = tileSelected;
+				// the selected unit is now in a position to either move or perform combat
+				gameState.isTileSelected = true;
+				Game.showValidMovement(out, tiles, clickedTile, 2);
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				Game.getBoard().drawBoard(out, tiles);
+				return;
+			} else if (gameState.currentSelectedUnit != null && selectedUnit == null) {// if a tile is clicked after a unit
+																						// is clicked, move the
+																						// unit to that tile (valid move not implemented, for now it
+																						// just moves)
+				if (tileSelected.getIsActionableTile()) {
+					System.out.println("able to move");
+					BasicCommands.addPlayer1Notification(out, "moved", 3);
+					gameState.unitCurrentTile.setUnit(null); // remove unit reference from previous tile before moving to new
+					// tile
+					gameState.currentSelectedUnit.setPositionByTile(tileSelected);
+					tileSelected.setUnit(gameState.currentSelectedUnit);
+					BasicCommands.addPlayer1Notification(out, "moveUnitToTile", 3);
+					BasicCommands.moveUnitToTile(out, gameState.currentSelectedUnit, tileSelected);
+					try {
+						Thread.sleep(4000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 
-			// Reset conditions after combat
-			gameState.isTileSelected = false;
-			gameState.currentSelectedUnit = null;
-			gameState.unitCurrentTile = null;
+				// Reset conditions after performing a move
+				gameState.currentSelectedUnit = null;
+				gameState.unitCurrentTile = null;
+				gameState.isTileSelected = false;
+				board.resetAllTiles();
+				return;
+			}
+			if (gameState.unitCurrentTile != tileSelected && gameState.isTileSelected
+					&& gameState.unitCurrentTile != null && tileSelected.getIsActionableTile()) {
+				BattleHandler.attackUnit(out, gameState.currentSelectedUnit, selectedUnit, gameState);
+
+				// Reset conditions after combat
+				gameState.isTileSelected = false;
+				gameState.currentSelectedUnit = null;
+				gameState.unitCurrentTile = null;
+				board.resetAllTiles();
+			} 
 		}
 
 	}

@@ -28,7 +28,7 @@ public class Unit {
 	Position position;
 	UnitAnimationSet animations;
 	ImageCorrection correction;
-	
+	    
 	protected boolean hasMoved = false;
 	protected boolean hasAttacked = false;
 	
@@ -153,8 +153,6 @@ public class Unit {
 	public String getName() {
 		return this.name;
 	}
-
-
 
 	
 	/**
