@@ -17,7 +17,7 @@ import structures.units.NightsorrowAssasin;
 import structures.units.RockPulveriser;
 
 public class SubUnitCreator {
-	static int globalUnitID = 0;
+	static int globalUnitID = 1;
 
 	final static Map<String, Class<? extends Unit>> unitMap = new HashMap<String, Class<? extends Unit>>() {
 		{

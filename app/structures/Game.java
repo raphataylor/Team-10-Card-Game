@@ -207,7 +207,7 @@ public class Game {
 		// stores an array of the two units
 		Unit[] avatars = new Unit[2];
 		Unit humanAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Avatar.class);
-		Tile humanAvatarStartTile = board.getTile(2, 2);
+		Tile humanAvatarStartTile = board.getTile(x, y);
 		humanAvatar.setPositionByTile(humanAvatarStartTile);
 		humanAvatarStartTile.setUnit(humanAvatar);
 		BasicCommands.drawUnit(out, humanAvatar, humanAvatarStartTile);
@@ -228,8 +228,8 @@ public class Game {
 		// "technically"
 		board.addPlayer1Unit(humanAvatar);
 
-		Unit aiAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Avatar.class);
-		Tile aiAvatarStartTile = board.getTile(6, 2);
+		Unit aiAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 1, Avatar.class);
+		Tile aiAvatarStartTile = board.getTile(x2, y2);
 		aiAvatarStartTile.setUnit(aiAvatar);
 		aiAvatar.setPositionByTile(aiAvatarStartTile);
 		BasicCommands.drawUnit(out, aiAvatar, aiAvatarStartTile);
@@ -249,6 +249,8 @@ public class Game {
 		// not sure if this is appropriate but its required for effect checking
 		// "technically"
 		board.addPlayer2Unit(aiAvatar);
+		
+		humanAvatar.setHasMoved(true);
 
 		return avatars;
 
@@ -260,45 +262,47 @@ public class Game {
 		int X = tile.getTilex();
 		int Y = tile.getTiley();
 		Unit clickedUnit = tile.getUnit();
-		
+		System.out.println("getting valid moves");
 		//checks adjacent tiles for any units with provoke and draws red square if present
 		List<Tile> adjTiles = board.getAdjacentTiles(tile);
 		for (int i = 0; i < adjTiles.size(); i++) {
 			if (adjTiles.get(i).hasUnit()) {
 				if (adjTiles.get(i).getUnit() instanceof ProvokeAbilityUnit) {
+					System.out.println("not drawing squares because of provoke");
 					BasicCommands.drawTile(out, adjTiles.get(i), 2);
 					adjTiles.get(i).setIsActionableTile(true);
 				}
-				else {
-					// Iterate over the board to find tiles within the specified distance.
-				    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
-				        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
-				        	Tile checkedTile = Game.getBoard().getTile(x, y);
-				            // Calculate the Manhattan distance to the unit.
-				            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
-				            if (manhattanDistance <= distance) {
-				                // Highlight this tile.
-				            	if(!checkedTile.hasUnit()) {
-									BasicCommands.drawTile(out, grid[x][y], 1);
-									//sets the tile to be actionable
-						            grid[x][y].setIsActionableTile(true);
-									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-				            	}
-			                    Unit unitOnTile = checkedTile.getUnit();
-			                    // Check if the unit belongs to player 2
-			                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
-			                    	BasicCommands.drawTile(out, grid[x][y], 2);
-			                    	//sets the tile to be actionable
-						            grid[x][y].setIsActionableTile(true);
-									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-			                    }
-				            }
-				            
-				        }
-				    }
-					
-					
-				}
+			}
+			else {
+				System.out.println("drawing squares");
+				// Iterate over the board to find tiles within the specified distance.
+			    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
+			        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
+			        	Tile checkedTile = Game.getBoard().getTile(x, y);
+			            // Calculate the Manhattan distance to the unit.
+			            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
+			            if (manhattanDistance <= distance) {
+			                // Highlight this tile.
+			            	if(!checkedTile.hasUnit()) {
+								BasicCommands.drawTile(out, grid[x][y], 1);
+								//sets the tile to be actionable
+					            grid[x][y].setIsActionableTile(true);
+								try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+			            	}
+		                    Unit unitOnTile = checkedTile.getUnit();
+		                    // Check if the unit belongs to player 2
+		                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
+		                    	BasicCommands.drawTile(out, grid[x][y], 2);
+		                    	//sets the tile to be actionable
+					            grid[x][y].setIsActionableTile(true);
+								try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+		                    }
+			            }
+			            
+			        }
+			    }
+				
+				
 			}
 		}
 	}
@@ -568,5 +572,7 @@ public class Game {
 		else {
 			
 		}
+		
+		resetGameState(out, gameState);
 	}
 }

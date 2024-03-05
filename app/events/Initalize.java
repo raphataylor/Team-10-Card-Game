@@ -46,7 +46,7 @@ public class Initalize implements EventProcessor {
 		
 		
 		//to add correct coordinates when identified 
-		Unit[] avatars = Game.avatarSummonSetup(out, 0, 0, 0, 0);
+		Unit[] avatars = Game.avatarSummonSetup(out, 1, 2, 7, 2);
 		
 		//This is required for the mana system code to run successfully 
 		Player player1 = new Player(avatars[0]);

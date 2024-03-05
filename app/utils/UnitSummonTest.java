@@ -168,7 +168,7 @@ public class UnitSummonTest {
 		
 		Card testCard = BasicObjectBuilders.loadCard("conf/gameconfs/cards/1_1_c_u_bad_omen.json", 2, Card.class);
 		Unit testunit = BasicObjectBuilders.loadUnit(testCard.getUnitConfig(), 5, Unit.class);
-		Tile testtile = Game.getBoard().getTile(1, 2);
+		Tile testtile = Game.getBoard().getTile(1, 4);
 		testunit.setPositionByTile(testtile);
 		BasicCommands.drawUnit(out, testunit, testtile);
 		try {
