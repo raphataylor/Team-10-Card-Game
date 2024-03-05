@@ -49,8 +49,9 @@ public class CardClicked implements EventProcessor{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			//not sure why we reset the gameboard after selecting a card 
 			//Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
-			Game.getBoard().resetAllTiles(out);
+			//Game.getBoard().resetAllTiles(out);
 		}
 
 		

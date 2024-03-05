@@ -127,6 +127,7 @@ public class Game {
 		// is this the right place?
 
 		Tile tileSelected = board.getTile(x, y);
+		System.out.println(tileSelected.getIsActionableTile());
 		if (tileSelected.getIsActionableTile()) {
 			//mana cost check to ensure the player attempting to summon the unit has enough mana 
 			if (gameState.currentPlayer.getMana() - cardToPlayer.getManacost() < 0) {
@@ -188,6 +189,7 @@ public class Game {
 
 		gameState.cardSelected = false;
 		gameState.currentCardSelected = -1;
+		resetGameState(out, gameState);
 	}
 
 	// requires the correct coordinates for tile locations for both avatars
@@ -270,7 +272,7 @@ public class Game {
 									BasicCommands.drawTile(out, grid[x][y], 1);
 									//sets the tile to be actionable
 						            grid[x][y].setIsActionableTile(true);
-									//try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 				            	}
 			                    Unit unitOnTile = checkedTile.getUnit();
 			                    // Check if the unit belongs to player 2
@@ -543,7 +545,16 @@ public class Game {
 		gameState.cardSelected = false;
 		getBoard().resetAllTiles(out);
 		
+	}
+	
+	public static void beginNewTurn(ActorRef out, GameState gameState) {
+		if (gameState.currentPlayer == gameState.player1) {
+			updateManaVisual(out, gameState.player1);
+			gameState.player1.drawCardAtTurnEnd(out);
+		}
 		
-		
+		else {
+			
+		}
 	}
 }

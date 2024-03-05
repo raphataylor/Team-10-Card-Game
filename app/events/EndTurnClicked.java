@@ -59,6 +59,7 @@ public class EndTurnClicked implements EventProcessor {
 		
 		gameState.previousSelectedTile = null;
 		gameState.isTileSelected = false;
+		Game.beginNewTurn(out, gameState);
 
 		
 	}

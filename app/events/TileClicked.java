@@ -44,9 +44,6 @@ public class TileClicked implements EventProcessor {
 			// do some logic
 		}
 
-		// bens testing ground
-		// UnitSummonTest.summonUnit(out, gameState, tilex, tiley);
-
 		if (!gameState.gameOver) {
 			// the new method for summoning a unit - does not consider potential move or
 			// anything like that yet - be prepared to adjust to funnel to correct method
@@ -76,7 +73,7 @@ public class TileClicked implements EventProcessor {
 					e.printStackTrace();
 				}
 				//Game.getBoard().drawBoard(out, tiles);
-				board.resetAllTiles(out);
+				//board.resetAllTiles(out);
 				return;
 			} else if (gameState.currentSelectedUnit != null && selectedUnit == null) {// if a tile is clicked after a unit
 																						// is clicked, move the

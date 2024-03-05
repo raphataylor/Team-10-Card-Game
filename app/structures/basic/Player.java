@@ -122,6 +122,7 @@ public class Player {
 		}
 		else {
 			drawCard(out, 1);
+			return;
 		}
 		removeCardFromDeck(0);
 		
