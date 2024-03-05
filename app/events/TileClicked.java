@@ -39,13 +39,13 @@ public class TileClicked implements EventProcessor {
 		Tile clickedTile = Game.getBoard().getTile(tilex, tiley);
 		Tile[][] tiles = Game.getBoard().getTiles();
 		Unit selectedUnit = clickedTile.getUnit();
+		
+		System.out.println(selectedUnit);
+
 
 		if (gameState.something == true) {
 			// do some logic
 		}
-
-		// bens testing ground
-		// UnitSummonTest.summonUnit(out, gameState, tilex, tiley);
 
 		if (!gameState.gameOver) {
 			// the new method for summoning a unit - does not consider potential move or
@@ -75,7 +75,8 @@ public class TileClicked implements EventProcessor {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				Game.getBoard().drawBoard(out, tiles);
+				//Game.getBoard().drawBoard(out, tiles);
+				//board.resetAllTiles(out);
 				return;
 			} else if (gameState.currentSelectedUnit != null && selectedUnit == null) {// if a tile is clicked after a unit
 																						// is clicked, move the
@@ -101,18 +102,21 @@ public class TileClicked implements EventProcessor {
 				gameState.currentSelectedUnit = null;
 				gameState.unitCurrentTile = null;
 				gameState.isTileSelected = false;
-				board.resetAllTiles();
+				board.resetAllTiles(out);
 				return;
 			}
 			if (gameState.unitCurrentTile != tileSelected && gameState.isTileSelected
 					&& gameState.unitCurrentTile != null && tileSelected.getIsActionableTile()) {
+				System.out.println("performing combat");
+				System.out.println(selectedUnit.getName());
 				BattleHandler.attackUnit(out, gameState.currentSelectedUnit, selectedUnit, gameState);
 
+				return;
 				// Reset conditions after combat
-				gameState.isTileSelected = false;
-				gameState.currentSelectedUnit = null;
-				gameState.unitCurrentTile = null;
-				board.resetAllTiles();
+//				gameState.isTileSelected = false;
+//				gameState.currentSelectedUnit = null;
+//				gameState.unitCurrentTile = null;
+//				board.resetAllTiles(out);
 			} 
 		}
 

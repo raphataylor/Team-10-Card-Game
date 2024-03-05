@@ -34,9 +34,6 @@ public class CardClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		int handPosition = message.get("position").asInt();
-		
-		//bens testing ground
-		//UnitSummonTest.cardClick(out, gameState, handPosition);
 		//the new method for dealing with card clicked
 		Game.selectCard(out, gameState, handPosition);
 		
@@ -52,7 +49,9 @@ public class CardClicked implements EventProcessor{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
+			//not sure why we reset the gameboard after selecting a card 
+			//Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
+			//Game.getBoard().resetAllTiles(out);
 		}
 
 		

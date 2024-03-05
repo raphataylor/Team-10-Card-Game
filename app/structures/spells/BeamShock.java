@@ -20,7 +20,7 @@ public class BeamShock extends Card implements Spell {
         if (tile.hasUnit()) {
             Unit targetUnit = tile.getUnit();
             // Stun the unit, preventing it from moving or attacking next turn
-            targetUnit.setStunned(true);
+            targetUnit.setStunned(out, true);
             // Display notification that the unit is stunned
             BasicCommands.addPlayer1Notification(out, targetUnit.getName() + " is stunned!", 2);
         }

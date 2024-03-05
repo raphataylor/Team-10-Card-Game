@@ -23,7 +23,7 @@ public class Player {
 
 	// Holds the current players Cards in a hand
 	//CHANGE HAND TO ARRAY AND TEST LATER
-	public List<Card> playerHand = new ArrayList<Card>(6);
+	public Card[] playerHand = new Card[6];
 
 	public List<Card> playerDeck = new ArrayList<Card>(20);
 
@@ -42,8 +42,7 @@ public class Player {
 
 	public void removeCardFromHand(int handPosition) {
 		// test bandaid
-		playerHand.add(new Card());
-		playerHand.remove(handPosition);
+		playerHand[handPosition] = null;
 	}
 
 	// function for drawing cards
@@ -54,12 +53,28 @@ public class Player {
 		}
 		for (int i = 0; i < cardsToDraw; i++) {
 			Card card = playerDeck.get(0);
-			BasicCommands.drawCard(out, card, playerHand.size(), 0);
-			setPlayerHandCard(playerHand.size(), card);
-			removeCardFromDeck(0);
+			int freeHandPosition = identifyFreeHandPosition();
+			if (freeHandPosition != -1) {
+				BasicCommands.drawCard(out, card, freeHandPosition, 0);
+				setPlayerHandCard(freeHandPosition, card);
+				removeCardFromDeck(0);
 			}
-				
 		}
+	}
+	
+	//This method will identify the free hand position if there is any space
+	//If there isnt any space then it will return -1 
+	public int identifyFreeHandPosition() {
+		for (int i = 0; i < playerHand.length; i++) {
+			if (playerHand[i] instanceof Card) {
+				continue;
+			}
+			else {
+				return i;
+			}
+		}
+		return -1;
+	}
 	
 	
 	//could be added to the AI child class extending Player -- drawCard could be made abstract class which will be derived in both Player1 and player2 class extending player class
@@ -71,9 +86,9 @@ public class Player {
 		
 		for (int i = 0; i < cardsToDraw; i++) {
 			Card card = playerDeck.get(0);
-			
-			setPlayerHandCard(playerHand.size(), card);
-			System.out.println("AI card : "+playerHand.get(i).cardname);
+			int freeHandPosition = identifyFreeHandPosition();
+			setPlayerHandCard(freeHandPosition, card);
+			System.out.println("AI card : "+playerHand[freeHandPosition].cardname);
 			removeCardFromDeck(0);
 				
 		}
@@ -100,11 +115,21 @@ public class Player {
 			BasicCommands.addPlayer1Notification(out, "Card Deck Empty. Deck Reshfulled", 5);
 			setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
 		}
-		drawCard(out, this.playerHand.size() >= 6 ? 0 : 1);
+		//if there are no free spaces in the hand then it will return -1
+		//this means there is no need to draw a card and that top card will be discarded instead
+		int freeHandPos = identifyFreeHandPosition();
+		if (freeHandPos == -1) {
+		}
+		else {
+			drawCard(out, 1);
+			return;
+		}
+		removeCardFromDeck(0);
+		
 	}
 
-	public void removeCardFromDeck(int handPosition) {
-		this.playerDeck.remove(handPosition);
+	public void removeCardFromDeck(int deckPosition) {
+		this.playerDeck.remove(deckPosition);
 	}
 
 	public int getHealth() {
@@ -126,11 +151,11 @@ public class Player {
 	public Card getPlayerHandCard(int handPosition) {
 		// handPosition returning -1 has been crashing the game
 		System.out.println(handPosition);
-		return this.playerHand.get(handPosition);
+		return this.playerHand[handPosition];
 	}
 
 	public void setPlayerHandCard(int handPosition, Card card) {
-		this.playerHand.add(card);
+		this.playerHand[handPosition] = card;
 	}
 
 	public List<Card> getPlayerDeck() {

@@ -56,14 +56,25 @@ public class Game {
 	public static void setManaOnStartTurn(ActorRef out, GameState gameState) {
 
 		if (gameState.gameInitalised) {
-
-			gameState.currentPlayer.setMana(gameState.turn + 1);
-
-			if (gameState.currentPlayer == gameState.player1) {
-				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
-			} else {
-				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
+			System.out.println("updatign mana");
+			
+			
+			//checks for turn number, if it is greater than 8 then every turn after will give the current player 9 mana.
+			if (gameState.turn <= 8) {
+				gameState.currentPlayer.setMana(gameState.turn + 1);
 			}
+			else {
+				gameState.currentPlayer.setMana(9);
+			}
+			
+			//utilises a method created for this purpose rather than making additional work
+			updateManaVisual(out, gameState.currentPlayer);
+
+//			if (gameState.currentPlayer == gameState.player1) {
+//				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
+//			} else {
+//				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
+//			}
 
 		}
 
@@ -75,6 +86,7 @@ public class Game {
 
 			Thread.sleep(300);
 			gameState.currentPlayer.setMana(0);
+			updateManaVisual(out, gameState.currentPlayer);
 
 			if (gameState.currentPlayer == gameState.player1) {
 				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
@@ -124,86 +136,102 @@ public class Game {
 		// make unit id static public attribute - where to track this? gameState again?
 		// is this the right place?
 
-		// example tile but needs the board class with populated tiles to work with this
 		Tile tileSelected = board.getTile(x, y);
+		System.out.println(tileSelected.getIsActionableTile());
+		if (tileSelected.getIsActionableTile()) {
+			//mana cost check to ensure the player attempting to summon the unit has enough mana 
+			if (gameState.currentPlayer.getMana() - cardToPlayer.getManacost() < 0) {
+				BasicCommands.addPlayer1Notification(out, "NOT ENOUGH MANA", 3);
+			}
+			else {
+				// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
+				// Unit.class);
+				Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference, x, y);
+				System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
+				unitSummon.setPositionByTile(tileSelected);
+				tileSelected.setUnit(unitSummon);
+				
+				if (unitSummon instanceof OpeningGambitAbilityUnit) {
+					((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
+				}
 
-		// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
-		// Unit.class);
-		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(), cardJSONReference, x, y);
-		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
-		unitSummon.setPositionByTile(tileSelected);
-		tileSelected.setUnit(unitSummon);
-		
-		if (unitSummon instanceof OpeningGambitAbilityUnit) {
-			((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
+				// add unit summon to player 1 unit array
+				board.addPlayer1Unit(unitSummon);
+				// System.out.println(board.getPlayer1Units());
+
+				BasicCommands.drawUnit(out, unitSummon, tileSelected);
+				// stops tiles from highlighting after summon
+				unitSummon.setHasMoved(true);
+
+				// a delay is required from drawing to setting attack/hp or else it will not
+				// work
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				// consider building upon existing constructor in Unit class when time permits
+				// to strengthen and create a safer class with invariants!
+				int healthVal = cardToPlayer.getHealth();
+				int attackVal = cardToPlayer.getAttack();
+
+				unitSummon.setHealth(healthVal);
+				unitSummon.setAttack(attackVal);
+
+				String name = cardToPlayer.getCardname();
+				unitSummon.setName(name);
+
+				// now grabs health and attack values from the card for drawing
+				BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
+				BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
+
+				GameState.player1.removeCardFromHand(gameState.currentCardSelected);
+				BasicCommands.deleteCard(out, gameState.currentCardSelected);
+				GameState.player1.setMana(GameState.player1.getMana() - cardToPlayer.getManacost());
+				updateManaVisual(out, gameState.player1);
+			}
+
 		}
-
-		// add unit summon to player 1 unit array
-		board.addPlayer1Unit(unitSummon);
-		// System.out.println(board.getPlayer1Units());
-
-		BasicCommands.drawUnit(out, unitSummon, tileSelected);
-		// stops tiles from highlighting after summon
-		unitSummon.setHasMoved(true);
-
-		// a delay is required from drawing to setting attack/hp or else it will not
-		// work
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		else {
+			BasicCommands.addPlayer1Notification(out, "CANNOT PLACE UNIT THERE", 3);
 		}
-
-		// consider building upon existing constructor in Unit class when time permits
-		// to strengthen and create a safer class with invariants!
-		int healthVal = cardToPlayer.getHealth();
-		int attackVal = cardToPlayer.getAttack();
-
-		unitSummon.setHealth(healthVal);
-		unitSummon.setAttack(attackVal);
-
-		String name = cardToPlayer.getCardname();
-		unitSummon.setName(name);
-
-		// now grabs health and attack values from the card for drawing
-		BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
-		BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
-
-		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
-		BasicCommands.deleteCard(out, gameState.currentCardSelected);
 
 		gameState.cardSelected = false;
 		gameState.currentCardSelected = -1;
+		resetGameState(out, gameState);
 	}
 
 	// requires the correct coordinates for tile locations for both avatars
 	public static Unit[] avatarSummonSetup(ActorRef out, int x, int y, int x2, int y2) {
+		
+		
 		// stores an array of the two units
 		Unit[] avatars = new Unit[2];
 		Unit humanAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Avatar.class);
-		Tile humanAvatarStartTile = board.getTile(2, 2);
+		Tile humanAvatarStartTile = board.getTile(x, y);
 		humanAvatar.setPositionByTile(humanAvatarStartTile);
 		humanAvatarStartTile.setUnit(humanAvatar);
 		BasicCommands.drawUnit(out, humanAvatar, humanAvatarStartTile);
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
-		humanAvatar.setAttack(0);
+		humanAvatar.setAttack(2);
 		humanAvatar.setHealth(20);
 
 		BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setUnitHealth(out, humanAvatar, 20);
-		BasicCommands.setUnitAttack(out, humanAvatar, 0);
+		BasicCommands.setUnitAttack(out, humanAvatar, 2);
 		avatars[0] = humanAvatar;
 		// not sure if this is appropriate but its required for effect checking
 		// "technically"
 		board.addPlayer1Unit(humanAvatar);
 
-		Unit aiAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Avatar.class);
-		Tile aiAvatarStartTile = board.getTile(6, 2);
+		Unit aiAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 1, Avatar.class);
+		Tile aiAvatarStartTile = board.getTile(x2, y2);
 		aiAvatarStartTile.setUnit(aiAvatar);
 		aiAvatar.setPositionByTile(aiAvatarStartTile);
 		BasicCommands.drawUnit(out, aiAvatar, aiAvatarStartTile);
@@ -213,16 +241,18 @@ public class Game {
 			e.printStackTrace();
 		}
 
-		aiAvatar.setAttack(0);
+		aiAvatar.setAttack(2);
 		aiAvatar.setHealth(20);
 
 		BasicCommands.setPlayer2Health(out, GameState.player2);
 		BasicCommands.setUnitHealth(out, aiAvatar, 20);
-		BasicCommands.setUnitAttack(out, aiAvatar, 0);
+		BasicCommands.setUnitAttack(out, aiAvatar, 2);
 		avatars[1] = aiAvatar;
 		// not sure if this is appropriate but its required for effect checking
 		// "technically"
 		board.addPlayer2Unit(aiAvatar);
+		
+		humanAvatar.setHasMoved(true);
 
 		return avatars;
 
@@ -234,45 +264,47 @@ public class Game {
 		int X = tile.getTilex();
 		int Y = tile.getTiley();
 		Unit clickedUnit = tile.getUnit();
-		
+		System.out.println("getting valid moves");
 		//checks adjacent tiles for any units with provoke and draws red square if present
 		List<Tile> adjTiles = board.getAdjacentTiles(tile);
 		for (int i = 0; i < adjTiles.size(); i++) {
 			if (adjTiles.get(i).hasUnit()) {
 				if (adjTiles.get(i).getUnit() instanceof ProvokeAbilityUnit) {
+					System.out.println("not drawing squares because of provoke");
 					BasicCommands.drawTile(out, adjTiles.get(i), 2);
+					adjTiles.get(i).setIsActionableTile(true);
 				}
-				else {
-					// Iterate over the board to find tiles within the specified distance.
-				    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
-				        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
-				        	Tile checkedTile = Game.getBoard().getTile(x, y);
-				            System.out.println(checkedTile);
-				            // Calculate the Manhattan distance to the unit.
-				            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
-				            if (manhattanDistance <= distance) {
-				                // Highlight this tile.
-				            	if(!checkedTile.hasUnit()) {
-									BasicCommands.drawTile(out, grid[x][y], 1);
-									//sets the tile to be actionable
-						            grid[x][y].setIsActionableTile(true);
-									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-				            	}
-			                    Unit unitOnTile = checkedTile.getUnit();
-			                    // Check if the unit belongs to player 2
-			                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
-			                    	BasicCommands.drawTile(out, grid[x][y], 2);
-			                    	//sets the tile to be actionable
-						            grid[x][y].setIsActionableTile(true);
-									try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-			                    }
-				            }
-				            
-				        }
-				    }
-					
-					
-				}
+			}
+			else {
+				System.out.println("drawing squares");
+				// Iterate over the board to find tiles within the specified distance.
+			    for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
+			        for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
+			        	Tile checkedTile = Game.getBoard().getTile(x, y);
+			            // Calculate the Manhattan distance to the unit.
+			            int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
+			            if (manhattanDistance <= distance) {
+			                // Highlight this tile.
+			            	if(!checkedTile.hasUnit()) {
+								BasicCommands.drawTile(out, grid[x][y], 1);
+								//sets the tile to be actionable
+					            grid[x][y].setIsActionableTile(true);
+								try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+			            	}
+		                    Unit unitOnTile = checkedTile.getUnit();
+		                    // Check if the unit belongs to player 2
+		                    if(Game.getBoard().getPlayer2Units().contains(unitOnTile)) {
+		                    	BasicCommands.drawTile(out, grid[x][y], 2);
+		                    	//sets the tile to be actionable
+					            grid[x][y].setIsActionableTile(true);
+								try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+		                    }
+			            }
+			            
+			        }
+			    }
+				
+				
 			}
 		}
 	}
@@ -299,15 +331,13 @@ public class Game {
 
 	// Sprint 1 [VIS08] & [VIS07]
 	// Method to update and display health for both players
-	public static void updateHealthVisual(ActorRef out, Player player1, Player player2) {
-		BasicCommands.setPlayer1Health(out, player1); // Update player 1's health
-		BasicCommands.setPlayer2Health(out, player2); // Update player 2's health
+	public static void updateHealthVisual(ActorRef out, Player player) {
+		BasicCommands.setPlayer1Health(out, player); // Update player 1's health
 	}
 
 	// Method to update and display mana for both players
-	public static void updateManaVisual(ActorRef out, Player player1, Player player2) {
-		BasicCommands.setPlayer1Mana(out, player1); // Update player 1's mana
-		BasicCommands.setPlayer2Mana(out, player2); // Update player 2's mana
+	public static void updateManaVisual(ActorRef out, Player player) {
+		BasicCommands.setPlayer1Mana(out, player); // Update player 1's mana
 	}
 	
 	/* method to update the attack of an unit or avatar summoned on the board
@@ -347,7 +377,7 @@ public class Game {
                     
                     summonAICard(out, gameState, targetTile, cardToPlay);
                     
-                    gameState.player2.playerHand.remove(i);
+                    gameState.player2.playerHand[i] = null;
                                         
                     
                 } else {
@@ -487,7 +517,7 @@ public class Game {
            
             // Deduct the mana cost of the spell from the player's mana pool
             gameState.player1.setMana(gameState.player1.getMana() - cardToCast.getManacost());
-            BasicCommands.setPlayer1Mana(out, gameState.player1);
+            updateManaVisual(out, gameState.currentPlayer);
            
             // Remove the spell card from the player's hand
             gameState.player1.removeCardFromHand(gameState.currentCardSelected);
@@ -515,5 +545,36 @@ public class Game {
 		} else if (spellCard instanceof WraithlingSwarm) {
 			((WraithlingSwarm)spellCard).spell(out, gameState, tile);
 		}
+	}
+	
+	public static void resetGameState(ActorRef out, GameState gameState) {
+		
+		if (gameState.currentPlayer == gameState.player1) {
+			if (gameState.currentCardSelected != -1) {
+				Card currentCardHighlighted = gameState.player1.getPlayerHandCard(gameState.currentCardSelected);
+				BasicCommands.drawCard(out, currentCardHighlighted, gameState.currentCardSelected, 0);
+			}
+			
+		}
+		gameState.previousSelectedTile = null;
+		gameState.isTileSelected = false;
+		gameState.cardSelected = false;
+		getBoard().resetAllTiles(out);
+		
+	}
+	
+	public static void beginNewTurn(ActorRef out, GameState gameState) {
+		
+		gameState.turn++; 
+		if (gameState.currentPlayer == gameState.player1) {
+			setManaOnStartTurn(out, gameState);
+			gameState.player1.drawCardAtTurnEnd(out);
+		}
+		
+		else {
+			
+		}
+		
+		resetGameState(out, gameState);
 	}
 }
