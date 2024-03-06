@@ -48,5 +48,5 @@ public class GameState {
 	public static Player currentPlayer = player1;
 	
 	public static boolean gameOver = false;
-
+	
 }

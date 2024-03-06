@@ -24,7 +24,7 @@ public class OtherClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		//prevents any potential issues by resetting tile selection state
 		
-		
+		Game.getBoard().unHighlightAllTiles(out);
 		Game.resetGameState(out, gameState);
 		//moved to a resetBoardState but requires testing before we can remove this
 //		gameState.previousSelectedTile = null;

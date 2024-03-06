@@ -39,6 +39,7 @@ public class TileClicked implements EventProcessor {
 		Tile clickedTile = Game.getBoard().getTile(tilex, tiley);
 		Tile[][] tiles = Game.getBoard().getTiles();
 		Unit selectedUnit = clickedTile.getUnit();
+		Game.getBoard().unHighlightAllTiles(out);
 		
 		System.out.println(selectedUnit);
 
