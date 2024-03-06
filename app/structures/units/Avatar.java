@@ -9,9 +9,9 @@ import structures.basic.Unit;
 
 //currently using class instead of interface as behaviour does not matter, just typing does
 public class Avatar extends Unit{
+	private boolean hasHornOfForsaken = false;
 	
 	public void highlightAdjacentTiles(ActorRef out, Tile[][] grid) {
-			
 		int X = this.getPosition().getTilex();
 		int Y = this.getPosition().getTiley();
 		
@@ -27,6 +27,14 @@ public class Avatar extends Unit{
 	            }
 	        }
 	    }
+	}
+	
+	public boolean getHasHornOfForsaken() {
+		return this.hasHornOfForsaken;
+	}
+	
+	public void setHasHornOfForsaken(boolean hasHornOfForsaken) {
+		this.hasHornOfForsaken = hasHornOfForsaken;
 	}
 
 }

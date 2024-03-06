@@ -90,10 +90,7 @@ public class Player {
 			setPlayerHandCard(freeHandPosition, card);
 			System.out.println("AI card : "+playerHand[freeHandPosition].cardname);
 			removeCardFromDeck(0);
-				
 		}
-		
-		
 	}
 
 	public void drawInitialHand(ActorRef out) {

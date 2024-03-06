@@ -127,20 +127,16 @@ public class Game {
 		}
 	}
 
-	// work on later to handle non unit situations
-	// DO NOT ATTEMPT TO SUMMON A SPELL OR USE ONE - NOT IMPLEMENTED AND WILL CAUSE
-	// CRASH
+
 	// this method only does player 1 summoning?
 	public static void summonUnit(ActorRef out, GameState gameState, int x, int y) {
 		System.out.println("summoning unit");
 		Card cardToPlayer = GameState.player1.getPlayerHandCard(gameState.currentCardSelected);
 		String cardJSONReference = cardToPlayer.getUnitConfig();
-		// make unit id static public attribute - where to track this? gameState again?
-		// is this the right place?
-
 		Tile tileSelected = board.getTile(x, y);
 		System.out.println(tileSelected.getIsActionableTile());
-		if (tileSelected.getIsActionableTile()) {
+		//ensures the card attempting to be played is a unit card
+		if (tileSelected.getIsActionableTile() && cardToPlayer.getIsCreature()) {
 			//mana cost check to ensure the player attempting to summon the unit has enough mana 
 			if (gameState.currentPlayer.getMana() - cardToPlayer.getManacost() < 0) {
 				BasicCommands.addPlayer1Notification(out, "NOT ENOUGH MANA", 3);
@@ -179,7 +175,6 @@ public class Game {
 
 				String name = cardToPlayer.getCardname();
 				unitSummon.setName(name);
-
 				// now grabs health and attack values from the card for drawing
 				BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
 				BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
@@ -200,7 +195,6 @@ public class Game {
 		else {
 			BasicCommands.addPlayer1Notification(out, "CANNOT PLACE UNIT THERE", 3);
 		}
-
 		gameState.cardSelected = false;
 		gameState.currentCardSelected = -1;
 		resetGameState(out, gameState);
@@ -226,8 +220,6 @@ public class Game {
 
 	// requires the correct coordinates for tile locations for both avatars
 	public static Unit[] avatarSummonSetup(ActorRef out, int x, int y, int x2, int y2) {
-		
-		
 		// stores an array of the two units
 		Unit[] avatars = new Unit[2];
 		Unit humanAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Avatar.class);
@@ -282,7 +274,6 @@ public class Game {
 	
 	
 	public static void showValidMovement(ActorRef out, Tile[][] grid, Tile tile, int distance) {
-		
 		int X = tile.getTilex();
 		int Y = tile.getTiley();
 		Unit clickedUnit = tile.getUnit();
@@ -394,8 +385,6 @@ public class Game {
 	
 
 
-	//SPELL01 CAST SPELL
-    public static void castSpell(ActorRef out, GameState gameState, int x, int y) {
 
 	public static void highlightEnemyUnits(ActorRef out, GameState gameState) {
 		for (Tile[] row : Game.getBoard().getTiles()) {
@@ -419,23 +408,7 @@ public class Game {
 		}
 	}
 
-            // Implement spell effects based on the type of spell
-            applySpellEffect(out, gameState, tileSelected, cardToCast);
            
-            // Deduct the mana cost of the spell from the player's mana pool
-            gameState.player1.setMana(gameState.player1.getMana() - cardToCast.getManacost());
-            updateManaVisual(out, gameState.currentPlayer, gameState);
-           
-            // Remove the spell card from the player's hand
-            gameState.player1.removeCardFromHand(gameState.currentCardSelected);
-            BasicCommands.deleteCard(out, gameState.currentCardSelected);
-           
-            // Reset selected card state in the game state
-            gameState.cardSelected = false;
-            gameState.currentCardSelected = -1;
-           
-            // Add a notification to indicate the spell has been successfully cast
-            BasicCommands.addPlayer1Notification(out, "Casted " + cardToCast.getCardname(), 2);
 
 	// SPELL01 CAST SPELL
 	public static void castSpell(ActorRef out, GameState gameState, int x, int y) {
@@ -451,7 +424,7 @@ public class Game {
 			applySpellEffect(out, gameState, tileSelected, cardToCast);
 				// Deduct the mana cost of the spell from the player's mana pool
 				gameState.player1.setMana(gameState.player1.getMana() - cardToCast.getManacost());
-				updateManaVisual(out, gameState.currentPlayer);
+				updateManaVisual(out, gameState.currentPlayer, gameState);
 				
 				// Remove the spell card from the player's hand
 				gameState.player1.removeCardFromHand(gameState.currentCardSelected);

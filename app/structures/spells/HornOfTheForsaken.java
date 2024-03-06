@@ -4,6 +4,8 @@ import akka.actor.ActorRef;
 import structures.Game;
 import structures.GameState;
 import structures.basic.*;
+import structures.units.Avatar;
+
 import java.util.List;
 import java.util.Random;
 import commands.BasicCommands;
@@ -33,8 +35,8 @@ public class HornOfTheForsaken extends Card implements SpellAbility {
     }
 
     public void spellAbility(ActorRef out, GameState gameState, Tile tile) {
-        Unit playerAvatar = gameState.currentPlayer.getAvatar();
-        playerAvatar.setArtifact(this); // Equipping the artifact to the player's avatar
+        Avatar playerAvatar = (Avatar) gameState.currentPlayer.getAvatar();
+        playerAvatar.setHasAttacked(true); // Equipping the artifact to the player's avatar
 
         BasicCommands.addPlayer1Notification(out, "Horn of the Forsaken equipped", 2); // Display notification
         gameState.currentPlayer.setMana(gameState.currentPlayer.getMana() - this.getManacost()); // Deducting mana cost
@@ -42,11 +44,12 @@ public class HornOfTheForsaken extends Card implements SpellAbility {
     }
 
     public void onPlayerAvatarDamaged(ActorRef out, GameState gameState) {
+    	Avatar playerAvatar = (Avatar) gameState.currentPlayer.getAvatar();
         robustness -= 1;
         BasicCommands.addPlayer1Notification(out, "Horn of the Forsaken robustness decreased", 2);
         if (robustness <= 0) {
             BasicCommands.addPlayer1Notification(out, "Horn of the Forsaken destroyed", 2);
-            GameState.currentPlayer.getAvatar().removeArtifact(); // Remove the artifact when robustness is 0
+            playerAvatar.setHasHornOfForsaken(false); // Remove the artifact when robustness is 0
         }
     }
 
@@ -57,10 +60,7 @@ public class HornOfTheForsaken extends Card implements SpellAbility {
 
         for (Tile adjacentTile : adjacentTiles) {
             if (!adjacentTile.hasUnit()) {
-                Unit wraithling = WraithlingSwarm.loadUnit(StaticConfFiles.u_wraithling, Unit.getUniqueUnitId(), Unit.class); 
-                wraithling.setPositionByTile(adjacentTile);
-                adjacentTile.setUnit(wraithling);
-                BasicCommands.drawUnit(out, wraithling, adjacentTile);
+            	Game.summonToken(out, adjacentTile);
                 wraithlingSummoned = true;
                 break; // Summon only one wraithling
             }

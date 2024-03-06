@@ -53,6 +53,14 @@ public class CardClicked implements EventProcessor{
 			//Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
 			//Game.getBoard().resetAllTiles(out);
 		}
+		
+		//handles clicking a spell card
+		if (!clickedCard.getIsCreature()) {
+			
+			
+			
+			
+		}
 
 		
 		if (clickedCard.getCardname().equalsIgnoreCase("dark terminus")) {// replace to check if it's a dark terminus card
