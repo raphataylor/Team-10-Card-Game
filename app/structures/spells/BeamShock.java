@@ -15,7 +15,7 @@ import structures.basic.Unit;
 * */
  
 public class BeamShock extends Card implements Spell {
-    public void spell(ActorRef out, GameState gameState, Tile tile){
+    public void spell(ActorRef out, GameState gameState, Tile tile) {
         // Check if there is a unit on the targeted tile
         if (tile.hasUnit()) {
             Unit targetUnit = tile.getUnit();
