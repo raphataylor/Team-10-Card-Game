@@ -402,7 +402,8 @@ public class Game {
 		int Y = avatarPosition.getTiley();
 		System.out.println("tile Y avatar "+Y);
 		
-        Tile avatarTile = getBoard().getTile(X, Y); 
+        Tile avatarTile = getBoard().getTile(X, Y);
+        
         
         List<Tile> adjacentTiles = getBoard().getAdjacentTiles(avatarTile);
 
