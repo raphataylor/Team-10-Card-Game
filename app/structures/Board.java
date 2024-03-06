@@ -19,6 +19,7 @@ public class Board {
 	
     private List<Unit> player1Units;
     private List<Unit> player2Units;
+    private ArrayList<Tile> tileList = new ArrayList<Tile>();
 	
 	public Board(ActorRef out) {
 		tiles = createTiles();
@@ -32,6 +33,7 @@ public class Board {
 		for(int i=0;i<rows;i++) {
 			for(int j=0;j<columns;j++) {
 				tiles[i][j] = BasicObjectBuilders.loadTile(i,j);
+				tileList.add(tiles[i][j]);
 			}
 		}
 		return tiles;
@@ -49,7 +51,6 @@ public class Board {
 	
 	//returns all adjacent tiles from an incoming tile
 	public List<Tile> getAdjacentTiles(Tile middleTile){
-		
 		List<Tile> adjTiles = new ArrayList<Tile>();
 		int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
         int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
@@ -63,7 +64,14 @@ public class Board {
             	continue;
             }
             else {
+            	try{
             	adjTiles.add(getTile(adjx, adjy));
+            	}
+            	catch (ArrayIndexOutOfBoundsException e) {
+            		e.printStackTrace();
+            		continue;
+            	}
+            	
             }
             
         }
@@ -76,6 +84,15 @@ public class Board {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				tiles[i][j].setIsActionableTile(false);
+				BasicCommands.drawTile(out, tiles[i][j], 0);
+			}
+		}
+	}
+	
+	//removes all drawings on tiles
+	public void unHighlightAllTiles(ActorRef out) {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
 				BasicCommands.drawTile(out, tiles[i][j], 0);
 			}
 		}
@@ -128,6 +145,10 @@ public class Board {
 
 	public int getColumns() {
 		return columns;
+	}
+	
+	public ArrayList<Tile> getTileList(){
+		return tileList;
 	}
 
 	

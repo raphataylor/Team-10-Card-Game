@@ -49,6 +49,4 @@ public class GameState {
 	
 	public static boolean gameOver = false;
 	
-	public static boolean isAITurnOver = false;
-
 }
