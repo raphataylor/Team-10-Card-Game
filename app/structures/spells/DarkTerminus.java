@@ -15,7 +15,7 @@ import structures.basic.Unit;
 * 			Destroy an enemy creature.
 * 			Summon a Wraithling on the tile of the destroyed creature
 * */
-public class DarkTerminus extends Card implements Spell {
+public class DarkTerminus extends Card implements Spell, EnemySpell {
     public void spell(ActorRef out, GameState gameState, Tile tile){
         // Check if there is an enemy unit on the targeted tile
         if (tile.hasUnit()) {

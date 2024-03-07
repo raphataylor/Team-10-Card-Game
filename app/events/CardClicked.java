@@ -13,7 +13,11 @@ import structures.GameState;
 import structures.basic.Card;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.spells.EnemySpell;
+import structures.spells.FriendlySpell;
+import structures.spells.Spell;
 import structures.units.Avatar;
+import utils.SpellCreator;
 import utils.UnitSummonTest;
 
 /**
@@ -57,8 +61,17 @@ public class CardClicked implements EventProcessor{
 		//handles clicking a spell card
 		if (!clickedCard.getIsCreature()) {
 			
+			Spell spell = SpellCreator.returnSpell(clickedCard.getCardname());
+			if (spell instanceof FriendlySpell) {
+				Game.highlightFriendlyUnits(out, gameState);
+			}
+			else if (spell instanceof EnemySpell) {
+				Game.highlightEnemyUnits(out, gameState);
+			}
 			
-			
+			else {
+				
+			}
 			
 		}
 

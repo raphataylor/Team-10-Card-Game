@@ -12,7 +12,7 @@ import structures.basic.Tile;
  * Effects: Deal 2 damage to an enemy unit.
  * */
 
-public class TrueStrike extends Card implements SpellAbility{
+public class TrueStrike extends Card implements Spell, SpellAbility{
 	
 	public void spellAbility(ActorRef out, GameState gameState, Tile tile){
     }
