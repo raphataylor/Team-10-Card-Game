@@ -45,11 +45,11 @@ public class Game {
 	}
 
 	public static void createPlayerDeck(ActorRef out, GameState gameState) {
-		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
+		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(2));
 		gameState.player1.drawInitialHand(out);
 		
 		//get AI cards and draw initial cards for AI
-		gameState.player2.setPlayerDeck(OrderedCardLoader.getPlayer2Cards(1));
+		gameState.player2.setPlayerDeck(OrderedCardLoader.getPlayer2Cards(2));
 		gameState.player2.drawInitialHandAI(out);
 	}
 
@@ -273,7 +273,7 @@ public class Game {
 	}
 	
 	
-	public static void showValidMovement(ActorRef out, Tile[][] grid, Tile tile, int distance) {
+	public static void showValidMovement(ActorRef out, Tile[][] grid, Tile tile, int distance, GameState gameState) {
 		int X = tile.getTilex();
 		int Y = tile.getTiley();
 		Unit clickedUnit = tile.getUnit();
@@ -282,7 +282,11 @@ public class Game {
 		List<Tile> adjTiles = board.getAdjacentTiles(tile);
 		for (int i = 0; i < adjTiles.size(); i++) {
 			if (adjTiles.get(i).hasUnit()) {
-				if (adjTiles.get(i).getUnit() instanceof ProvokeAbilityUnit) {
+				Unit adjUnit = adjTiles.get(i).getUnit();
+				if (adjUnit instanceof ProvokeAbilityUnit && (gameState.currentPlayer == gameState.player1 &&
+						getBoard().getPlayer2Units().contains(adjUnit) ||
+						gameState.currentPlayer == gameState.player2 &&
+						getBoard().getPlayer1Units().contains(adjUnit))) {
 					BasicCommands.drawTile(out, adjTiles.get(i), 2);
 					adjTiles.get(i).setIsActionableTile(true);
 				}
@@ -389,7 +393,7 @@ public class Game {
 	public static void highlightEnemyUnits(ActorRef out, GameState gameState) {
 		for (Tile[] row : Game.getBoard().getTiles()) {
 			for (Tile tile : row) {
-				if (tile.hasUnit() && !board.getPlayer2Units().contains(tile.getUnit())) {
+				if (tile.hasUnit() && board.getPlayer2Units().contains(tile.getUnit())) {
 					BasicCommands.drawTile(out, tile, 2); // 2 for enemy highlight
 					try { Thread.sleep(10); } catch (InterruptedException e) { e.printStackTrace(); }
 				}
@@ -488,11 +492,10 @@ public class Game {
 		//these actions occur if it is the AIs turn
 		else {
 			setManaOnStartTurn(out, gameState);
-			gameState.currentPlayer = gameState.player2;
 			AILogic.playAITurn(out, gameState);
 
 		}
-		
+		getBoard().resetAllTiles(out);
 		resetGameState(out, gameState);
 	}
 }

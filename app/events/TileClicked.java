@@ -70,7 +70,7 @@ public class TileClicked implements EventProcessor {
 				gameState.unitCurrentTile = tileSelected;
 				// the selected unit is now in a position to either move or perform combat
 				gameState.isTileSelected = true;
-				Game.showValidMovement(out, tiles, clickedTile, 2);
+				Game.showValidMovement(out, tiles, clickedTile, 2, gameState);
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {

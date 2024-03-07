@@ -43,8 +43,13 @@ public class AILogic {
 				e.printStackTrace();
 			}
 			Tile tileOfInterest = Game.getBoard().getTile(unitOfInterest.getPosition().getTilex(), unitOfInterest.getPosition().getTiley());
-			Game.showValidMovement(out, Game.getBoard().getTiles(), tileOfInterest, 2);
-			performUnitBattle(unitOfInterest, out, gameState);
+			Game.showValidMovement(out, Game.getBoard().getTiles(), tileOfInterest, 2, gameState);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			//performUnitBattle(unitOfInterest, out, gameState);
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -56,6 +61,8 @@ public class AILogic {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			Game.getBoard().resetAllTiles(out);
 		}		
 	}
 	
@@ -89,7 +96,6 @@ public class AILogic {
 	}
 	
 	public static void performUnitMove(Unit unitOfInterest, ActorRef out, GameState gameState) {
-		System.out.println("attemptiong to move");
 		ArrayList<Tile> allTiles = Game.getBoard().getTileList();
 		ArrayList<Tile> moveableTiles = new ArrayList<Tile>();
 		int currentTileX = unitOfInterest.getPosition().getTilex();
@@ -121,6 +127,7 @@ public class AILogic {
 			}
 			tileToMoveTo.setUnit(unitOfInterest);
 			unitOfInterest.setPositionByTile(tileToMoveTo);
+			unitOfInterest.setHasMoved(true);
 		}
 		return;
 		//logic for AI to choose which position to move to
@@ -283,6 +290,7 @@ public class AILogic {
 		    unit.setHasAttacked(false);
 		}
 		gameState.currentPlayer = gameState.player1;
+		Game.getBoard().resetAllTiles(out);
 		Game.beginNewTurn(out, gameState);
 		
 	}
