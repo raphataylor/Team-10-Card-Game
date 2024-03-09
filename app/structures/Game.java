@@ -33,10 +33,13 @@ public class Game {
 	private static Board board;
 
 	public Game(ActorRef out) {
+		System.out.println("Game : inside game constructor");
 		createBoard(out);
 	}
 
 	public static void createBoard(ActorRef out) {
+		System.out.println("Game : inside createBoard ");
+
 		board = new Board(out);
 	}
 
@@ -45,7 +48,11 @@ public class Game {
 	}
 
 	public static void createPlayerDeck(ActorRef out, GameState gameState) {
+		System.out.println("Game : inside createPlayerDeck");
+
 		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(2));
+		System.out.println("Game : inside createPlayerDeck : "+gameState.player1.getPlayerDeck().size());
+		
 		gameState.player1.drawInitialHand(out);
 		
 		//get AI cards and draw initial cards for AI
@@ -58,7 +65,8 @@ public class Game {
 		if (gameState.gameInitalised) {
 			System.out.println("updatign mana");
 			
-			
+			System.out.println("Game : inside setManaOnStartTurn");
+
 			//checks for turn number, if it is greater than 8 then every turn after will give the current player 9 mana.
 			//players must start with 2 mana as the lowest so this will ensure the lowest mana possible is 2
 			if (gameState.turn <= 2) {
@@ -220,6 +228,9 @@ public class Game {
 
 	// requires the correct coordinates for tile locations for both avatars
 	public static Unit[] avatarSummonSetup(ActorRef out, int x, int y, int x2, int y2) {
+		
+		System.out.println("Game : inside avatarSummonSetup");
+
 		// stores an array of the two units
 		Unit[] avatars = new Unit[2];
 		Unit humanAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Avatar.class);
@@ -365,6 +376,9 @@ public class Game {
 
 	// Method to update and display mana for both players
 	public static void updateManaVisual(ActorRef out, Player player, GameState gameState) {
+		
+		System.out.println("Game : inside updateManaVisual");
+
 		if (gameState.currentPlayer == gameState.player1) {
 			BasicCommands.setPlayer1Mana(out, player); // Update player 1's mana
 		}

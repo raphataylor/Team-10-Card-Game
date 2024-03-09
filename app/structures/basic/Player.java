@@ -47,6 +47,7 @@ public class Player {
 
 	// function for drawing cards
 	public void drawCard(ActorRef out, int cardsToDraw) {
+		System.out.println("Player - inside drawCard");
 		if (cardsToDraw <= 0) {
 			removeCardFromDeck(0);
 			return;
@@ -55,6 +56,7 @@ public class Player {
 			Card card = playerDeck.get(0);
 			int freeHandPosition = identifyFreeHandPosition();
 			if (freeHandPosition != -1) {
+				System.out.println("Player - inside if");
 				BasicCommands.drawCard(out, card, freeHandPosition, 0);
 				setPlayerHandCard(freeHandPosition, card);
 				removeCardFromDeck(0);
@@ -65,6 +67,9 @@ public class Player {
 	//This method will identify the free hand position if there is any space
 	//If there isnt any space then it will return -1 
 	public int identifyFreeHandPosition() {
+		
+		System.out.println("Player - inside identifyFreeHandPosition");
+
 		for (int i = 0; i < playerHand.length; i++) {
 			if (playerHand[i] instanceof Card) {
 				continue;
@@ -94,6 +99,7 @@ public class Player {
 	}
 
 	public void drawInitialHand(ActorRef out) {
+		System.out.println("Player - inside drawInitialHand");
 		if (!this.playerDeck.isEmpty()) {
 			this.drawCard(out, 3);
 		}
