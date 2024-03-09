@@ -143,7 +143,7 @@ public class BattleHandler {
 		System.out.println("checking for deathwatch ability");
 		// logic for checking if it has death ability or not
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
-		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
+		// List<Unit> player2Units = Game.getBoard().getPlayer2Units();
 
 		for (int i = 0; i < player1Units.size(); i++) {
 			Unit unit = player1Units.get(i);

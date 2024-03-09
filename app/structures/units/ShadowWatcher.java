@@ -9,7 +9,9 @@ public class ShadowWatcher extends Unit implements DeathwatchAbilityUnit {
 
 	public void deathwatchAbility(ActorRef out) {
 		this.setHealth(getHealth() + 1);
-		this.setAttack(getAttack() + 1);
+		if (this.getAttack() < 3) {
+			this.setAttack(getAttack() + 1);
+		}
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
