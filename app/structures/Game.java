@@ -266,7 +266,7 @@ public class Game {
 		// "technically"
 		board.addPlayer2Unit(aiAvatar);
 		
-		humanAvatar.setHasMoved(true);
+		//humanAvatar.setHasMoved(true);
 
 		return avatars;
 

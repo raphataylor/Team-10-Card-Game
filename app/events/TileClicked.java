@@ -40,6 +40,7 @@ public class TileClicked implements EventProcessor {
 		Tile[][] tiles = Game.getBoard().getTiles();
 		Unit selectedUnit = clickedTile.getUnit();
 		Game.getBoard().unHighlightAllTiles(out);
+		//System.out.println("avatar has moved : "+clickedTile.getUnit().getHasMoved());
 		
 		System.out.println(selectedUnit);
 
@@ -49,11 +50,18 @@ public class TileClicked implements EventProcessor {
 		}
 
 		if (!gameState.gameOver) {
+			
+			System.out.println("TileClicked:  !gameState.gameOver");
+
 			// the new method for summoning a unit - does not consider potential move or
 			// anything like that yet - be prepared to adjust to funnel to correct method
 			Board board = Game.getBoard();
 			Tile tileSelected = board.getTile(tilex, tiley);
 			if (gameState.cardSelected) { // tile clicked after card is selected, summon that card unit on the tile
+				
+				System.out.println("TileClicked:  gameState.cardSelected");
+
+				
 				BasicCommands.addPlayer1Notification(out, "card selected", 3);
 				gameState.currentSelectedUnit = null;
 				gameState.unitCurrentTile = null;
@@ -63,8 +71,12 @@ public class TileClicked implements EventProcessor {
 				// going to declare an attack
 				gameState.isTileSelected = false;
 				Game.summonUnit(out, gameState, tilex, tiley);
-			} else if (tileSelected.hasUnit() && !gameState.isTileSelected) { // if the tile clicked has unit on it show
+			} else if ( (tileSelected.hasUnit() && !gameState.isTileSelected && !tileSelected.getUnit().getHasMoved()) ) { // if the tile clicked has unit on it show
 																				// valid moves
+				
+				//tileSelected.hasUnit() && !tileSelected.getUnit().getHasAttacked()
+				System.out.println("TileClicked:  tileSelected.hasUnit() && !gameState.isTileSelected && !tileSelected.getUnit().getHasMoved()");
+
 				BasicCommands.addPlayer1Notification(out, "move by clicking on tiles", 3);
 				gameState.currentSelectedUnit = tileSelected.getUnit();
 				gameState.unitCurrentTile = tileSelected;
@@ -83,6 +95,10 @@ public class TileClicked implements EventProcessor {
 																						// is clicked, move the
 																						// unit to that tile (valid move not implemented, for now it
 																						// just moves)
+				
+				
+				System.out.println("TileClicked:  gameState.currentSelectedUnit != null && selectedUnit == null");
+				
 				if (tileSelected.getIsActionableTile()) {
 					System.out.println("able to move");
 					BasicCommands.addPlayer1Notification(out, "moved", 3);
@@ -92,6 +108,7 @@ public class TileClicked implements EventProcessor {
 					tileSelected.setUnit(gameState.currentSelectedUnit);
 					BasicCommands.addPlayer1Notification(out, "moveUnitToTile", 3);
 					BasicCommands.moveUnitToTile(out, gameState.currentSelectedUnit, tileSelected);
+					gameState.currentSelectedUnit.setHasMoved(true);
 					try {
 						Thread.sleep(4000);
 					} catch (InterruptedException e) {

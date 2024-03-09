@@ -30,8 +30,8 @@ public class Unit {
 	UnitAnimationSet animations;
 	ImageCorrection correction;
 	    
-	protected boolean hasMoved = false;
-	protected boolean hasAttacked = false;
+	protected boolean hasMoved;
+	protected boolean hasAttacked;
 	
 	//attributes required for combat
 	int health;
@@ -44,7 +44,8 @@ public class Unit {
 	private boolean hasAbility = false;
 	private String name;
 	
-	public Unit() {}
+	public Unit() {
+	}
 	
 	public Unit(int id, UnitAnimationSet animations, ImageCorrection correction) {
 		super();
