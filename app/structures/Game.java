@@ -69,15 +69,19 @@ public class Game {
 
 			//checks for turn number, if it is greater than 8 then every turn after will give the current player 9 mana.
 			//players must start with 2 mana as the lowest so this will ensure the lowest mana possible is 2
-			if (gameState.turn <= 2) {
+			if (gameState.turn < 2) {
 				gameState.currentPlayer.setMana(2);
 			}
-			else if (gameState.turn <= 8) {
-				gameState.currentPlayer.setMana(gameState.turn);
+			else if (gameState.turn >= 2 && gameState.turn <= 8) {
+				gameState.currentPlayer.setMana(gameState.turn + 1);
 			}
-			else if (gameState.turn >= 9){
+			/*else if (gameState.turn >= 9){
+				gameState.currentPlayer.setMana(9);
+			}*/
+			else {
 				gameState.currentPlayer.setMana(9);
 			}
+			
 			//utilises a method created for this purpose rather than making additional work
 			updateManaVisual(out, gameState.currentPlayer, gameState);
 
@@ -489,8 +493,13 @@ public class Game {
 	
 	public static void beginNewTurn(ActorRef out, GameState gameState) {
 		
-		gameState.turn++; 
+		System.out.println("Game : inside beginNewTurn");
+		System.out.println("Game : gameState.turn : "+gameState.turn);
+		//gameState.turn++; 
+		System.out.println("Game : gameState.turn : "+gameState.turn);
+
 		Game.resetMana(out, gameState);
+		
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {

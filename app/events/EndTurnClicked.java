@@ -32,11 +32,15 @@ public class EndTurnClicked implements EventProcessor {
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		if(gameState.gameOver == false) {
+			
+			System.out.println("End Turned : inside");
+
 			//Game.selectAICardToPlay(out, gameState);
 			//makeAIMoves(out, gameState);
 			//If it was the human player that pressed end turn this happens
 			//This should always be the case but needs a check just to be sure
 			if(gameState.currentPlayer == gameState.player1) {
+				System.out.println("End Turned : inside if");
 				gameState.currentPlayer = gameState.player2;
 				List<Unit> player1Units = Game.getBoard().getPlayer1Units();
 				for (Unit unit : player1Units) {

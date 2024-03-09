@@ -283,6 +283,8 @@ public class AILogic {
 	    }
 	
 	public static void endAITurn(ActorRef out, GameState gameState) {
+		gameState.turn++; 
+		
 		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
 		for (Unit unit : player2Units) {
 			//System.out.println("setting unit to not moved");
