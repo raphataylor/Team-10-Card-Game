@@ -83,8 +83,11 @@ public class Board {
 	public void resetAllTiles(ActorRef out) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				tiles[i][j].setIsActionableTile(false);
-				BasicCommands.drawTile(out, tiles[i][j], 0);
+				if(tiles[i][j].getIsActionableTile()) {
+					tiles[i][j].setIsActionableTile(false);
+					BasicCommands.drawTile(out, tiles[i][j], 0);
+				}
+				
 			}
 		}
 	}
@@ -93,7 +96,7 @@ public class Board {
 	public void unHighlightAllTiles(ActorRef out) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				BasicCommands.drawTile(out, tiles[i][j], 0);
+				//BasicCommands.drawTile(out, tiles[i][j], 0);
 			}
 		}
 	}
