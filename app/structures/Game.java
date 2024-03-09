@@ -236,7 +236,7 @@ public class Game {
 		humanAvatar.setAttack(2);
 		humanAvatar.setHealth(20);
 
-		BasicCommands.setPlayer1Health(out, GameState.player1);
+		//BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setUnitHealth(out, humanAvatar, 20);
 		BasicCommands.setUnitAttack(out, humanAvatar, 2);
 		avatars[0] = humanAvatar;
@@ -258,7 +258,7 @@ public class Game {
 		aiAvatar.setAttack(2);
 		aiAvatar.setHealth(20);
 
-		BasicCommands.setPlayer2Health(out, GameState.player2);
+		//BasicCommands.setPlayer2Health(out, GameState.player2);
 		BasicCommands.setUnitHealth(out, aiAvatar, 20);
 		BasicCommands.setUnitAttack(out, aiAvatar, 2);
 		avatars[1] = aiAvatar;
