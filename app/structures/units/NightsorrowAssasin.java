@@ -14,7 +14,7 @@ import structures.basic.Tile;
 
 public class NightsorrowAssasin extends Unit implements OpeningGambitAbilityUnit {
 
-    public void openingGambitAbility(ActorRef out) {
+    public void openingGambitAbility(ActorRef out, GameState gameState) {
         Tile[][] board = Game.getBoard().getTiles();
         Position unitPosition = this.getPosition();
         int tilex = unitPosition.getTilex();

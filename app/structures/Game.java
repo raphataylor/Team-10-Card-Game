@@ -196,7 +196,7 @@ public class Game {
 				
 				if (unitSummon instanceof OpeningGambitAbilityUnit) {
 					System.out.println("unit has opening gambit ability");
-					((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out);
+					((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out, gameState);
 				}
 				
 				GameState.player1.setMana(GameState.player1.getMana() - cardToPlayer.getManacost());

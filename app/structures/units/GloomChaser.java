@@ -13,24 +13,25 @@ import utils.SubUnitCreator;
 
 public class GloomChaser extends Unit implements OpeningGambitAbilityUnit {
 
-    public void openingGambitAbility(ActorRef out) {
- 
+    public void openingGambitAbility(ActorRef out, GameState gameState) {
+
         Tile[][] board = Game.getBoard().getTiles();
         Position unitPosition = this.getPosition();
-        int x = unitPosition.getTilex() - 1;
-        int y = unitPosition.getTiley();
+        Position avatarPosition = GameState.player1.getAvatar().getPosition();
+
+        int x = avatarPosition.getTilex() - 1;
+        int y = avatarPosition.getTiley();
         // getting left tile using clicked tile co-rodinates
         if (x >= 0 && x < 9) {
-        	Tile leftTile = board[x][y];
-        	// summon wrathling if the tile on the left has no unit present on it
-            System.out.println(leftTile.hasUnit());
+            Tile leftTile = board[x][y];
+            // summon wrathling if the tile on the left has no unit present on it
+            // System.out.println(leftTile.hasUnit());
             if (!leftTile.hasUnit()) {
                 BasicCommands.addPlayer1Notification(out, "drawUnit", 1);
                 Game.summonToken(out, leftTile);
             }
         }
-        
-        
+
     }
 
 }

@@ -15,7 +15,7 @@ import utils.StaticConfFiles;
 
 public class SilverguardSquire extends Unit implements OpeningGambitAbilityUnit {
 
-    public void openingGambitAbility(ActorRef out) {
+    public void openingGambitAbility(ActorRef out, GameState gameState) {
         Tile[][] board = Game.getBoard().getTiles();
         Unit humanAvatar = GameState.player1.getAvatar();
         Position unitPosition = humanAvatar.getPosition();
