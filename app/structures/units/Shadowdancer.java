@@ -21,7 +21,9 @@ public class Shadowdancer extends Unit implements DeathwatchAbilityUnit {
 		// apparently using setHealth with getHealth causes issues and returns 0?
 		// you have to grab it into an int variable then you can alter it - this strange
 		// behaviour may also explain why latest unit is effected but will need testing
-		humanAvatar.setHealth(humanAvatarHealth + 1);
+		if (humanAvatar.getHealth() < 20) {
+			humanAvatar.setHealth(humanAvatarHealth + 1);
+		}
 		aiAvatar.setHealth(aiAvatarHealth - 1);
 
 		System.out.println(" " +
