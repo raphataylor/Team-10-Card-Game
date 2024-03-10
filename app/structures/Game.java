@@ -150,6 +150,7 @@ public class Game {
 		System.out.println(tileSelected.getIsActionableTile());
 		// ensures the card attempting to be played is a unit card
 		if (tileSelected.getIsActionableTile() && cardToPlayer.getIsCreature()) {
+			//
 			// mana cost check to ensure the player attempting to summon the unit has enough
 			// mana
 			if (gameState.currentPlayer.getMana() - cardToPlayer.getManacost() < 0) {
@@ -159,6 +160,8 @@ public class Game {
 				// Unit.class);
 				Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(),
 						cardJSONReference, x, y);
+				
+				System.out.println("unitSummon : "+unitSummon);
 				// System.out.println(unitSummon.getPosition().getTilex() + "," +
 				// unitSummon.getPosition().getTiley());
 				unitSummon.setPositionByTile(tileSelected);
@@ -203,6 +206,9 @@ public class Game {
 					System.out.println("unit has opening gambit ability");
 					((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out, gameState);
 				}
+				//else if(unitSummon instanceof Spell) {
+					
+				//}
 
 				GameState.player1.setMana(GameState.player1.getMana() - cardToPlayer.getManacost());
 				updateManaVisual(out, gameState.player1, gameState);
