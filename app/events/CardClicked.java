@@ -73,12 +73,12 @@ public class CardClicked implements EventProcessor{
 			if (spell instanceof FriendlySpell) {
 				System.out.println("CardClicked : inside spell instanceof FriendlySpell");
 
-				Game.highlightFriendlyUnits(out, gameState);
+				Game.highlightFriendlyUnits(out, gameState, clickedCard);
 			}
 			else if (spell instanceof EnemySpell) {
 				System.out.println("CardClicked : inside spell instanceof EnemySpell");
 
-				Game.highlightEnemyUnits(out, gameState);
+				Game.highlightEnemyUnits(out, gameState, clickedCard);
 			}
 			
 			else {

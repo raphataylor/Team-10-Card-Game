@@ -362,7 +362,7 @@ public class Game {
 	}
 
 	// highlight all enemy creatures on board
-	public static void showDarkTerminusHighlighing(ActorRef out) {
+	/*public static void showDarkTerminusHighlighing(ActorRef out) {
 		Board board = Game.getBoard();
 		List<Unit> player2units = board.getPlayer2Units();
 		Tile[][] tiles = board.getTiles();
@@ -385,7 +385,7 @@ public class Game {
 				}
 			}
 		}
-	}
+	}*/
 
 	// Sprint 1 [VIS08] & [VIS07]
 	// Method to update and display health for both players
@@ -428,15 +428,27 @@ public class Game {
 													// the value of attack would vary
 	}
 
-	public static void highlightEnemyUnits(ActorRef out, GameState gameState) {
+	public static void highlightEnemyUnits(ActorRef out, GameState gameState, Card card) {
 		
 		System.out.println("Game : inside highlightEnemyUnits");
+		
+		Tile[][] tiles = board.getTiles();
+		int rows = board.getRows();
+		int columns = board.getColumns();
 
 		
-		for (Tile[] row : Game.getBoard().getTiles()) {
-			for (Tile tile : row) {
-				if (tile.hasUnit() && board.getPlayer2Units().contains(tile.getUnit())) {
-					BasicCommands.drawTile(out, tile, 2); // 2 for enemy highlight
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				
+				Tile checkedTile = board.getTile(i, j);
+				
+				if (checkedTile.hasUnit() && board.getPlayer2Units().contains(checkedTile.getUnit())) {
+					
+					if(card.getCardname().equalsIgnoreCase("dark terminus") && !(checkedTile.getUnit() instanceof Avatar) ) {
+						BasicCommands.drawTile(out, checkedTile, 2); // 2 for enemy highlight
+						tiles[i][j].setIsActionableTile(true);
+						
+					}
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -447,7 +459,7 @@ public class Game {
 		}
 	}
 
-	public static void highlightFriendlyUnits(ActorRef out, GameState gameState) {
+	public static void highlightFriendlyUnits(ActorRef out, GameState gameState, Card card) {
 		for (Tile[] row : Game.getBoard().getTiles()) {
 			for (Tile tile : row) {
 				if (tile.hasUnit() && board.getPlayer1Units().contains(tile.getUnit())) {
