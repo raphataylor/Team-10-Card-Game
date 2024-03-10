@@ -24,7 +24,7 @@ import commands.BasicCommands;
  *      selected unoccupied adjacent tile. If there are no unoccupied tiles, then this ability has no effect.
  */
 
-public class HornOfTheForsaken extends Card implements Spell, SpellAbility, FriendlySpell {
+public class HornOfTheForsaken extends Card implements Spell, FriendlySpell {
     private int robustness = 3; // Initial robustness of the artifact
 
     public HornOfTheForsaken() {
@@ -34,7 +34,7 @@ public class HornOfTheForsaken extends Card implements Spell, SpellAbility, Frie
         this.setCardname("Horn of the Forsaken");
     }
 
-    public void spellAbility(ActorRef out, GameState gameState, Tile tile) {
+    public void spell(ActorRef out, GameState gameState, Tile tile) {
         Avatar playerAvatar = (Avatar) gameState.currentPlayer.getAvatar();
         playerAvatar.setHasAttacked(true); // Equipping the artifact to the player's avatar
 
