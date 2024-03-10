@@ -109,6 +109,7 @@ public class BattleHandler {
 			BasicCommands.deleteUnit(out, defender);
 		}
 		attacker.setHasAttacked(true);
+		Game.getBoard().resetAllTiles(out);
 	}
 
 	public static void counterAttack(ActorRef out, Unit counterAttacker, Unit defender, GameState gameState) {
