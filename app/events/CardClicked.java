@@ -40,16 +40,21 @@ public class CardClicked implements EventProcessor{
 		int handPosition = message.get("position").asInt();
 		//the new method for dealing with card clicked
 		Game.selectCard(out, gameState, handPosition);
-		
+		System.out.println("CardClicked : inside CardClicked");
+
 		// get current card clicked
 		Card clickedCard = GameState.player1.getPlayerHandCard(handPosition);
 
 		if (clickedCard.getIsCreature()) {// replace with check to see if card is creature
 			// Highlight potential summoning tiles
+			
+			System.out.println("CardClicked : inside if - clickedCard.getIsCreature()");
+
+			
 			Avatar player1Avatar = (Avatar) gameState.player1.getAvatar();
 			player1Avatar.highlightAdjacentTiles(out, Game.getBoard().getTiles());
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -61,11 +66,18 @@ public class CardClicked implements EventProcessor{
 		//handles clicking a spell card
 		if (!clickedCard.getIsCreature()) {
 			
+			System.out.println("CardClicked : inside if - !clickedCard.getIsCreature()");
+
+			
 			Spell spell = SpellCreator.returnSpell(clickedCard.getCardname());
 			if (spell instanceof FriendlySpell) {
+				System.out.println("CardClicked : inside spell instanceof FriendlySpell");
+
 				Game.highlightFriendlyUnits(out, gameState);
 			}
 			else if (spell instanceof EnemySpell) {
+				System.out.println("CardClicked : inside spell instanceof EnemySpell");
+
 				Game.highlightEnemyUnits(out, gameState);
 			}
 			
@@ -78,7 +90,7 @@ public class CardClicked implements EventProcessor{
 		
 		if (clickedCard.getCardname().equalsIgnoreCase("dark terminus")) {// replace to check if it's a dark terminus card
 			System.out.println("clicked card is dark terminus");
-			Game.showDarkTerminusHighlighing(out);
+			//Game.showDarkTerminusHighlighing(out);
 		}
 		
 	}

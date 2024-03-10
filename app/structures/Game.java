@@ -429,6 +429,10 @@ public class Game {
 	}
 
 	public static void highlightEnemyUnits(ActorRef out, GameState gameState) {
+		
+		System.out.println("Game : inside highlightEnemyUnits");
+
+		
 		for (Tile[] row : Game.getBoard().getTiles()) {
 			for (Tile tile : row) {
 				if (tile.hasUnit() && board.getPlayer2Units().contains(tile.getUnit())) {
