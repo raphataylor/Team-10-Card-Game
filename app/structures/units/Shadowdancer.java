@@ -21,15 +21,21 @@ public class Shadowdancer extends Unit implements DeathwatchAbilityUnit {
 		// apparently using setHealth with getHealth causes issues and returns 0?
 		// you have to grab it into an int variable then you can alter it - this strange
 		// behaviour may also explain why latest unit is effected but will need testing
-		humanAvatar.setHealth(humanAvatarHealth - 1);
+		humanAvatar.setHealth(humanAvatarHealth + 1);
 		aiAvatar.setHealth(aiAvatarHealth - 1);
+
+		System.out.println(" " +
+				humanAvatar.getHealth() + " " +
+				humanAvatar.getAttack() + " " +
+				aiAvatar.getHealth() + " " +
+				aiAvatar.getAttack());
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
-		BasicCommands.setUnitHealth(out, humanAvatar, humanAvatarHealth);
+		BasicCommands.setUnitHealth(out, humanAvatar, humanAvatar.getHealth());
 
 		try {
 			Thread.sleep(1000);
@@ -37,7 +43,7 @@ public class Shadowdancer extends Unit implements DeathwatchAbilityUnit {
 			e.printStackTrace();
 		}
 		System.out.println("removing hp from enemy avatar");
-		BasicCommands.setUnitHealth(out, aiAvatar, aiAvatarHealth);
+		BasicCommands.setUnitHealth(out, aiAvatar, aiAvatar.getHealth());
 	}
 
 }
