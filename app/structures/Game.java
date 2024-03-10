@@ -57,8 +57,6 @@ public class Game {
 
 		// get AI cards and draw initial cards for AI
 		gameState.player2.setPlayerDeck(OrderedCardLoader.getPlayer2Cards(2));
-		System.out.println("Game : inside createPlayerDeck : " + gameState.player2.getPlayerDeck().size());
-
 		gameState.player2.drawInitialHandAI(out);
 	}
 
@@ -180,7 +178,7 @@ public class Game {
 				// a delay is required from drawing to setting attack/hp or else it will not
 				// work
 				try {
-					Thread.sleep(10);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -200,11 +198,9 @@ public class Game {
 				// now grabs health and attack values from the card for drawing
 				BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
 				BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
-				
+
 				GameState.player1.removeCardFromHand(gameState.currentCardSelected);
 				BasicCommands.deleteCard(out, gameState.currentCardSelected);
-				
-				
 
 				if (unitSummon instanceof OpeningGambitAbilityUnit) {
 					System.out.println("unit has opening gambit ability");
@@ -553,7 +549,7 @@ public class Game {
 		Game.resetMana(out, gameState);
 
 		try {
-			Thread.sleep(10);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -561,15 +557,13 @@ public class Game {
 		// these actions occur if it is the players turn
 		if (gameState.currentPlayer == gameState.player1) {
 			setManaOnStartTurn(out, gameState);
-			//gameState.player1.drawCardAtTurnEnd(out);
-			
+			gameState.player1.drawCardAtTurnEnd(out);
 		}
 
 		// these actions occur if it is the AIs turn
 		else {
 			setManaOnStartTurn(out, gameState);
 			AILogic.playAITurn(out, gameState);
-			gameState.player2.drawAICard(out, 1);
 
 		}
 		getBoard().resetAllTiles(out);
