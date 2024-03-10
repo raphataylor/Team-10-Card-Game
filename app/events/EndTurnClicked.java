@@ -32,11 +32,16 @@ public class EndTurnClicked implements EventProcessor {
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		if(gameState.gameOver == false) {
+			
+			System.out.println("End Turned : inside");
+
 			//Game.selectAICardToPlay(out, gameState);
 			//makeAIMoves(out, gameState);
 			//If it was the human player that pressed end turn this happens
 			//This should always be the case but needs a check just to be sure
 			if(gameState.currentPlayer == gameState.player1) {
+				
+				System.out.println("End Turned : inside if");
 				gameState.currentPlayer = gameState.player2;
 				List<Unit> player1Units = Game.getBoard().getPlayer1Units();
 				for (Unit unit : player1Units) {
@@ -45,6 +50,8 @@ public class EndTurnClicked implements EventProcessor {
 				}
 				
 			}
+				
+		
 			//for testing AI player
 			
 			//code logic for AI player end turn will be placed her 
@@ -52,7 +59,7 @@ public class EndTurnClicked implements EventProcessor {
 			//gameState.currentPlayer = gameState.player1;
 			//Game.setManaOnStartTurn(out, gameState);
 			
-			}
+		}
 
 		//gameState.player1.drawCardAtTurnEnd(out);
 		
@@ -60,6 +67,7 @@ public class EndTurnClicked implements EventProcessor {
 		//resets game state stuff - might need replacing later with proper method if it already exists
 		gameState.previousSelectedTile = null;
 		gameState.isTileSelected = false;
+		gameState.player1.drawCardAtTurnEnd(out);
 		Game.beginNewTurn(out, gameState);
 
 	}

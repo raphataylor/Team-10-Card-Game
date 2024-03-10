@@ -54,6 +54,9 @@ public class Initalize implements EventProcessor {
 		gameState.player2 = new Player(avatars[1]);
 		gameState.currentPlayer = player1;
 		
+		BasicCommands.setPlayer1Health(out, GameState.player1);
+		BasicCommands.setPlayer2Health(out, GameState.player2);
+		
 		Game.createPlayerDeck(out, gameState);
 		Game.setManaOnStartTurn(out, gameState);
 

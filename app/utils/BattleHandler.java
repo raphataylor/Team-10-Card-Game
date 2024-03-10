@@ -23,93 +23,113 @@ public class BattleHandler {
 	public static void attackUnit(ActorRef out, Unit attacker, Unit defender, GameState gameState) {
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
 		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
-		
-		
-		//a simple and somewhat ugly solution to friendly fire checks
-		//MAY NOT BE NEEDED SO TEST THIS 
-//		if (player1Units.contains(attacker) && player1Units.contains(defender)) {
-//			System.out.println("CANNOT ATTACK FRIENDLY FIRE");
-//			return;
-//		}
-//		
-//		else if (player2Units.contains(attacker) && player2Units.contains(defender)) {
-//			System.out.println("CANNOT ATTACK FRIENDLY FIRE");
-//			return; 
-//		}
-//		
-		
+		System.out.println("Attacking");
+		// a simple and somewhat ugly solution to friendly fire checks
+		// MAY NOT BE NEEDED SO TEST THIS
+		// if (player1Units.contains(attacker) && player1Units.contains(defender)) {
+		// System.out.println("CANNOT ATTACK FRIENDLY FIRE");
+		// return;
+		// }
+		//
+		// else if (player2Units.contains(attacker) && player2Units.contains(defender))
+		// {
+		// System.out.println("CANNOT ATTACK FRIENDLY FIRE");
+		// return;
+		// }
+		//
+
 		// debugging code to ensure positions and values are intended
 		System.out.println("defender: " + String.valueOf(defender.getPosition()));
 		System.out.println("attacker: " + String.valueOf(attacker.getPosition()));
 		System.out.println(defender.getName() + " is defending");
 		System.out.println(attacker.getName() + " is attacking");
 		int defenderPostCombatHealth = defender.getHealth() - attacker.getAttack();
+
 		defender.setHealth(defenderPostCombatHealth);
-		
-		
 
 		// the basicCommands only seem to effecting the latest drawn unit but the units
 		// being referenced are correct
 		System.out.println(attacker.getName() + " is playing the attack animation");
+		System.out.println("post combat health " + defenderPostCombatHealth);
+
 		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
+
+		// display defender player's health on top
+		if ((defender instanceof Avatar) && gameState.currentPlayer == gameState.player1) {
+			gameState.player2.setHealth(defenderPostCombatHealth);
+			BasicCommands.setPlayer2Health(out, gameState.player2); // Update player 1's health
+		} else if ((defender instanceof Avatar) && gameState.currentPlayer == gameState.player2) {
+			gameState.player1.setHealth(defenderPostCombatHealth);
+			BasicCommands.setPlayer1Health(out, gameState.player1); // Update player 2's health
+		}
 		BasicCommands.playUnitAnimation(out, attacker, UnitAnimationType.attack);
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		System.out.println(defender.getPosition());
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		if (defenderPostCombatHealth > 0) {
-			counterAttack(out, defender, attacker);
-		}
-		else {
-			
+			counterAttack(out, defender, attacker, gameState);
+		} else {
+
 			// check for end game condition
-			if(defender instanceof Avatar) {
-				if(defender == gameState.player1.getAvatar()) {
+			if (defender instanceof Avatar) {
+				if (defender == gameState.player1.getAvatar()) {
 					Player player1 = gameState.player1;
 					gameOver(out, player1, gameState);
-				}
-				else {
+				} else {
 					Player player2 = gameState.player2;
 					gameOver(out, player2, gameState);
 				}
 			}
-			
+
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			// 1500 seems like an initial good time from animation to delete but experiment
 			// to find most
 			// appropriate
 			try {
-				Thread.sleep(1500);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			unitDeathwatchAbilityCheck(out);
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			BasicCommands.deleteUnit(out, defender);
 		}
 		attacker.setHasAttacked(true);
+		Game.getBoard().resetAllTiles(out);
 	}
 
-	public static void counterAttack(ActorRef out, Unit counterAttacker, Unit defender) {
+	public static void counterAttack(ActorRef out, Unit counterAttacker, Unit defender, GameState gameState) {
+		System.out.println("COUNTER attacking");
 		int defenderPostCombatHealth = defender.getHealth() - counterAttacker.getAttack();
+		System.out.println("post combat health " + defenderPostCombatHealth);
 		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
+
 		BasicCommands.playUnitAnimation(out, counterAttacker, UnitAnimationType.attack);
 
+		// display defender player's health on top
+		if ((defender instanceof Avatar) && gameState.currentPlayer == gameState.player1) {
+			gameState.player1.setHealth(defenderPostCombatHealth);
+			BasicCommands.setPlayer1Health(out, gameState.player1); // Update player 1's health
+		} else if ((defender instanceof Avatar) && gameState.currentPlayer == gameState.player2) {
+			gameState.player2.setHealth(defenderPostCombatHealth);
+			BasicCommands.setPlayer2Health(out, gameState.player2); // Update player 2's health
+		}
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -117,13 +137,13 @@ public class BattleHandler {
 		if (defenderPostCombatHealth <= 0) {
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			try {
-				Thread.sleep(1500);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			unitDeathwatchAbilityCheck(out);
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -132,7 +152,7 @@ public class BattleHandler {
 			defender.setHealth(defenderPostCombatHealth);
 		}
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -143,7 +163,7 @@ public class BattleHandler {
 		System.out.println("checking for deathwatch ability");
 		// logic for checking if it has death ability or not
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
-		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
+		// List<Unit> player2Units = Game.getBoard().getPlayer2Units();
 
 		for (int i = 0; i < player1Units.size(); i++) {
 			Unit unit = player1Units.get(i);
@@ -168,13 +188,12 @@ public class BattleHandler {
 		}
 		return array;
 	}
-	
+
 	public static void gameOver(ActorRef out, Player winner, GameState gamestate) {
-		if(winner == GameState.player1) {
-            BasicCommands.addPlayer1Notification(out, "you win", 10000);
-		}
-		else {
-            BasicCommands.addPlayer1Notification(out, "you lose", 10000);
+		if (winner == GameState.player1) {
+			BasicCommands.addPlayer1Notification(out, "you win", 10000);
+		} else {
+			BasicCommands.addPlayer1Notification(out, "you lose", 10000);
 		}
 		GameState.gameOver = true;
 	}

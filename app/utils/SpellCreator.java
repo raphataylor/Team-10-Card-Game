@@ -14,11 +14,14 @@ public class SpellCreator {
 	
 	private static final HashMap<String, Spell> spellMap = new HashMap<String, Spell>(){
 		{
-			put("Beam Shock", new BeamShock());
+			
+			put("Horn Of the Forsaken", new HornOfTheForsaken());
+			put("Wraithling Swarm", new DarkTerminus());
 			put("Dark Terminus", new DarkTerminus());
-			put("Horn Of The Forsaken", new HornOfTheForsaken());
-			put("Sundrop Elixer", new SundropElixir());
+			
+			put("Sundrop Elixir", new SundropElixir());
 			put("True Strike", new TrueStrike());
+			put("Beam Shock", new BeamShock());
 		}
 		
 	};

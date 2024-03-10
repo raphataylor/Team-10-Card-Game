@@ -22,6 +22,7 @@ public class Board {
     private ArrayList<Tile> tileList = new ArrayList<Tile>();
 	
 	public Board(ActorRef out) {
+		System.out.println("Board : inside Board constructor ");
 		tiles = createTiles();
 		drawBoard(out, tiles);
         player1Units = new ArrayList<>();
@@ -29,6 +30,8 @@ public class Board {
 	}
 	
 	public Tile[][] createTiles() {
+		System.out.println("Board : inside createTiles ");
+
 		Tile[][] tiles = new Tile[rows][columns];
 		for(int i=0;i<rows;i++) {
 			for(int j=0;j<columns;j++) {
@@ -40,6 +43,8 @@ public class Board {
 	}
 	
 	public void drawBoard(ActorRef out, Tile[][] tiles) {
+		System.out.println("Board : drawBoard ");
+
 		for(int i=0;i<rows;i++) {
 			for(int j=0;j<columns;j++) {
 				//multi thread this to prevent buffer overflow
@@ -83,8 +88,11 @@ public class Board {
 	public void resetAllTiles(ActorRef out) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				tiles[i][j].setIsActionableTile(false);
-				BasicCommands.drawTile(out, tiles[i][j], 0);
+				if(tiles[i][j].getIsActionableTile()) {
+					tiles[i][j].setIsActionableTile(false);
+					BasicCommands.drawTile(out, tiles[i][j], 0);
+				}
+				
 			}
 		}
 	}
@@ -93,7 +101,7 @@ public class Board {
 	public void unHighlightAllTiles(ActorRef out) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				BasicCommands.drawTile(out, tiles[i][j], 0);
+				//BasicCommands.drawTile(out, tiles[i][j], 0);
 			}
 		}
 	}

@@ -9,6 +9,12 @@ import structures.basic.Unit;
 
 //currently using class instead of interface as behaviour does not matter, just typing does
 public class Avatar extends Unit{
+	
+	public Avatar() {
+		super();
+		hasMoved = false;
+		hasAttacked = false;
+	}
 	private boolean hasHornOfForsaken = false;
 	
 	public void highlightAdjacentTiles(ActorRef out, Tile[][] grid) {

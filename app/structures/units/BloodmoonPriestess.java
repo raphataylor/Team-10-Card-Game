@@ -35,18 +35,8 @@ public class BloodmoonPriestess extends Unit implements DeathwatchAbilityUnit {
 			if (!adjacentTile.hasUnit()) {
 				BasicCommands.addPlayer1Notification(out, "drawUnit", 1);
 				// summon wrathling if the tile on the adjacent tile has no unit present on it
-				Unit unit2 = BasicObjectBuilders.loadUnit(StaticConfFiles.wraithling, 1, Unit.class);
-				unit2.setPositionByTile(adjacentTile);
-				adjacentTile.setUnit(unit2);
-
-				BasicCommands.drawUnit(out, unit2, adjacentTile);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Game.summonToken(out, adjacentTile);
 				return;
-
 			}
 		}
 		return;
