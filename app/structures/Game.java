@@ -180,7 +180,7 @@ public class Game {
 				// a delay is required from drawing to setting attack/hp or else it will not
 				// work
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -84,7 +84,7 @@ public class TileClicked implements EventProcessor {
 				gameState.isTileSelected = true;
 				Game.showValidMovement(out, tiles, clickedTile, 2, gameState);
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -110,7 +110,7 @@ public class TileClicked implements EventProcessor {
 					BasicCommands.moveUnitToTile(out, gameState.currentSelectedUnit, tileSelected);
 					gameState.currentSelectedUnit.setHasMoved(true);
 					try {
-						Thread.sleep(4000);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

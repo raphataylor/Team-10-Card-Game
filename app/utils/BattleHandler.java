@@ -44,6 +44,7 @@ public class BattleHandler {
 		System.out.println(defender.getName() + " is defending");
 		System.out.println(attacker.getName() + " is attacking");
 		int defenderPostCombatHealth = defender.getHealth() - attacker.getAttack();
+		
 		defender.setHealth(defenderPostCombatHealth);
 		
 		
@@ -54,14 +55,14 @@ public class BattleHandler {
 		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
 		BasicCommands.playUnitAnimation(out, attacker, UnitAnimationType.attack);
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		System.out.println(defender.getPosition());
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -88,13 +89,13 @@ public class BattleHandler {
 			// to find most
 			// appropriate
 			try {
-				Thread.sleep(1500);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			unitDeathwatchAbilityCheck(out);
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -105,11 +106,13 @@ public class BattleHandler {
 
 	public static void counterAttack(ActorRef out, Unit counterAttacker, Unit defender) {
 		int defenderPostCombatHealth = defender.getHealth() - counterAttacker.getAttack();
+		System.out.println("post combat health "+defenderPostCombatHealth);
 		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
+
 		BasicCommands.playUnitAnimation(out, counterAttacker, UnitAnimationType.attack);
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -117,13 +120,13 @@ public class BattleHandler {
 		if (defenderPostCombatHealth <= 0) {
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			try {
-				Thread.sleep(1500);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			unitDeathwatchAbilityCheck(out);
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -132,7 +135,7 @@ public class BattleHandler {
 			defender.setHealth(defenderPostCombatHealth);
 		}
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
