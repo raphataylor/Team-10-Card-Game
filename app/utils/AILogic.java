@@ -1,6 +1,8 @@
 package utils;
 
 import java.util.ArrayList;
+
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +15,8 @@ import structures.basic.Card;
 import structures.basic.Position;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.basic.Card;
+
 
 //AI Specific logic 
 public class AILogic {
@@ -29,6 +33,8 @@ public class AILogic {
 	}
 
 	public static void identifyValidMoves(ActorRef out, GameState gameState) {
+		System.out.println("AILogic : inside identifyValidMoves");
+		
 		ArrayList<Tile> moveTiles = new ArrayList<Tile>();
 		ArrayList<Tile> attackTiles = new ArrayList<Tile>();
 		List<Unit> aiUnits = new ArrayList<Unit>();
@@ -99,6 +105,8 @@ public class AILogic {
 	}
 
 	public static void performUnitMove(Unit unitOfInterest, ActorRef out, GameState gameState) {
+		System.out.println("AILogic : inside performUnitMove");
+
 		ArrayList<Tile> allTiles = Game.getBoard().getTileList();
 		ArrayList<Tile> moveableTiles = new ArrayList<Tile>();
 		int currentTileX = unitOfInterest.getPosition().getTilex();
@@ -166,8 +174,8 @@ public class AILogic {
 		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tile);
 		tile.setUnit(unitSummon);
-		// add unit summon to player 1 unit array
-		Game.getBoard().addPlayer2Unit(unitSummon);
+
+		
 		// System.out.println(board.getPlayer2Units());
 
 		BasicCommands.drawUnit(out, unitSummon, tile);
@@ -180,6 +188,8 @@ public class AILogic {
 		unitSummon.setMaxAttack(attack);
 		unitSummon.setHasMoved(true);
 		unitSummon.setName(card.getCardname());
+		
+		Game.getBoard().addPlayer2Unit(unitSummon);
 
 		// a delay is required from drawing to setting attack/hp or else it will not
 		// work
@@ -191,6 +201,19 @@ public class AILogic {
 		// now grabs health and attack values from the card for drawing
 		BasicCommands.setUnitHealth(out, unitSummon, card.getHealth());
 		BasicCommands.setUnitAttack(out, unitSummon, card.getAttack());
+		try {
+			
+				for (int i = 0; i < gameState.player2.playerHand.length; i++) {
+			        if (gameState.player2.playerHand[i] != null && gameState.player2.playerHand[i].getCardname().equals(card.getCardname())) {
+			        	gameState.player2.removeCardFromHand(i);  // Remove by setting the reference to null
+			            break; // Stop if you only need to remove the first match
+			        }
+			    }
+			
+		}catch(Exception e) {
+			System.out.println("exception");
+		}
+		//gameState.player2.removeCardFromHand(gameState.currentCardSelected);
 		Game.resetGameState(out, gameState);
 	}
 
@@ -260,7 +283,7 @@ public class AILogic {
 
 		// to find playable cards (creature)
 		List<Card> playableCards = getPlayableAICards(gameState);
-		System.out.println("playableAI cards : " + playableCards.size());
+		System.out.println("playableAI cards #### : " + playableCards.size());
 		int remainingMana = gameState.player2.getMana();
 
 		if (!playableCards.isEmpty()) {
@@ -301,6 +324,7 @@ public class AILogic {
 		}
 		gameState.currentPlayer = gameState.player1;
 		Game.getBoard().resetAllTiles(out);
+		//gameState.player2.drawCardAtTurnEnd(out);
 		Game.beginNewTurn(out, gameState);
 
 	}

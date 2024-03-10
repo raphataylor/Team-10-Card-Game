@@ -57,6 +57,7 @@ public class Player {
 			int freeHandPosition = identifyFreeHandPosition();
 			if (freeHandPosition != -1) {
 				System.out.println("Player - inside if");
+				System.out.println("Player - card name "+i+ " "+card.getCardname());
 				BasicCommands.drawCard(out, card, freeHandPosition, 0);
 				setPlayerHandCard(freeHandPosition, card);
 				removeCardFromDeck(0);
@@ -82,7 +83,6 @@ public class Player {
 	}
 	
 	
-	//could be added to the AI child class extending Player -- drawCard could be made abstract class which will be derived in both Player1 and player2 class extending player class
 	public void drawAICard(ActorRef out, int cardsToDraw) {
 		if (cardsToDraw <= 0) {
 			removeCardFromDeck(0);
@@ -93,7 +93,7 @@ public class Player {
 			Card card = playerDeck.get(0);
 			int freeHandPosition = identifyFreeHandPosition();
 			setPlayerHandCard(freeHandPosition, card);
-			System.out.println("AI card : "+playerHand[freeHandPosition].cardname);
+			System.out.println("AI card : @@@"+playerHand[freeHandPosition].cardname+ " "+i);
 			removeCardFromDeck(0);
 		}
 	}
@@ -107,6 +107,7 @@ public class Player {
 	
 	//could be added to the AI child class extending Player
 	public void drawInitialHandAI(ActorRef out) {
+		System.out.println("Player - inside drawInitialHandAI");
 		if (!this.playerDeck.isEmpty()) {
 			this.drawAICard(out, 3);
 		}
@@ -124,9 +125,11 @@ public class Player {
 		if (freeHandPos == -1) {
 		}
 		else {
-			drawCard(out, 1);
-			return;
-		}
+			
+				drawCard(out, 1);
+				return;
+			}
+	
 		removeCardFromDeck(0);
 		
 	}
