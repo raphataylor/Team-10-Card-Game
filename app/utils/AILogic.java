@@ -55,7 +55,7 @@ public class AILogic {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			// performUnitBattle(unitOfInterest, out, gameState);
+			performUnitBattle(unitOfInterest, out, gameState);
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -84,7 +84,7 @@ public class AILogic {
 				// if the selected unit is able to kill the defending unit in 1 blow this
 				// happens
 				if (unitOfInterest.getAttack() > unitToAttack.getHealth()) {
-					BattleHandler.attackUnit(out, unitOfInterest, unitToAttack, gameState);
+					BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
 					return;
 				}
 			}
@@ -97,7 +97,7 @@ public class AILogic {
 				// if the selected unit will survive a counter attack then it will attack for
 				// the sake of attacking to chip the enemy unit
 				if ((unitOfInterest.getHealth() > unitToAttack.getAttack()) && unitOfInterest.getAttack() > 0) {
-					BattleHandler.attackUnit(out, unitOfInterest, unitToAttack, gameState);
+					BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
 					return;
 				}
 			}

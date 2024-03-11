@@ -47,7 +47,7 @@ public class Game {
 		return board;
 	}
 
-	public static void createPlayerDeck(ActorRef out, GameState gameState) {
+	public static void initialisePlayerDeck(ActorRef out, GameState gameState) {
 		System.out.println("Game : inside createPlayerDeck");
 
 		gameState.player1.setPlayerDeck(OrderedCardLoader.getPlayer1Cards(2));
@@ -169,6 +169,9 @@ public class Game {
 
 				// add unit summon to player 1 unit array
 				board.addPlayer1Unit(unitSummon);
+				
+				BasicCommands.addPlayer1Notification(out, "I summon an ally.", 5);
+				
 				// System.out.println(board.getPlayer1Units());
 
 				BasicCommands.drawUnit(out, unitSummon, tileSelected);
@@ -261,6 +264,9 @@ public class Game {
 
 		humanAvatar.setAttack(2);
 		humanAvatar.setHealth(20);
+		
+		humanAvatar.setMaxAttack(2);
+		humanAvatar.setMaxHealth(20);
 
 		// BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setUnitHealth(out, humanAvatar, 20);
@@ -283,6 +289,10 @@ public class Game {
 
 		aiAvatar.setAttack(2);
 		aiAvatar.setHealth(20);
+		
+		aiAvatar.setMaxAttack(2);
+		aiAvatar.setMaxHealth(20);
+
 
 		// BasicCommands.setPlayer2Health(out, GameState.player2);
 		BasicCommands.setUnitHealth(out, aiAvatar, 20);
@@ -325,8 +335,11 @@ public class Game {
 						int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
 						if (manhattanDistance <= distance) {
 							// Highlight this tile.
-							if (!checkedTile.hasUnit()) {
-								BasicCommands.drawTile(out, grid[x][y], 1);
+							if (!checkedTile.hasUnit() && !clickedUnit.getHasMoved()) {
+								if (gameState.currentPlayer == gameState.player1) {
+									BasicCommands.drawTile(out, grid[x][y], 1);
+								}
+								
 								// sets the tile to be actionable
 								grid[x][y].setIsActionableTile(true);
 								try {
@@ -338,7 +351,7 @@ public class Game {
 							Unit unitOnTile = checkedTile.getUnit();
 							// Check if the unit belongs to player 2
 							if (Game.getBoard().getPlayer2Units().contains(unitOnTile)
-									&& GameState.currentPlayer == GameState.player1) {
+									&& GameState.currentPlayer == GameState.player1 && !clickedUnit.getHasAttacked()) {
 								BasicCommands.drawTile(out, grid[x][y], 2);
 								// sets the tile to be actionable
 								grid[x][y].setIsActionableTile(true);
@@ -349,7 +362,8 @@ public class Game {
 								}
 							} else if (Game.getBoard().getPlayer1Units().contains(unitOnTile)
 									&& GameState.currentPlayer == GameState.player2) {
-								BasicCommands.drawTile(out, grid[x][y], 2);
+								//we dont need to draw for ai
+								//BasicCommands.drawTile(out, grid[x][y], 2);
 								// sets the tile to be actionable
 								grid[x][y].setIsActionableTile(true);
 								try {
@@ -434,27 +448,14 @@ public class Game {
 													// the value of attack would vary
 	}
 
-	public static void highlightEnemyUnits(ActorRef out, GameState gameState, Card card) {
+	public static void highlightEnemyUnits(ActorRef out, GameState gameState) {
 		
 		System.out.println("Game : inside highlightEnemyUnits");
-		
-		Tile[][] tiles = board.getTiles();
-		int rows = board.getRows();
-		int columns = board.getColumns();
-
-		
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				
-				Tile checkedTile = board.getTile(i, j);
-				
-				if (checkedTile.hasUnit() && board.getPlayer2Units().contains(checkedTile.getUnit())) {
-					
-					if(card.getCardname().equalsIgnoreCase("dark terminus") && !(checkedTile.getUnit() instanceof Avatar) ) {
-						BasicCommands.drawTile(out, checkedTile, 2); // 2 for enemy highlight
-						tiles[i][j].setIsActionableTile(true);
-						
-					}
+		for (Tile[] row : Game.getBoard().getTiles()) {
+			for (Tile tile : row) {
+				if (tile.hasUnit() && board.getPlayer2Units().contains(tile.getUnit())) {
+					BasicCommands.drawTile(out, tile, 2);
+					tile.setIsActionableTile(true);
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -465,11 +466,12 @@ public class Game {
 		}
 	}
 
-	public static void highlightFriendlyUnits(ActorRef out, GameState gameState, Card card) {
+	public static void highlightFriendlyUnits(ActorRef out, GameState gameState) {
 		for (Tile[] row : Game.getBoard().getTiles()) {
 			for (Tile tile : row) {
 				if (tile.hasUnit() && board.getPlayer1Units().contains(tile.getUnit())) {
 					BasicCommands.drawTile(out, tile, 1); // 1 for friendly highlight
+					tile.setIsActionableTile(true);
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -479,50 +481,9 @@ public class Game {
 			}
 		}
 	}
+	
 
-	// SPELL01 CAST SPELL
-	public static void castSpell(ActorRef out, GameState gameState, int x, int y) {
-		// Retrieve the selected card from the player's hand
-		Card cardToCast = gameState.player1.getPlayerHandCard(gameState.currentCardSelected);
 
-		// Retrieve the targeted tile from the board
-		Tile tileSelected = board.getTile(x, y);
-
-		// Check if the selected card is indeed a spell and the player has enough mana
-		if (!cardToCast.isCreature() && gameState.player1.getMana() >= cardToCast.getManacost()) {
-			// Implement spell effects based on the type of spell
-			applySpellEffect(out, gameState, tileSelected, cardToCast);
-			// Deduct the mana cost of the spell from the player's mana pool
-			gameState.player1.setMana(gameState.player1.getMana() - cardToCast.getManacost());
-			updateManaVisual(out, gameState.currentPlayer, gameState);
-
-			// Remove the spell card from the player's hand
-			gameState.player1.removeCardFromHand(gameState.currentCardSelected);
-			BasicCommands.deleteCard(out, gameState.currentCardSelected);
-
-			// Reset selected card state in the game state
-			gameState.cardSelected = false;
-			gameState.currentCardSelected = -1;
-
-			// Add a notification to indicate the spell has been successfully cast
-			BasicCommands.addPlayer1Notification(out, "Casted " + cardToCast.getCardname(), 2);
-		} else {
-			// If the card is not a spell or not enough mana, notify the player
-			BasicCommands.addPlayer1Notification(out, "Cannot cast " + cardToCast.getCardname(), 2);
-		}
-	}
-
-	// Apply the effect of the spell to the targeted tile or unit
-	private static void applySpellEffect(ActorRef out, GameState gameState, Tile tile, Card spellCard) {
-		// Check the type of spell and apply the corresponding effect and highlighting
-		if (spellCard instanceof BeamShock) {
-			((BeamShock) spellCard).spell(out, gameState, tile);
-		} else if (spellCard instanceof DarkTerminus) {
-			((DarkTerminus) spellCard).spell(out, gameState, tile);
-		} else if (spellCard instanceof WraithlingSwarm) {
-			((WraithlingSwarm) spellCard).spell(out, gameState, tile);
-		}
-	}
 
 	public static void resetGameState(ActorRef out, GameState gameState) {
 		if (gameState.currentPlayer == gameState.player1) {
@@ -535,6 +496,9 @@ public class Game {
 		gameState.previousSelectedTile = null;
 		gameState.isTileSelected = false;
 		gameState.cardSelected = false;
+	
+		gameState.isCardSelectedSpell = false;
+		gameState.currentSpell = null;
 		getBoard().resetAllTiles(out);
 
 	}
@@ -557,11 +521,12 @@ public class Game {
 		// these actions occur if it is the players turn
 		if (gameState.currentPlayer == gameState.player1) {
 			setManaOnStartTurn(out, gameState);
-			gameState.player1.drawCardAtTurnEnd(out);
+			
 		}
-
 		// these actions occur if it is the AIs turn
 		else {
+			//according to game rules the player will draw a card at the end of their turn
+			gameState.player1.drawCardAtTurnEnd(out);
 			setManaOnStartTurn(out, gameState);
 			AILogic.playAITurn(out, gameState);
 

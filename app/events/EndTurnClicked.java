@@ -67,7 +67,6 @@ public class EndTurnClicked implements EventProcessor {
 		//resets game state stuff - might need replacing later with proper method if it already exists
 		gameState.previousSelectedTile = null;
 		gameState.isTileSelected = false;
-		gameState.player1.drawCardAtTurnEnd(out);
 		Game.beginNewTurn(out, gameState);
 
 	}

@@ -14,7 +14,13 @@ import structures.basic.Unit;
 * Effects: Stun (the target unit cannot move or attack next turn) target enemy non-avatar unit.
 * */
  
-public class BeamShock extends Card implements Spell, EnemySpell {
+public class BeamShock extends Spell implements EnemySpell {
+	
+	public BeamShock() {
+		this.manaCost = 1;
+		this.name = "Beamshock";
+	}
+	
     public void spell(ActorRef out, GameState gameState, Tile tile) {
         // Check if there is a unit on the targeted tile
         if (tile.hasUnit()) {

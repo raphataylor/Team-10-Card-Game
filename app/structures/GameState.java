@@ -4,6 +4,7 @@ import commands.BasicCommands;
 import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.spells.Spell;
 
 /**
  * This class can be used to hold information about the on-going game.
@@ -20,6 +21,12 @@ public class GameState {
 
 	// tracks if a player has a card current selected
 	public boolean cardSelected = false;
+	
+	//checks if card selected is a spell
+	public boolean isCardSelectedSpell = false;
+	
+	//checks what the spell is if the current card selected is a spell
+	public Spell currentSpell = null;
 
 	// tracks the unit on tile
 	public static Tile unitCurrentTile = null;

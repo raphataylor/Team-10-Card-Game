@@ -6,6 +6,8 @@ import structures.Game;
 import structures.GameState;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.spells.HornOfTheForsaken;
+import structures.spells.Spell;
 
 //currently using class instead of interface as behaviour does not matter, just typing does
 public class Avatar extends Unit{
@@ -15,7 +17,9 @@ public class Avatar extends Unit{
 		hasMoved = false;
 		hasAttacked = false;
 	}
-	private boolean hasHornOfForsaken = false;
+	
+	//attribute for storing the horn of the forsaken to utilise its methods
+	private HornOfTheForsaken hornOfTheForsaken = null;
 	
 	public void highlightAdjacentTiles(ActorRef out, Tile[][] grid) {
 		int X = this.getPosition().getTilex();
@@ -36,11 +40,21 @@ public class Avatar extends Unit{
 	}
 	
 	public boolean getHasHornOfForsaken() {
-		return this.hasHornOfForsaken;
+		if (this.hornOfTheForsaken == null) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 	
-	public void setHasHornOfForsaken(boolean hasHornOfForsaken) {
-		this.hasHornOfForsaken = hasHornOfForsaken;
+	
+	public HornOfTheForsaken getHornOfTheForsaken() {
+		return this.hornOfTheForsaken;
+	}
+	
+	public void setHornOfTheForsaken(HornOfTheForsaken hornOfTheForsaken) {
+		this.hornOfTheForsaken = (HornOfTheForsaken) hornOfTheForsaken;
 	}
 
 }

@@ -188,6 +188,25 @@ public class UnitSummonTest {
 		Game.getBoard().addPlayer2Unit(testunit);
 	}
 	
+	public static void spellTest(ActorRef out, GameState gameState) {
+		Card c1 = BasicObjectBuilders.loadCard("conf/gameconfs/cards/2_9_c_s_sundrop_elixir.json", 0, Card.class);
+		Card c2 = BasicObjectBuilders.loadCard("conf/gameconfs/cards/1_8_c_s_dark_terminus.json", 0, Card.class);
+		Card c3 = BasicObjectBuilders.loadCard("conf/gameconfs/cards/2_5_c_s_beamshock.json", 0, Card.class);
+		Card c4 = BasicObjectBuilders.loadCard("conf/gameconfs/cards/2_a1_c_s_truestrike.json", 0, Card.class);
+		Card c5 = BasicObjectBuilders.loadCard("conf/gameconfs/cards/2_9_c_s_sundrop_elixir.json", 0, Card.class);
+		
+		ArrayList<Card> testDeck = new ArrayList<Card>();
+		testDeck.add(c1);
+		testDeck.add(c2);
+		testDeck.add(c3);
+		testDeck.add(c4);
+		testDeck.add(c5);
+		System.out.println(testDeck);
+		gameState.player1.setPlayerDeck(testDeck);
+
+		gameState.player1.drawInitialHand(out);
+	}
+	
 
 
 }

@@ -2,6 +2,7 @@ package structures.spells;
  
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import structures.Game;
 import structures.GameState;
 import structures.basic.Card;
 import structures.basic.Tile;
@@ -15,7 +16,14 @@ import structures.basic.Unit;
 * 			Destroy an enemy creature.
 * 			Summon a Wraithling on the tile of the destroyed creature
 * */
-public class DarkTerminus extends Card implements Spell, EnemySpell {
+public class DarkTerminus extends Spell implements EnemySpell {
+	
+	public DarkTerminus() {
+		this.manaCost = 4;
+		this.name = "Dark Terminus";
+	}
+	
+	
     public void spell(ActorRef out, GameState gameState, Tile tile){
         // Check if there is an enemy unit on the targeted tile
         if (tile.hasUnit()) {
@@ -23,10 +31,9 @@ public class DarkTerminus extends Card implements Spell, EnemySpell {
             // Destroy the enemy unit
             BasicCommands.deleteUnit(out, targetUnit);
             tile.setUnit(null); // Remove the unit from the tile
+            Game.getBoard().removePlayer2Unit(targetUnit);
             // Summon a Wraithling on the same tile
-            Unit wraithling = new Unit(); // Replace this with actual creation logic
-            tile.setUnit(wraithling);
-            BasicCommands.drawUnit(out, wraithling, tile);
+            Game.summonToken(out, tile); // Replace this with actual creation logic
         }
     }
 }

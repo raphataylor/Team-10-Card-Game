@@ -1,6 +1,7 @@
 package structures.basic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import akka.actor.ActorRef;
@@ -21,8 +22,7 @@ public class Player {
 	int mana;
 	Unit avatar;
 
-	// Holds the current players Cards in a hand
-	//CHANGE HAND TO ARRAY AND TEST LATER
+
 	public Card[] playerHand = new Card[6];
 
 	public List<Card> playerDeck = new ArrayList<Card>(20);
@@ -117,7 +117,8 @@ public class Player {
 		if (this.playerDeck.isEmpty()) {
 			System.out.println("Card Deck Empty. Deck Reshuffled!");
 			BasicCommands.addPlayer1Notification(out, "Card Deck Empty. Deck Reshfulled", 5);
-			setPlayerDeck(OrderedCardLoader.getPlayer1Cards(1));
+			setPlayerDeck(OrderedCardLoader.getPlayer1Cards(2));
+			shufflePlayerCards();
 		}
 		//if there are no free spaces in the hand then it will return -1
 		//this means there is no need to draw a card and that top card will be discarded instead
@@ -131,6 +132,14 @@ public class Player {
 			}
 	
 		removeCardFromDeck(0);
+		
+	}
+	
+	//shuffles the deck when drawing a new deck
+	public void shufflePlayerCards() {
+		ArrayList<Card> cardsToShuffle = (ArrayList<Card>) this.getPlayerDeck();
+		Collections.shuffle(cardsToShuffle);
+		this.setPlayerDeck(cardsToShuffle);
 		
 	}
 

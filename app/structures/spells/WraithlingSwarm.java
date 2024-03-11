@@ -18,30 +18,32 @@ import structures.units.*;
  *          Summon 3 Wraithlings in sequence.
  */
 
-public class WraithlingSwarm extends Card implements Spell {
+public class WraithlingSwarm extends Spell {
+	
+	public WraithlingSwarm() {
+		this.manaCost = 3;
+		this.name = "Wraithling Swarm";
+	}
 
     public void spell(ActorRef out, GameState gameState, Tile tile) {
-        for (int i = 0; i < 3; i++) { 
-            // Check if the tile is empty before summoning
-            if (!tile.hasUnit()) {
-                Unit wraithling = createWraithling(tile); // Create and place a Wraithling on the tile.
-                BasicCommands.drawUnit(out, wraithling, tile); // Draw the Wraithling unit on the board.
+    	int wraiths = 0;
+    	while(wraiths < 4) {
+    		if (!tile.hasUnit()) {
+                Game.summonToken(out, tile);
+                wraiths++;
                 try {
-                    Thread.sleep(1000); 
+                    Thread.sleep(100); 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
-        }
+    		else {
+    			continue;
+    		}
+    	}
+    	  	
     }
 
-    private Unit createWraithling(Tile tile) {
-        Unit wraithling = new Unit();
-        wraithling.setPositionByTile(tile); // Set the unit's position based on the tile.
-        wraithling.setHealth(3); // Example attributes
-        wraithling.setAttack(1);
-        wraithling.setName("Wraithling");
-        tile.setUnit(wraithling); // Assign the newly created wraithling to the tile.
-        return wraithling;
-    }
+
 }

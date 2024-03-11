@@ -86,6 +86,7 @@ public class Board {
 	
 	//makes all tiles unactionable
 	public void resetAllTiles(ActorRef out) {
+		System.out.println("resetting tiles");
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				if(tiles[i][j].getIsActionableTile()) {

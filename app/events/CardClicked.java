@@ -17,7 +17,7 @@ import structures.spells.EnemySpell;
 import structures.spells.FriendlySpell;
 import structures.spells.Spell;
 import structures.units.Avatar;
-import utils.SpellCreator;
+import utils.SpellHandler;
 import utils.UnitSummonTest;
 
 /**
@@ -65,25 +65,12 @@ public class CardClicked implements EventProcessor{
 		
 		//handles clicking a spell card
 		if (!clickedCard.getIsCreature()) {
-			
 			System.out.println("CardClicked : inside if - !clickedCard.getIsCreature()");
-
-			
-			Spell spell = SpellCreator.returnSpell(clickedCard.getCardname());
-			if (spell instanceof FriendlySpell) {
-				System.out.println("CardClicked : inside spell instanceof FriendlySpell");
-
-				Game.highlightFriendlyUnits(out, gameState, clickedCard);
-			}
-			else if (spell instanceof EnemySpell) {
-				System.out.println("CardClicked : inside spell instanceof EnemySpell");
-
-				Game.highlightEnemyUnits(out, gameState, clickedCard);
-			}
-			
-			else {
-				
-			}
+			Spell spell = SpellHandler.returnSpell(clickedCard.getCardname());
+			gameState.cardSelected = true;
+			gameState.isCardSelectedSpell = true;
+			gameState.currentSpell = spell;
+			SpellHandler.HighlightTilesSpell(spell, out, gameState);
 			
 		}
 

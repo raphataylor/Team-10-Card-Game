@@ -24,23 +24,21 @@ import commands.BasicCommands;
  *      selected unoccupied adjacent tile. If there are no unoccupied tiles, then this ability has no effect.
  */
 
-public class HornOfTheForsaken extends Card implements Spell, FriendlySpell {
+public class HornOfTheForsaken extends Spell implements FriendlySpell {
     private int robustness = 3; // Initial robustness of the artifact
 
     public HornOfTheForsaken() {
-        super();
+   
         // Initialize the card with proper values
-        this.setManacost(1);
-        this.setCardname("Horn of the Forsaken");
+        this.manaCost = 1;
+        this.name = "Horn of the Forsaken";
     }
 
     public void spell(ActorRef out, GameState gameState, Tile tile) {
-        Avatar playerAvatar = (Avatar) gameState.currentPlayer.getAvatar();
-        playerAvatar.setHasAttacked(true); // Equipping the artifact to the player's avatar
+        Avatar playerAvatar = (Avatar) tile.getUnit();
+        playerAvatar.setHornOfTheForsaken(this); // Equipping the artifact to the player's avatar
 
         BasicCommands.addPlayer1Notification(out, "Horn of the Forsaken equipped", 2); // Display notification
-        gameState.currentPlayer.setMana(gameState.currentPlayer.getMana() - this.getManacost()); // Deducting mana cost
-        BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
     }
 
     public void onPlayerAvatarDamaged(ActorRef out, GameState gameState) {
@@ -49,13 +47,15 @@ public class HornOfTheForsaken extends Card implements Spell, FriendlySpell {
         BasicCommands.addPlayer1Notification(out, "Horn of the Forsaken robustness decreased", 2);
         if (robustness <= 0) {
             BasicCommands.addPlayer1Notification(out, "Horn of the Forsaken destroyed", 2);
-            playerAvatar.setHasHornOfForsaken(false); // Remove the artifact when robustness is 0
+            playerAvatar.setHornOfTheForsaken(null); // Remove the artifact when robustness is 0
         }
     }
 
     public void onUnitHitsEnemy(ActorRef out, GameState gameState, Tile tile) {
         List<Tile> adjacentTiles = Game.getBoard().getAdjacentTiles(tile);
         Random rand = new Random();
+        
+        //why is this boolean here? is this for a while loop that disappeared mid development?
         boolean wraithlingSummoned = false;
 
         for (Tile adjacentTile : adjacentTiles) {
