@@ -43,7 +43,7 @@ public class DarkTerminus extends Spell implements EnemySpell {
             tile.setUnit(null); // Remove the unit from the tile
             Game.getBoard().removePlayer2Unit(targetUnit);
             // Summon a Wraithling on the same tile
-            Game.summonToken(out, tile); // Replace this with actual creation logic
+            Game.summonToken(out, tile); 
         }
     }
 }

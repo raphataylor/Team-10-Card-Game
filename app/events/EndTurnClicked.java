@@ -31,23 +31,8 @@ public class EndTurnClicked implements EventProcessor {
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		if(gameState.gameOver == false) {
-			
+		if(gameState.gameOver == false) {			
 			System.out.println("End Turned : inside");
-
-			//Game.selectAICardToPlay(out, gameState);
-			//makeAIMoves(out, gameState);
-			//If it was the human player that pressed end turn this happens
-			//This should always be the case but needs a check just to be sure
-			
-				
-		
-			//for testing AI player
-			
-			//code logic for AI player end turn will be placed her 
-			//Game.resetMana(out, gameState);
-			//gameState.currentPlayer = gameState.player1;
-			//Game.setManaOnStartTurn(out, gameState);
 			Game.beginNewTurn(out, gameState);
 		}
 

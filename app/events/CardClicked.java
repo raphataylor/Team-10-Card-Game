@@ -18,7 +18,6 @@ import structures.spells.FriendlySpell;
 import structures.spells.Spell;
 import structures.units.Avatar;
 import utils.SpellHandler;
-import utils.UnitSummonTest;
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case a card.
@@ -49,8 +48,6 @@ public class CardClicked implements EventProcessor{
 			// Highlight potential summoning tiles
 			
 			System.out.println("CardClicked : inside if - clickedCard.getIsCreature()");
-
-			
 			Avatar player1Avatar = (Avatar) gameState.player1.getAvatar();
 			player1Avatar.highlightAdjacentTiles(out, Game.getBoard().getTiles(), gameState);
 			try {
@@ -58,11 +55,8 @@ public class CardClicked implements EventProcessor{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			//not sure why we reset the gameboard after selecting a card 
-			//Game.getBoard().drawBoard(out, Game.getBoard().getTiles());
-			//Game.getBoard().resetAllTiles(out);
+
 		}
-		
 		//handles clicking a spell card
 		if (!clickedCard.getIsCreature()) {
 			System.out.println("CardClicked : inside if - !clickedCard.getIsCreature()");
@@ -74,11 +68,6 @@ public class CardClicked implements EventProcessor{
 			
 		}
 
-		
-		if (clickedCard.getCardname().equalsIgnoreCase("dark terminus")) {// replace to check if it's a dark terminus card
-			System.out.println("clicked card is dark terminus");
-			//Game.showDarkTerminusHighlighing(out);
-		}
 		
 	}
 

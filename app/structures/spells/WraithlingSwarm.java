@@ -19,6 +19,7 @@ import structures.units.*;
  */
 
 public class WraithlingSwarm extends Spell {
+	private boolean isStillCasting = true;
 	
 	public WraithlingSwarm() {
 		this.manaCost = 3;
@@ -43,7 +44,12 @@ public class WraithlingSwarm extends Spell {
     			continue;
     		}
     	}
+    	isStillCasting = true;
     	  	
+    }
+    
+    public boolean getIsStillCasting() {
+    	return this.isStillCasting;
     }
 
 

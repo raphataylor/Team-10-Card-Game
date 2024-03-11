@@ -1,6 +1,7 @@
 package utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import akka.actor.ActorRef;
@@ -60,7 +61,30 @@ public class SpellHandler {
 	
 	public static void HighlightTilesSpell(Spell spell, ActorRef out, GameState gameState) {
 		
-		if (spell instanceof FriendlySpell) {
+		if (spell instanceof WraithlingSwarm) {
+			ArrayList<Tile> tiles = Game.getBoard().getTileList();
+			for (Tile tile: tiles) {
+				if (!tile.hasUnit()) {
+					BasicCommands.drawTile(out, tile, 1);
+					tile.setIsActionableTile(true);
+				}
+			}
+			WraithlingSwarm ws = (WraithlingSwarm) spell;
+			while(ws.getIsStillCasting()) {
+				
+			}
+			Game.resetGameState(out, gameState);
+		}
+		
+		else if (spell instanceof HornOfTheForsaken) {
+			int x = gameState.player1.getAvatar().getPosition().getTilex();
+			int y = gameState.player1.getAvatar().getPosition().getTiley();
+			Tile tile = Game.getBoard().getTile(x, y);
+			BasicCommands.drawTile(out, tile, 1);
+			tile.setIsActionableTile(true);
+		}
+		
+		else if (spell instanceof FriendlySpell) {
 			System.out.println("CardClicked : inside spell instanceof FriendlySpell");
 
 			Game.highlightFriendlyUnits(out, gameState);
@@ -79,6 +103,12 @@ public class SpellHandler {
         	BasicCommands.addPlayer1Notification(out, "He seems to be protected by something", 3);
         	Game.resetGameState(out, gameState);
         	return;
+		}
+		
+		if (spell instanceof HornOfTheForsaken && !selectedTile.getIsActionableTile()) {
+			Game.resetGameState(out, gameState);
+			return;
+			
 		}
 		
 		else {

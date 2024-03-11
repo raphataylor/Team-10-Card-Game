@@ -12,7 +12,7 @@ import structures.basic.Tile;
 import structures.basic.Unit;
 import utils.BattleHandler;
 import utils.SpellHandler;
-import utils.UnitSummonTest;
+
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this
@@ -62,7 +62,6 @@ public class TileClicked implements EventProcessor {
 					SpellHandler.performSpell(gameState.currentSpell, tileSelected, out, gameState);
 				}
 				else {
-					BasicCommands.addPlayer1Notification(out, "card selected", 3);
 					gameState.currentSelectedUnit = null;
 					gameState.unitCurrentTile = null;
 					
@@ -90,8 +89,6 @@ public class TileClicked implements EventProcessor {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				//Game.getBoard().drawBoard(out, tiles);
-				//board.resetAllTiles(out);
 				return;
 			} else if (gameState.currentSelectedUnit != null && selectedUnit == null) {// if a tile is clicked after a unit
 																						// is clicked, move the

@@ -30,7 +30,6 @@ public class GloomChaser extends Unit implements OpeningGambitAbilityUnit {
                 // summon wrathling if the tile on the left has no unit present on it
                 
                 if (!leftTile.hasUnit()) {
-                    BasicCommands.addPlayer1Notification(out, "drawUnit", 1);
                     Game.summonToken(out, leftTile);
                 }
         	}

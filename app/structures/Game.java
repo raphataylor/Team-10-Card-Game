@@ -76,11 +76,6 @@ public class Game {
 			} else if (gameState.turn >= 2 && gameState.turn <= 8) {
 				gameState.currentPlayer.setMana(gameState.turn + 1);
 			}
-			/*
-			 * else if (gameState.turn >= 9){
-			 * gameState.currentPlayer.setMana(9);
-			 * }
-			 */
 			else {
 				gameState.currentPlayer.setMana(9);
 			}
@@ -200,9 +195,7 @@ public class Game {
 					System.out.println("unit has opening gambit ability");
 					((OpeningGambitAbilityUnit) unitSummon).openingGambitAbility(out, gameState);
 				}
-				//else if(unitSummon instanceof Spell) {
-					
-				//}
+
 
 				GameState.player1.setMana(GameState.player1.getMana() - cardToPlayer.getManacost());
 				updateManaVisual(out, gameState.player1, gameState);
@@ -269,12 +262,10 @@ public class Game {
 		humanAvatar.setMaxAttack(2);
 		humanAvatar.setMaxHealth(20);
 
-		// BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setUnitHealth(out, humanAvatar, 20);
 		BasicCommands.setUnitAttack(out, humanAvatar, 2);
 		avatars[0] = humanAvatar;
-		// not sure if this is appropriate but its required for effect checking
-		// "technically"
+	
 		board.addPlayer1Unit(humanAvatar);
 
 		Unit aiAvatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 1, Avatar.class);
@@ -296,14 +287,12 @@ public class Game {
 		aiAvatar.setMaxHealth(20);
 
 
-		// BasicCommands.setPlayer2Health(out, GameState.player2);
 		BasicCommands.setUnitHealth(out, aiAvatar, 20);
 		BasicCommands.setUnitAttack(out, aiAvatar, 2);
 		avatars[1] = aiAvatar;
 		
 		board.addPlayer2Unit(aiAvatar);
 
-		// humanAvatar.setHasMoved(true);
 
 		return avatars;
 

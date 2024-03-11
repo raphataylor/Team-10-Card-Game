@@ -1,5 +1,7 @@
 package structures.units;
 
+import java.util.List;
+
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.Game;
@@ -15,34 +17,18 @@ public class BloodmoonPriestess extends Unit implements DeathwatchAbilityUnit {
 	
     // Method representing the deathwatch ability of the Bloodmoon Priestess
 	public void deathwatchAbility(ActorRef out) {
-		
-		Tile[][] board = Game.getBoard().getTiles();
-		Position unitPosition = this.getPosition();
-		// array for obtaining tiles around and adjecent to the unit tile
-		int[][] array = { 
-				{ -1, -1 },
-				{ -1, 0 },
-				{ -1, 1 },
-				{ 0, -1 },
-				{ 0, 1 },
-				{ 1, -1 },
-				{ 1, 0 },
-				{ 1, 1 },
-		};
-		
-		int[][] shuffledArray = BattleHandler.shuffleArray(array);
-		for (int i = 0; i < shuffledArray.length; i++) {
-			int x = unitPosition.getTilex() + shuffledArray[i][0];
-			int y = unitPosition.getTiley() + shuffledArray[i][1];
-			Tile adjacentTile = board[x][y];
-			if (!adjacentTile.hasUnit()) {
-				BasicCommands.addPlayer1Notification(out, "drawUnit", 1);
-				
-				// summon wrathling if the tile on the adjacent tile has no unit present on it
-				Game.summonToken(out, adjacentTile);
-				return;
+
+			
+			Tile thisTile = Game.getBoard().getTile(this.getPosition().getTilex(), this.getPosition().getTiley());
+			List<Tile> adjacentTiles = Game.getBoard().getAdjacentTiles(thisTile);
+			
+			for (Tile adjTile: adjacentTiles) {
+				if (!adjTile.hasUnit()) {
+					Game.summonToken(out, adjTile);
+					return;
+				}
+				else continue;	
 			}
-		}
 		return;
 	}
 }

@@ -138,8 +138,7 @@ public class BattleHandler {
 			}
 		}
 		attacker.setHasAttacked(true);
-		defenderTile.setIsActionableTile(false);
-		//Game.getBoard().resetAllTiles(out);
+		Game.resetGameState(out, gameState);
 		
 	}
 
@@ -195,6 +194,12 @@ public class BattleHandler {
 				e.printStackTrace();
 			}
 			BasicCommands.deleteUnit(out, defender);
+			
+			
+			int dX = defender.getPosition().getTilex();
+			int dY = defender.getPosition().getTiley();
+			Tile defenderTile = Game.getBoard().getTile(dX, dY);
+			defenderTile.setUnit(null);	
 			if (gameState.currentPlayer == gameState.player1) {
 				Game.getBoard().removePlayer2Unit(defender);
 			}

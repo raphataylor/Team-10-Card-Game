@@ -13,7 +13,6 @@ import structures.basic.Tile;
 import structures.basic.Unit;
 import utils.BasicObjectBuilders;
 import utils.OrderedCardLoader;
-import utils.UnitSummonTest;
 
 import structures.basic.Player;
 
@@ -33,17 +32,11 @@ public class Initalize implements EventProcessor {
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		// hello this is a change
 
 		gameState.gameInitalised = true;
-
-		gameState.something = true;
-		// Game currentGame = new Game();
-				
+		gameState.something = true;	
 		gameState.turn = 1; 
-		
 		Game.createBoard(out);
-		
 		
 		//to add correct coordinates when identified 
 		Unit[] avatars = Game.avatarSummonSetup(out, 1, 2, 7, 2);
@@ -57,22 +50,17 @@ public class Initalize implements EventProcessor {
 		BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setPlayer2Health(out, GameState.player2);
 		
-		Game.initialisePlayerDeck(out, gameState); //removed for testing something
-		//UnitSummonTest.spellTest(out,gameState);
+		Game.initialisePlayerDeck(out, gameState);
 		Game.setManaOnStartTurn(out, gameState);
 
-		
+	
 		// User 1 makes a change
 		// CommandDemo.executeDemo(out); // this executes the command demo, comment out
 		// this when implementing your solution
 		// Loaders_2024_Check.test(out);
 
 		// replace this with the initialisation method from the game class
-		// UnitSummonTest.givePlayerCard(out);
-		
-//		UnitSummonTest.summonEnemyUnitTest(out);
-//		UnitSummonTest.deathwatcherUnitTest(out);
-//		UnitSummonTest.provokeUnitTest(out);
+
 	}
 
 }

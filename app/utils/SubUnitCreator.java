@@ -54,7 +54,7 @@ public class SubUnitCreator {
 			System.out.println("printing a specific unit type");
 			return BasicObjectBuilders.loadUnit(jsonConfig, globalUnitID, classType);
 		}
-		// If the unit is not a deathwatch type then it will just be constructed as a
+		// If the unit is not an ability type then it will just be constructed as a
 		// normal unit
 		else {
 			globalUnitID++;

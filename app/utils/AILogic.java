@@ -115,7 +115,6 @@ public class AILogic {
 			SpellHandler.performSpell(spell, targetTile, out, gameState);
 		}
 		
-		//the ai will target the unit furthest to the right (usually most threatening) and if there are multiple it will choose the highest hp one
 		if (spell instanceof BeamShock) {
 						
 				int tileX = gameState.player1.getAvatar().getPosition().getTilex();
@@ -168,50 +167,6 @@ public class AILogic {
 	}
 	
 	
-	public static Tile findMostThreateningUnitToAvatar(Tile avatarTile, int range, List<Unit> player1Units) {
-		Unit closeStrongestUnit = null;
-		int xRange = avatarTile.getTilex() + range;
-		for (Unit unit: player1Units) {
-			int currentUnitX = unit.getPosition().getTilex();
-			if (currentUnitX == xRange && closeStrongestUnit == null) {
-				closeStrongestUnit = unit;
-			}
-			else if (currentUnitX == xRange) {
-					if (unit.getAttack() > closeStrongestUnit.getAttack()) {
-						closeStrongestUnit = unit;
-					}
-			}
-		}
-		
-		if (closeStrongestUnit == null) {
-			Tile leftColumn = null;
-			Tile rightColumn = null;
-			if (range > 0) {
-				leftColumn = findMostThreateningUnitToAvatar(avatarTile, range - 1, player1Units);
-				if (closeStrongestUnit == null) {
-					if (range < 8) {
-						rightColumn = findMostThreateningUnitToAvatar(avatarTile, range + 1, player1Units);
-					}
-				}
-			}
-			if (leftColumn == null && rightColumn == null) {
-				return null;
-			}
-			else if (rightColumn == null) {
-				return leftColumn;
-			}
-			else {
-				return rightColumn;
-			}
-		}
-		
-		int tileX = closeStrongestUnit.getPosition().getTilex();
-		int tileY = closeStrongestUnit.getPosition().getTiley();
-		Tile targetTile = Game.getBoard().getTile(tileX, tileY);
-		
-		
-		return targetTile;
-	}
 	
     // Performs logic to summon units, considering optimal positioning.
 	public static void unitSummonAILogic(Card unitCard, GameState gameState, ActorRef out) {

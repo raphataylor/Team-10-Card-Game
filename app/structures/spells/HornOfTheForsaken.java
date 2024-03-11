@@ -25,7 +25,7 @@ import commands.BasicCommands;
  *      selected unoccupied adjacent tile. If there are no unoccupied tiles, then this ability has no effect.
  */
 
-public class HornOfTheForsaken extends Spell implements FriendlySpell {
+public class HornOfTheForsaken extends Spell {
     private int robustness = 3; // Initial robustness of the artifact
 
     public HornOfTheForsaken() {
