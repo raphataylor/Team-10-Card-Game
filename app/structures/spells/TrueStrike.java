@@ -27,7 +27,8 @@ public class TrueStrike extends Spell implements EnemySpell{
     }
 
 
-
+	
+    // Method representing the spell's effect
 	public void spell(ActorRef out, GameState gameState, Tile tile) {
 		Unit targetUnit = tile.getUnit();
 		

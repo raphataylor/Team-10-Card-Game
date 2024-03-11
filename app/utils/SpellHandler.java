@@ -14,18 +14,21 @@ import structures.spells.DarkTerminus;
 import structures.spells.EnemySpell;
 import structures.spells.FriendlySpell;
 import structures.spells.HornOfTheForsaken;
+import structures.spells.*;
 import structures.spells.Spell;
 import structures.spells.SundropElixir;
 import structures.spells.TrueStrike;
 import structures.units.Avatar;
 
+
 public class SpellHandler {
 	
+    // A mapping from spell names to their corresponding class types. This allows for dynamic spell instantiation.
 	private static final HashMap<String, Class <? extends Spell>> spellMap = new HashMap<String, Class <? extends Spell>>(){
 		{
 			
 			put("Horn of the Forsaken", HornOfTheForsaken.class);
-			put("Wraithling Swarm", DarkTerminus.class);
+			put("Wraithling Swarm", WraithlingSwarm.class);
 			put("Dark Terminus", DarkTerminus.class);
 			
 			put("Sundrop Elixir", SundropElixir.class);
@@ -38,8 +41,6 @@ public class SpellHandler {
 	
 	//identifies class type and through reflection gets an instance of the spell 
 	public static Spell returnSpell(String spellname){
-		//will need to test for all spells
-		System.out.println("grabbingspell");
 		System.out.println(spellname);
 		if (spellMap.containsKey(spellname)) {
 			Class<? extends Spell> spellOfInterest = spellMap.get(spellname);

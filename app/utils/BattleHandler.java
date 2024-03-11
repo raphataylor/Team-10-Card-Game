@@ -19,13 +19,12 @@ import structures.units.SilverguardKnight;
 import structures.units.Avatar;
 
 public class BattleHandler {
-
+	
+    // Initiates an attack from one unit to another, processing the battle outcome.
 	public static void attackUnit(ActorRef out, Unit attacker, Tile defenderTile, GameState gameState) {
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
 		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
-		Unit defender = defenderTile.getUnit();
-		System.out.println("Attacking");	
-		
+		Unit defender = defenderTile.getUnit();		
 	
 		Tile attackerTile = Game.getBoard().getTile(attacker.getPosition().getTilex(), attacker.getPosition().getTiley());
 	
@@ -62,11 +61,6 @@ public class BattleHandler {
 		}
 		
 		defender.setHealth(defenderPostCombatHealth);
-
-		// the basicCommands only seem to effecting the latest drawn unit but the units
-		// being referenced are correct
-		System.out.println(attacker.getName() + " is playing the attack animation");
-		System.out.println("post combat health " + defenderPostCombatHealth);
 
 		BasicCommands.setUnitHealth(out, defender, defenderPostCombatHealth);
 
@@ -121,9 +115,7 @@ public class BattleHandler {
 			}
 			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
 			defenderTile.setUnit(null);	
-			// 1500 seems like an initial good time from animation to delete but experiment
-			// to find most
-			// appropriate
+			
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -151,6 +143,7 @@ public class BattleHandler {
 		
 	}
 
+    // Counter-attack logic when the defending unit strikes back at the attacker, if applicable.
 	public static void counterAttack(ActorRef out, Unit counterAttacker, Unit defender, GameState gameState) {
 		System.out.println("COUNTER attacking");
 		int defenderPostCombatHealth = defender.getHealth();
@@ -223,10 +216,10 @@ public class BattleHandler {
 
 	// will now loop over all units on the board
 	public static void unitDeathwatchAbilityCheck(ActorRef out) {
+		
 		System.out.println("checking for deathwatch ability");
 		// logic for checking if it has death ability or not
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
-		// List<Unit> player2Units = Game.getBoard().getPlayer2Units();
 
 		for (int i = 0; i < player1Units.size(); i++) {
 			Unit unit = player1Units.get(i);

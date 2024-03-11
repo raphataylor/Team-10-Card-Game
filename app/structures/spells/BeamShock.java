@@ -23,6 +23,7 @@ public class BeamShock extends Spell implements EnemySpell {
 		this.name = "Beamshock";
 	}
 	
+    // Method representing the spell's effect
     public void spell(ActorRef out, GameState gameState, Tile tile) {
         // Check if there is a unit on the targeted tile
         if (tile.hasUnit()) {

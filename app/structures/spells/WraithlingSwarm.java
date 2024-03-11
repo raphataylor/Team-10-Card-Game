@@ -24,7 +24,8 @@ public class WraithlingSwarm extends Spell {
 		this.manaCost = 3;
 		this.name = "Wraithling Swarm";
 	}
-
+	
+    // Method representing the spell's effect
     public void spell(ActorRef out, GameState gameState, Tile tile) {
     	int wraiths = 0;
     	while(wraiths < 4) {

@@ -64,7 +64,6 @@ public class Game {
 	public static void setManaOnStartTurn(ActorRef out, GameState gameState) {
 
 		if (gameState.gameInitalised) {
-			System.out.println("updatign mana");
 
 			System.out.println("Game : inside setManaOnStartTurn");
 
@@ -114,10 +113,10 @@ public class Game {
 
 
 	// when the player selects a card this method is called - essentially has a
-	// highlight and dehighlight system in place
+	// highlight and de-highlight system in place
 	public static void selectCard(ActorRef out, GameState gameState, int handPosition) {
 		if (!gameState.cardSelected) {
-			// creating a bandaid for now
+
 			BasicCommands.drawCard(out, GameState.player1.getPlayerHandCard(handPosition), handPosition, 1);
 			gameState.currentCardSelected = handPosition;
 			gameState.cardSelected = true;
@@ -144,8 +143,7 @@ public class Game {
 		System.out.println(tileSelected.getIsActionableTile());
 		// ensures the card attempting to be played is a unit card
 		if (tileSelected.getIsActionableTile() && cardToPlayer.getIsCreature()) {
-			// mana cost check to ensure the player attempting to summon the unit has enough
-			// mana
+			// mana cost check to ensure the player attempting to summon the unit has enough mana
 			if (gameState.currentPlayer.getMana() - cardToPlayer.getManacost() < 0) {
 				BasicCommands.addPlayer1Notification(out, "NOT ENOUGH MANA", 3);
 			} else {
@@ -167,22 +165,19 @@ public class Game {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				// System.out.println(board.getPlayer1Units());
 
 				BasicCommands.drawUnit(out, unitSummon, tileSelected);
 				// stops tiles from highlighting after summon
 				unitSummon.setHasMoved(true);
 
-				// a delay is required from drawing to setting attack/hp or else it will not
-				// work
+				// a delay is required from drawing to setting attack/hp or else it will not work
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 
-				// consider building upon existing constructor in Unit class when time permits
-				// to strengthen and create a safer class with invariants!
+		
 				int healthVal = cardToPlayer.getHealth();
 				int attackVal = cardToPlayer.getAttack();
 
@@ -193,6 +188,7 @@ public class Game {
 
 				String name = cardToPlayer.getCardname();
 				unitSummon.setName(name);
+				
 				// now grabs health and attack values from the card for drawing
 				BasicCommands.setUnitHealth(out, unitSummon, cardToPlayer.getHealth());
 				BasicCommands.setUnitAttack(out, unitSummon, cardToPlayer.getAttack());
@@ -304,8 +300,7 @@ public class Game {
 		BasicCommands.setUnitHealth(out, aiAvatar, 20);
 		BasicCommands.setUnitAttack(out, aiAvatar, 2);
 		avatars[1] = aiAvatar;
-		// not sure if this is appropriate but its required for effect checking
-		// "technically"
+		
 		board.addPlayer2Unit(aiAvatar);
 
 		// humanAvatar.setHasMoved(true);
@@ -372,9 +367,7 @@ public class Game {
 								}
 							} else if (Game.getBoard().getPlayer1Units().contains(unitOnTile)
 									&& GameState.currentPlayer == GameState.player2) {
-								//we dont need to draw for ai
-								//BasicCommands.drawTile(out, grid[x][y], 2);
-								// sets the tile to be actionable
+								
 								grid[x][y].setIsActionableTile(true);
 								try {
 									Thread.sleep(10);
@@ -391,34 +384,7 @@ public class Game {
 		}
 	}
 
-	// highlight all enemy creatures on board
-	/*public static void showDarkTerminusHighlighing(ActorRef out) {
-		Board board = Game.getBoard();
-		List<Unit> player2units = board.getPlayer2Units();
-		Tile[][] tiles = board.getTiles();
-		int rows = board.getRows();
-		int columns = board.getColumns();
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				Tile checkedTile = Game.getBoard().getTile(i, j);
-				if (checkedTile.hasUnit()) {
-					Unit unitOnTile = checkedTile.getUnit();
-					if (player2units.contains(unitOnTile) && !(unitOnTile instanceof Avatar)) {
-						BasicCommands.drawTile(out, tiles[i][j], 2);
-						tiles[i][j].setIsActionableTile(true);
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}
-	}*/
-
-	// Sprint 1 [VIS08] & [VIS07]
-	// Method to update and display health for both players
+		// Method to update and display health for both players
 	public static void updateHealthVisual(ActorRef out, Player player, GameState gameState) {
 		if (gameState.currentPlayer == gameState.player1) {
 			BasicCommands.setPlayer1Health(out, player); // Update player 1's health
@@ -439,23 +405,6 @@ public class Game {
 			BasicCommands.setPlayer2Mana(out, player); // Update player 2's mana
 		}
 
-	}
-
-	/*
-	 * method to update the attack of an unit or avatar summoned on the board
-	 * 
-	 * to be modified when dependent features will get implemented like cast
-	 * spells/AI summoned units
-	 */
-	public static void gainAttack(ActorRef out, Unit unit) {
-		BasicCommands.setUnitAttack(out, unit, 2); // assigning the value 2, the unit identification and depending on it
-													// the value of attack would vary
-	}
-
-	// method to update the health of an unit or avatar summoned on the board
-	public static void gainHealthUnit(ActorRef out, Unit unit) {
-		BasicCommands.setUnitHealth(out, unit, 2); // assigning the value 2, the unit identification and depending on it
-													// the value of attack would vary
 	}
 
 	public static void highlightEnemyUnits(ActorRef out, GameState gameState) {
@@ -523,6 +472,7 @@ public class Game {
 		
 		getBoard().resetAllTiles(out);
 		resetGameState(out, gameState);
+		
 		if(gameState.currentPlayer == gameState.player1) {
 			gameState.player1.drawCardAtTurnEnd(out, gameState);
 			System.out.println("End Turned : inside if");

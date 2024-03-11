@@ -41,7 +41,6 @@ public class TileClicked implements EventProcessor {
 		Tile[][] tiles = Game.getBoard().getTiles();
 		Unit selectedUnit = clickedTile.getUnit();
 		Game.getBoard().unHighlightAllTiles(out);
-		//System.out.println("avatar has moved : "+clickedTile.getUnit().getHasMoved());
 		
 		System.out.println(selectedUnit);
 
@@ -52,15 +51,12 @@ public class TileClicked implements EventProcessor {
 
 		if (!gameState.gameOver) {
 			
-			System.out.println("TileClicked:  !gameState.gameOver");
 
-			// the new method for summoning a unit - does not consider potential move or
-			// anything like that yet - be prepared to adjust to funnel to correct method
 			Board board = Game.getBoard();
 			Tile tileSelected = board.getTile(tilex, tiley);
 			if (gameState.cardSelected) { // tile clicked after card is selected, summon that card unit on the tile
 				
-				System.out.println("TileClicked:  gameState.cardSelected");
+				
 				//if current card selected is a spell card this happens
 				if (gameState.isCardSelectedSpell) {
 					SpellHandler.performSpell(gameState.currentSpell, tileSelected, out, gameState);
@@ -69,26 +65,23 @@ public class TileClicked implements EventProcessor {
 					BasicCommands.addPlayer1Notification(out, "card selected", 3);
 					gameState.currentSelectedUnit = null;
 					gameState.unitCurrentTile = null;
-					// new changes to account for tracking whether a tile is clicked or not
-					// previouslySelectedTile is used for combat under the assumption it is
-					// referring to a unit thats
-					// going to declare an attack
+					
 					gameState.isTileSelected = false;
 					Game.summonUnit(out, gameState, tilex, tiley);
 				}
 				
 			} 
+			
 			//checks for if unit has attack or move action available
 			else if ( (tileSelected.hasUnit() && !gameState.isTileSelected && (!tileSelected.getUnit().getHasMoved() || !tileSelected.getUnit().getHasAttacked())
 					&& Game.getBoard().getPlayer1Units().contains(tileSelected.getUnit()) && !tileSelected.getUnit().isStunned(out)) ) { // if the tile clicked has unit on it show
 																				// valid moves
 				
-				//tileSelected.hasUnit() && !tileSelected.getUnit().getHasAttacked()
-				System.out.println("TileClicked:  tileSelected.hasUnit() && !gameState.isTileSelected && !tileSelected.getUnit().getHasMoved()");
 
 				BasicCommands.addPlayer1Notification(out, "Where can I move?", 5);
 				gameState.currentSelectedUnit = tileSelected.getUnit();
 				gameState.unitCurrentTile = tileSelected;
+				
 				// the selected unit is now in a position to either move or perform combat
 				gameState.isTileSelected = true;
 				Game.showValidMovement(out, tiles, clickedTile, 2, gameState);

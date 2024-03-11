@@ -20,20 +20,21 @@ import structures.units.RockPulveriser;
 public class SubUnitCreator {
 	public static int globalUnitID = 1;
 
+    // A mapping from unit names to their corresponding class types. This allows for dynamic instantiation of units with specific abilities.
 	final static Map<String, Class<? extends Unit>> unitMap = new HashMap<String, Class<? extends Unit>>() {
 		{
-			//Deathwatch units
+            // Units with the "Deathwatch" ability, triggering effects upon death of other units.
 			put("Bad Omen", BadOmen.class);
 			put("Bloodmoon Priestess", BloodmoonPriestess.class);
 			put("Shadowdancer", Shadowdancer.class);
 			put("Shadow Watcher", ShadowWatcher.class);
 			
-			//Opening gambit units
+            // Units with "Opening Gambit" ability, triggering effects when the unit enters play.
 			put("Nightsorrow Assassin", NightsorrowAssasin.class);
 			put("Gloom Chaser", GloomChaser.class);
 			put("Silverguard Squire", SilverguardSquire.class);
 			
-			//Provoke units
+            // Units with the "Provoke" ability, forcing adjacent enemy units to attack them.
 			put("Rock Pulveriser", RockPulveriser.class);
 			put("Swamp Entangler", SwampEntangler.class);
 			put("Ironcliff Guardian", IroncliffGuardian.class);
@@ -42,9 +43,8 @@ public class SubUnitCreator {
 		}
 	};
 
-	// aims to identify unit if it has an ability. Will return null if the unit has
-	// no ability
-	// currently
+	// Identifies a unit's type based on its name and summons it to the specified location on the board.
+    // This method dynamically instantiates units with specific abilities or as a generic unit if no ability is matched.
 	public static Unit identifyUnitTypeAndSummon(String unitName, String jsonConfig, int x, int y) {
 		System.out.println(unitName);
 		if (unitMap.containsKey(unitName)) {
