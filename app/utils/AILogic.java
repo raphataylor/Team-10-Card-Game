@@ -25,20 +25,27 @@ import structures.basic.Card;
 
 //AI Specific logic 
 public class AILogic {
-
+	
+    // Main method to orchestrate the AI's turn.
 	public static void playAITurn(ActorRef out, GameState gameState) {
+		
+		// AI checks its hand for playable cards.
 		checkCards(out, gameState);
+		
+        // AI identifies valid moves it can make this turn.
 		identifyValidMoves(out, gameState);
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+        // Ends the AI's turn and potentially triggers the start of the next turn.
 		endAITurn(out, gameState);
 	}
 	
 	
-	//checks hand like a player does
+    // Checks the AI's hand to decide on playing a card.
 	public static void checkCards(ActorRef out, GameState gameState) {
 		Card[] AIHand = gameState.player2.getPlayerHand();
 		for (int i = 0; i < AIHand.length; i++) {
@@ -63,11 +70,13 @@ public class AILogic {
 
 			}
 		}
+		
+        // Reset tile highlights after actions.
 		Game.getBoard().resetAllTiles(out);
 		
 	}
 	
-	//defines logic for how an ai deals with spell cards
+    // Logic for the AI to play spell cards.
 	public static void spellAILogic(Card spellCard, GameState gameState, ActorRef out) {
 		Spell spell = SpellHandler.returnSpell(spellCard.getCardname());
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
@@ -163,6 +172,7 @@ public class AILogic {
 		}
 	}
 	
+	
 	public static Tile findMostThreateningUnitToAvatar(Tile avatarTile, int range, List<Unit> player1Units) {
 		Unit closeStrongestUnit = null;
 		int xRange = avatarTile.getTilex() + range;
@@ -208,7 +218,7 @@ public class AILogic {
 		return targetTile;
 	}
 	
-	
+    // Performs logic to summon units, considering optimal positioning.
 	public static void unitSummonAILogic(Card unitCard, GameState gameState, ActorRef out) {
 		Unit AIAvatar = gameState.player2.getAvatar();
 		Unit playerAvatar = gameState.player1.getAvatar();
@@ -243,6 +253,7 @@ public class AILogic {
 		
 	}
 	
+    // Finds a tile close to a target tile that aligns with the AI's strategy.
 	public static Tile identifySummonTile(int directionModifier, int baseTileX) {
 		List<Tile> tiles = Game.getBoard().getTileList();
 		
@@ -269,7 +280,8 @@ public class AILogic {
 		
 		return null;
 	}
-
+	
+    // Identifies the most strategically advantageous tiles for the AI to move or attack.
 	public static void identifyValidMoves(ActorRef out, GameState gameState) {
 		System.out.println("AILogic : inside identifyValidMoves");
 		
@@ -308,7 +320,7 @@ public class AILogic {
 	}
 	
 	
-	
+    // Finds a tile close to a target tile that aligns with the AI's strategy.
 	public static Tile findPositioningTowardsTargetTile(Tile targetTile, int range) {
 		if (range == 1) {
 			List<Tile> adjTiles = Game.getBoard().getAdjacentTiles(targetTile);
@@ -361,9 +373,7 @@ public class AILogic {
 		}
 	}
 
-	// we will need a list of valid tiles to choose an action from
-	// There needs to be a clear distinction between what tiles are considered
-	// movement and which are considered attack
+    // Executes an attack if a favorable battle opportunity is identified.
 	public static void performUnitBattle(Unit unitOfInterest, ActorRef out, GameState gameState) {
 		ArrayList<Tile> allTiles = Game.getBoard().getTileList();
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
@@ -398,7 +408,8 @@ public class AILogic {
 			}
 		}
 	}
-
+	
+    // Moves the AI's unit towards strategic positions on the board.
 	public static void performUnitMove(Unit unitOfInterest, ActorRef out, GameState gameState) {
 		System.out.println("AILogic : inside performUnitMove");
 
@@ -449,7 +460,7 @@ public class AILogic {
 	}
 
 
-
+    // Helper method to handle the summoning process for an AI card.
 	private static void summonAICard(ActorRef out, GameState gameState, Tile tile, Card card) {
 
 		String cardJSONReference = card.getUnitConfig();
@@ -529,12 +540,12 @@ public class AILogic {
 		Game.resetGameState(out, gameState);
 	}
 
-	
 
-
-
+    // Ends the AI's turn and potentially triggers the start of the next player's turn.
 
 	public static void endAITurn(ActorRef out, GameState gameState) {
+		
+        // Resets all tiles and initiates the next turn.
 		Game.getBoard().resetAllTiles(out);
 		Game.beginNewTurn(out, gameState);
 
