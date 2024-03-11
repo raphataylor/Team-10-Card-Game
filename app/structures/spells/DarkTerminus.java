@@ -26,7 +26,7 @@ public class DarkTerminus extends Spell implements EnemySpell {
 		this.name = "Dark Terminus";
 	}
 	
-	
+    // Method representing the spell's effect
     public void spell(ActorRef out, GameState gameState, Tile tile){
         // Check if there is an enemy unit on the targeted tile
         if (tile.hasUnit()) {

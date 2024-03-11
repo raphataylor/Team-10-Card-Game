@@ -34,7 +34,8 @@ public class HornOfTheForsaken extends Spell implements FriendlySpell {
         this.manaCost = 1;
         this.name = "Horn of the Forsaken";
     }
-
+    
+    // Method representing the spell's effect
     public void spell(ActorRef out, GameState gameState, Tile tile) {
         Avatar playerAvatar = (Avatar) tile.getUnit();
         playerAvatar.setHornOfTheForsaken(this); // Equipping the artifact to the player's avatar

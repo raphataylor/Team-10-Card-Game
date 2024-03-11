@@ -23,6 +23,7 @@ public class SundropElixir extends Spell implements FriendlySpell{
 		this.name = "Sundrop Elixir";
 	}
 	
+    // Method representing the spell's effect
 	public void spell(ActorRef out, GameState gameState, Tile tile){
 		Unit selectedUnit = tile.getUnit();
 		int unitMaxHP = selectedUnit.getMaxHealth();
