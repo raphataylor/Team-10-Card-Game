@@ -15,11 +15,14 @@ import utils.BattleHandler;
 import utils.StaticConfFiles;
 
 public class BadOmen extends Unit implements DeathwatchAbilityUnit {
-
+	
+    // Method representing the deathwatch ability of the Bad Omen
+	
 	@Override
 	public void deathwatchAbility(ActorRef out) {
 		System.out.println("TILE: " + this.getPosition().getTilex() + "," +
 				this.getPosition().getTiley());
+		
 		this.setAttack(getAttack() + 1);
 		try {
 			Thread.sleep(1000);

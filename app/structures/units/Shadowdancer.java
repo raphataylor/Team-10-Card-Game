@@ -6,8 +6,10 @@ import structures.GameState;
 import structures.basic.Unit;
 
 public class Shadowdancer extends Unit implements DeathwatchAbilityUnit {
-
+	
+    // Method representing the deathwatch ability of the Shadowdancer
 	public void deathwatchAbility(ActorRef out) {
+		
 		Unit humanAvatar = GameState.player1.getAvatar();
 		Unit aiAvatar = GameState.player2.getAvatar();
 
@@ -18,9 +20,6 @@ public class Shadowdancer extends Unit implements DeathwatchAbilityUnit {
 				humanAvatar.getHealth(), humanAvatar.getAttack(),
 				aiAvatar.getHealth(), aiAvatar.getAttack()));
 
-		// apparently using setHealth with getHealth causes issues and returns 0?
-		// you have to grab it into an int variable then you can alter it - this strange
-		// behaviour may also explain why latest unit is effected but will need testing
 		if (humanAvatar.getHealth() < 20) {
 			humanAvatar.setHealth(humanAvatarHealth + 1);
 		}

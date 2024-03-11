@@ -7,6 +7,7 @@ import structures.basic.Unit;
 
 public class ShadowWatcher extends Unit implements DeathwatchAbilityUnit {
 
+    // Method representing the deathwatch ability of the ShadowWatcher
 	public void deathwatchAbility(ActorRef out) {
 		this.setHealth(getHealth() + 1);
 		if (this.getAttack() < 3) {
