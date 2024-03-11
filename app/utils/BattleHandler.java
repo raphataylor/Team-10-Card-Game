@@ -20,20 +20,13 @@ import structures.units.Avatar;
 
 public class BattleHandler {
 
-	// WHEN AI IS IMPLEMENTED PLEASE PLEASE DO A CHECK ON IF IT IS THE RIGHT PLAYERS
-	// TURN AND
-	// ENSURE FRIENDLY FIRE IS FIXED!!!!
 	public static void attackUnit(ActorRef out, Unit attacker, Tile defenderTile, GameState gameState) {
 		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
 		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
 		Unit defender = defenderTile.getUnit();
 		System.out.println("Attacking");	
 		
-		// System.out.println("CANNOT ATTACK FRIENDLY FIRE");
-		// return;
-		// }
-		//
-		
+	
 		Tile attackerTile = Game.getBoard().getTile(attacker.getPosition().getTilex(), attacker.getPosition().getTiley());
 	
 		
@@ -43,7 +36,7 @@ public class BattleHandler {
 		}
 	
 		try {
-			Thread.sleep(2000	);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -86,10 +79,10 @@ public class BattleHandler {
 					unit.setAttack(unit.getAttack() + 2);
 				}
 			}
-			BasicCommands.setPlayer2Health(out, gameState.player2); // Update player 1's health
+			BasicCommands.setPlayer2Health(out, gameState.player2); // Update player 2's health
 		} else if ((defender instanceof Avatar) && gameState.currentPlayer == gameState.player2) {
 			gameState.player1.setHealth(defenderPostCombatHealth);
-			BasicCommands.setPlayer1Health(out, gameState.player1); // Update player 2's health
+			BasicCommands.setPlayer1Health(out, gameState.player1); // Update player 1's health
 		}
 		
 		Game.resetGameState(out, gameState);
@@ -108,7 +101,7 @@ public class BattleHandler {
 			e.printStackTrace();
 		}
 
-		if (defenderPostCombatHealth > 0) {
+		if (defenderPostCombatHealth > 0 && !defender.isStunned(out)) {
 			counterAttack(out, defender, attacker, gameState);
 		} else {
 
@@ -260,6 +253,8 @@ public class BattleHandler {
 	}
 	
 	public static boolean travelToFightUnit(ActorRef out, GameState gameState, Tile startTile, Tile targetTile) {
+		System.out.println("start tile: " + startTile.getUnit().getName());
+		System.out.println("target tile: " + targetTile.getUnit().getName());
 		List<Tile> adjTiles = Game.getBoard().getAdjacentTiles(startTile);
 		if (adjTiles.contains(targetTile)) {
 			return true;
@@ -270,23 +265,25 @@ public class BattleHandler {
 				if (startTile.getUnit().getHasMoved()) {
 					return false;
 				}
-				else if (canAttack(tile, targetTile)) {
+				//this might need testing
+				else if (canAttack(tile, targetTile) && !tile.hasUnit() && tile.getIsActionableTile()) {
 					System.out.println("able to move");
-					BasicCommands.addPlayer1Notification(out, "Move my unit!", 5);
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					startTile.getUnit().setPositionByTile(targetTile);
-					tile.setUnit(startTile.getUnit());
+					
+					System.out.println("Moving: " + startTile.getUnit().getName());
 					BasicCommands.moveUnitToTile(out, startTile.getUnit(), tile);
+					startTile.getUnit().setPositionByTile(tile);
+					tile.setUnit(startTile.getUnit());
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					gameState.currentSelectedUnit.setHasMoved(true);
+					startTile.getUnit().setHasMoved(true);
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {

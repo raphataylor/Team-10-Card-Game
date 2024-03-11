@@ -65,7 +65,7 @@ public class Board {
         for (int i = 0; i < 8; i++) {
             int adjx = x + dx[i];
             int adjy = y + dy[i];
-            if (adjx >= 9 || adjy >= 5) {
+            if (adjx >= 9 || adjy >= 5 || adjx < 0 || adjy < 0) {
             	continue;
             }
             else {
@@ -76,7 +76,6 @@ public class Board {
             		e.printStackTrace();
             		continue;
             	}
-            	
             }
             
         }

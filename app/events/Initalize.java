@@ -57,8 +57,8 @@ public class Initalize implements EventProcessor {
 		BasicCommands.setPlayer1Health(out, GameState.player1);
 		BasicCommands.setPlayer2Health(out, GameState.player2);
 		
-		//Game.initialisePlayerDeck(out, gameState); removed for testing something
-		UnitSummonTest.spellTest(out,gameState);
+		Game.initialisePlayerDeck(out, gameState); //removed for testing something
+		//UnitSummonTest.spellTest(out,gameState);
 		Game.setManaOnStartTurn(out, gameState);
 
 		

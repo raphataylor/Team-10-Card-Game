@@ -52,7 +52,7 @@ public class CardClicked implements EventProcessor{
 
 			
 			Avatar player1Avatar = (Avatar) gameState.player1.getAvatar();
-			player1Avatar.highlightAdjacentTiles(out, Game.getBoard().getTiles());
+			player1Avatar.highlightAdjacentTiles(out, Game.getBoard().getTiles(), gameState);
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {

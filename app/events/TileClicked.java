@@ -140,20 +140,10 @@ public class TileClicked implements EventProcessor {
 				BattleHandler.attackUnit(out, gameState.currentSelectedUnit, tileSelected, gameState);
 
 				return;
-				// Reset conditions after combat
-//				gameState.isTileSelected = false;
-//				gameState.currentSelectedUnit = null;
-//				gameState.unitCurrentTile = null;
-//				board.resetAllTiles(out);
+
 			} 
 		}
 
 	}
-
-	// If a human unit is clicked, display potential movement tiles
-	// need to add filter to exclude AI units
-	// if (selectedUnit != null && selectedUnit.getHasMoved() == false) {
-
-	// }
 
 }

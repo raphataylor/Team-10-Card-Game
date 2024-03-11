@@ -1,8 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
-
-
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -12,6 +11,7 @@ import commands.BasicCommands;
 import structures.Game;
 import structures.GameState;
 import structures.basic.Card;
+import structures.basic.EffectAnimation;
 import structures.basic.Position;
 import structures.basic.Tile;
 import structures.basic.Unit;
@@ -19,6 +19,7 @@ import structures.spells.BeamShock;
 import structures.spells.Spell;
 import structures.spells.SundropElixir;
 import structures.spells.TrueStrike;
+import structures.units.Avatar;
 import structures.basic.Card;
 
 
@@ -33,7 +34,6 @@ public class AILogic {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		selectAICardToPlay(out, gameState);// working for summoning a creature card around ai avatar
 		endAITurn(out, gameState);
 	}
 	
@@ -42,13 +42,28 @@ public class AILogic {
 	public static void checkCards(ActorRef out, GameState gameState) {
 		Card[] AIHand = gameState.player2.getPlayerHand();
 		for (int i = 0; i < AIHand.length; i++) {
+		
 			//if the card is not a unit card and the ai has enough mana to use it then ai spell logic will come into effect
-			if (!AIHand[i].getIsCreature()) {
+			if (AIHand[i] == null) {
+				continue;
+			}
+			else if (!AIHand[i].getIsCreature()) {
+				System.out.println("ai casting spell");
 				if (gameState.player2.getMana() > AIHand[i].getManacost()) {
 					spellAILogic(AIHand[i], gameState, out);
+					Game.getBoard().resetAllTiles(out);
 				}
 			}
+			else {
+				System.out.println("ai summoning unit");
+				if (gameState.player2.getMana() > AIHand[i].getManacost()) {
+					unitSummonAILogic(AIHand[i], gameState, out);
+					Game.getBoard().resetAllTiles(out);
+				}
+
+			}
 		}
+		Game.getBoard().resetAllTiles(out);
 		
 	}
 	
@@ -95,18 +110,15 @@ public class AILogic {
 		
 		//the ai will target the unit furthest to the right (usually most threatening) and if there are multiple it will choose the highest hp one
 		if (spell instanceof BeamShock) {
-			//the first unit within the list will always be an avatar as it was added on setup before any other units could be added 
-			int avatarXTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTilex();
-			int avatarYTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTiley();
-			Tile avatarTile = Game.getBoard().getTile(avatarXTile, avatarYTile);
-			Tile tileToTarget = findMostThreateningUnitToAvatar(avatarTile, 0, player1Units);
 			
-			if (tileToTarget == null) {
-				return;
-			}
-			else {
-				SpellHandler.performSpell(spell, tileToTarget, out, gameState);
-			}
+		
+				System.out.println("beamshocking");
+			
+				int tileX = gameState.player1.getAvatar().getPosition().getTilex();
+				int tileY = gameState.player1.getAvatar().getPosition().getTiley();
+				Tile targetTile = Game.getBoard().getTile(tileX, tileY);
+				SpellHandler.performSpell(spell, targetTile, out, gameState);
+			
 			
 		}
 		
@@ -115,8 +127,8 @@ public class AILogic {
 			Unit unitToHeal = null;
 			int hpDiffFromMax = 0;
 			Unit avatar = player2Units.get(0);
-			int avatarXTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTilex();
-			int avatarYTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTiley();
+			int avatarXTile = gameState.player2.getAvatar().getPosition().getTilex();
+			int avatarYTile = gameState.player2.getAvatar().getPosition().getTiley();
 			Tile avatarTile = Game.getBoard().getTile(avatarXTile, avatarYTile);
 			
 			//if the avatar is missing more than 2hp the ai will just heal it for safety 
@@ -153,17 +165,16 @@ public class AILogic {
 	
 	public static Tile findMostThreateningUnitToAvatar(Tile avatarTile, int range, List<Unit> player1Units) {
 		Unit closeStrongestUnit = null;
+		int xRange = avatarTile.getTilex() + range;
 		for (Unit unit: player1Units) {
 			int currentUnitX = unit.getPosition().getTilex();
-			if (currentUnitX == range) {
+			if (currentUnitX == xRange && closeStrongestUnit == null) {
 				closeStrongestUnit = unit;
 			}
-			else if (currentUnitX == range) {
-				if (closeStrongestUnit != null) {
+			else if (currentUnitX == xRange) {
 					if (unit.getAttack() > closeStrongestUnit.getAttack()) {
 						closeStrongestUnit = unit;
 					}
-				}
 			}
 		}
 		
@@ -172,11 +183,12 @@ public class AILogic {
 			Tile rightColumn = null;
 			if (range > 0) {
 				leftColumn = findMostThreateningUnitToAvatar(avatarTile, range - 1, player1Units);
+				if (closeStrongestUnit == null) {
+					if (range < 8) {
+						rightColumn = findMostThreateningUnitToAvatar(avatarTile, range + 1, player1Units);
+					}
+				}
 			}
-			if (range < 8) {
-				rightColumn = findMostThreateningUnitToAvatar(avatarTile, range + 1, player1Units);
-			}
-			
 			if (leftColumn == null && rightColumn == null) {
 				return null;
 			}
@@ -193,12 +205,69 @@ public class AILogic {
 		Tile targetTile = Game.getBoard().getTile(tileX, tileY);
 		
 		
-		return null;
+		return targetTile;
 	}
 	
 	
-	public static void unitSummonAILogic() {
+	public static void unitSummonAILogic(Card unitCard, GameState gameState, ActorRef out) {
+		Unit AIAvatar = gameState.player2.getAvatar();
+		Unit playerAvatar = gameState.player1.getAvatar();
+		Tile tileToSummonOn = null;
+		//the type casted avatar 
+		Avatar aAIAvatar = (Avatar) AIAvatar;
+		aAIAvatar.highlightAdjacentTiles(out, Game.getBoard().getTiles(), gameState);
 		
+		//displays direction the ai wants to spawn the unit - -1 = left, 1 = right
+		int directionModifier = 0;
+		if (AIAvatar.getPosition().getTilex() > playerAvatar.getPosition().getTilex()) {
+			directionModifier = -1;
+			tileToSummonOn = identifySummonTile(directionModifier, AIAvatar.getPosition().getTilex());
+		}
+		else if (AIAvatar.getPosition().getTilex() < playerAvatar.getPosition().getTilex()) {
+			directionModifier = 1;
+			tileToSummonOn = identifySummonTile(directionModifier, AIAvatar.getPosition().getTilex());
+		}
+		else {
+			directionModifier = 0;
+			tileToSummonOn = identifySummonTile(directionModifier, AIAvatar.getPosition().getTilex());
+		}
+		
+		if (tileToSummonOn == null) {
+			return;
+		}
+		else {
+			summonAICard(out, gameState, tileToSummonOn, unitCard);
+			Game.getBoard().resetAllTiles(out);
+		}
+		
+		
+	}
+	
+	public static Tile identifySummonTile(int directionModifier, int baseTileX) {
+		List<Tile> tiles = Game.getBoard().getTileList();
+		
+		//checks x axis first
+		for (Tile tile: tiles) {
+			if (((tile.getTilex() + directionModifier) == baseTileX) && tile.getIsActionableTile()) {
+				return tile;
+			}
+		}
+		
+		for (Tile tile: tiles) {
+			if ((tile.getTilex() == baseTileX) && tile.getIsActionableTile()) {
+				return tile;
+			}
+		}
+		
+		//if it cannot place the unit on the desired column or on the same column as the avatar it will look for the otherside
+		directionModifier = directionModifier * -1;
+		for (Tile tile: tiles) {
+			if (((tile.getTilex() + directionModifier) == baseTileX) && tile.getIsActionableTile()) {
+				return tile;
+			}
+		}
+		
+		return null;
 	}
 
 	public static void identifyValidMoves(ActorRef out, GameState gameState) {
@@ -211,33 +280,84 @@ public class AILogic {
 		aiUnits = Game.getBoard().getPlayer2Units();
 
 		for (Unit unitOfInterest : aiUnits) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			System.out.println("identifying valid moves for: " + unitOfInterest.getName());
+
 			Tile tileOfInterest = Game.getBoard().getTile(unitOfInterest.getPosition().getTilex(),
 					unitOfInterest.getPosition().getTiley());
 			Game.showValidMovement(out, Game.getBoard().getTiles(), tileOfInterest, 2, gameState);
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			performUnitBattle(unitOfInterest, out, gameState);
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			performUnitMove(unitOfInterest, out, gameState);
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
 			Game.getBoard().resetAllTiles(out);
+		}
+	}
+	
+	
+	
+	public static Tile findPositioningTowardsTargetTile(Tile targetTile, int range) {
+		if (range == 1) {
+			List<Tile> adjTiles = Game.getBoard().getAdjacentTiles(targetTile);
+			Collections.shuffle(adjTiles);
+			for (Tile tile: adjTiles) {
+				if (tile.getIsActionableTile() && !tile.hasUnit()) {
+					return tile;
+				}
+			}
+		}
+		else {
+			List<Tile> candidateTiles = new ArrayList<Tile>();
+			int[] dx = { -range, -range, -range, 0, 0, range, range, range };
+	        int[] dy = { -range, 0, range, -range, range, -range, 0, range };
+	        int x = targetTile.getTilex();
+	        int y = targetTile.getTiley();
+	        // Iterate over adjacent tiles
+	        for (int i = 0; i < 8; i++) {
+	            int adjx = x + dx[i];
+	            int adjy = y + dy[i];
+	            if (adjx >= 9 || adjy >= 5 || adjx < 0 || adjy < 0) {
+	            	continue;
+	            }
+	            else {
+	            	try{
+	            		candidateTiles.add(Game.getBoard().getTile(adjx, adjy));
+	            	}
+	            	catch (ArrayIndexOutOfBoundsException e) {
+	            		e.printStackTrace();
+	            		continue;
+	            	}
+	            	
+	            }
+	            
+	        }
+	        Collections.shuffle(candidateTiles);
+	        for (Tile tile: candidateTiles) {
+				if (tile.getIsActionableTile() && !tile.hasUnit()) {
+					System.out.println("returning a ai tile");
+					return tile;
+				}
+			}
+	        
+		}
+		if (range <= 8) {
+			return findPositioningTowardsTargetTile(targetTile, range + 1);
+		}
+		else {
+			return null;
 		}
 	}
 
@@ -246,103 +366,118 @@ public class AILogic {
 	// movement and which are considered attack
 	public static void performUnitBattle(Unit unitOfInterest, ActorRef out, GameState gameState) {
 		ArrayList<Tile> allTiles = Game.getBoard().getTileList();
+		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
 		// we will first check all potential abilities for an easy kill with this loop
 		for (Tile attackTile : allTiles) {
 			if (attackTile.getIsActionableTile() && !unitOfInterest.getHasAttacked() && attackTile.hasUnit()) {
-				Unit unitToAttack = attackTile.getUnit();
-				// if the selected unit is able to kill the defending unit in 1 blow this
-				// happens
-				if (unitOfInterest.getAttack() > unitToAttack.getHealth()) {
-					BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
-					return;
+				if (player1Units.contains(attackTile.getUnit())) {
+					Unit unitToAttack = attackTile.getUnit();
+					// if the selected unit is able to kill the defending unit in 1 blow this
+					// happens
+					if (unitOfInterest.getAttack() > unitToAttack.getHealth()) {
+						BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
+						return;
+					}
+				
 				}
 			}
 		}
 		// if no easy kills are found this for loop is run instead for potential chip
 		// damage
-//		for (Tile attackTile : allTiles) {
-//			if (attackTile.getIsActionableTile() && !unitOfInterest.getHasAttacked() && attackTile.hasUnit()) {
-//				Unit unitToAttack = attackTile.getUnit();
-//				// if the selected unit will survive a counter attack then it will attack for
-//				// the sake of attacking to chip the enemy unit
-//				if ((unitOfInterest.getHealth() > unitToAttack.getAttack()) && unitOfInterest.getAttack() > 0) {
-//					BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
-//					return;
-//				}
-//			}
-//		}
+		for (Tile attackTile : allTiles) {
+			if (attackTile.getIsActionableTile() && !unitOfInterest.getHasAttacked() && attackTile.hasUnit()) {
+				if (player1Units.contains(attackTile.getUnit())) {
+					Unit unitToAttack = attackTile.getUnit();
+					// if the selected unit will survive a counter attack then it will attack for
+					// the sake of attacking to chip the enemy unit
+					if ((unitOfInterest.getHealth() > unitToAttack.getAttack()) && unitOfInterest.getAttack() > 0) {
+						BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
+						return;
+					}
+				}
+			}
+		}
 	}
 
 	public static void performUnitMove(Unit unitOfInterest, ActorRef out, GameState gameState) {
 		System.out.println("AILogic : inside performUnitMove");
 
-		ArrayList<Tile> allTiles = Game.getBoard().getTileList();
-		ArrayList<Tile> moveableTiles = new ArrayList<Tile>();
 		int currentTileX = unitOfInterest.getPosition().getTilex();
 		int currentTileY = unitOfInterest.getPosition().getTiley();
 		Tile currentTile = Game.getBoard().getTile(currentTileX, currentTileY);
-
-		// Collects all moveable tiles
-		for (Tile tile : allTiles) {
-			if (tile.getIsActionableTile() && !tile.hasUnit()) {
-				moveableTiles.add(tile);
+		Tile tileToMoveTo = null;
+		//if the ai avatars hp difference is greater than 5 (has less) then it will positioning safer
+		if (gameState.player1.getAvatar().getHealth() - gameState.player2.getAvatar().getHealth() > 5) {
+			if(unitOfInterest instanceof Avatar) {
+				//8 , 0 is the safest coordinates for the AI in most situations
+				Tile safestTile = Game.getBoard().getTile(8, 0);
+				tileToMoveTo = findPositioningTowardsTargetTile(safestTile, 0);
+			}
+			else {
+			int avatarXTile = gameState.player2.getAvatar().getPosition().getTilex();
+			int avatarYTile = gameState.player2.getAvatar().getPosition().getTiley();
+			Tile avatarTile = Game.getBoard().getTile(avatarXTile, avatarYTile);
+			tileToMoveTo = findPositioningTowardsTargetTile(avatarTile, 0);
 			}
 		}
-
-		// Logic for finding farthest moves towards the human player
-		Tile tileToMoveTo = null;
-		int counterForDistance = 0;
-		while (tileToMoveTo == null && counterForDistance < 8) {
-			tileToMoveTo = findIfMoveExist(moveableTiles, currentTile, counterForDistance, out);
-			counterForDistance++;
+		
+		else {
+			int avatarXTile = gameState.player1.getAvatar().getPosition().getTilex();
+			int avatarYTile = gameState.player1.getAvatar().getPosition().getTiley();
+			Tile avatarTile = Game.getBoard().getTile(avatarXTile, avatarYTile);
+			tileToMoveTo = findPositioningTowardsTargetTile(avatarTile, 0);
 		}
 
-		if (tileToMoveTo != null) {
-			currentTile.setUnit(null);
+		if (tileToMoveTo == null) {
+			return;
+		}
+		else {
+			System.out.println("moving ai unit with animation");
+			System.out.println(unitOfInterest.getName());
 			BasicCommands.moveUnitToTile(out, unitOfInterest, tileToMoveTo);
+			tileToMoveTo.setUnit(unitOfInterest);
+			unitOfInterest.setPositionByTile(tileToMoveTo);
+			currentTile.setUnit(null);
+			unitOfInterest.setHasMoved(true);
 			try {
-				Thread.sleep(500);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			tileToMoveTo.setUnit(unitOfInterest);
-			unitOfInterest.setPositionByTile(tileToMoveTo);
-			unitOfInterest.setHasMoved(true);
+			Game.getBoard().resetAllTiles(out);
 		}
-		return;
-		// logic for AI to choose which position to move to
 	}
 
-	// logic to identify tiles that meet the distance threshhold
-	private static Tile findIfMoveExist(ArrayList<Tile> potentialTiles, Tile currentTile, int distanceThreshhold,
-			ActorRef out) {
-		for (Tile moveableTile : potentialTiles) {
-			// System.out.println("attempting tile movement");
-			int xDiff = moveableTile.getTilex() - currentTile.getTilex();
-			int yDiff = moveableTile.getTiley() - currentTile.getTiley();
-			Unit unitOfInterest = currentTile.getUnit();
-			if (xDiff <= distanceThreshhold) {
-				try {
-					Game.getBoard().getTile(moveableTile.getTilex(), moveableTile.getTiley());
-					return Game.getBoard().getTile(moveableTile.getTilex(), moveableTile.getTiley());
-				} catch (ArrayIndexOutOfBoundsException e) {
-					continue;
-				}
-			}
-		}
 
-		return null;
-	}
 
 	private static void summonAICard(ActorRef out, GameState gameState, Tile tile, Card card) {
 
 		String cardJSONReference = card.getUnitConfig();
+		gameState.player2.setMana(gameState.player2.getMana() - card.getManacost());
+		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		BasicCommands.setPlayer2Mana(out, gameState.player2);
+		
+		
 		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(card.getCardname(), cardJSONReference,
 				tile.getTilex(), tile.getTiley());
 
 		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tile);
 		tile.setUnit(unitSummon);
+		
+		EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_summon.json");
+        int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tile);
+        try {
+			Thread.sleep(animationDuration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		
 		// System.out.println(board.getPlayer2Units());
@@ -363,17 +498,25 @@ public class AILogic {
 		// a delay is required from drawing to setting attack/hp or else it will not
 		// work
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		// now grabs health and attack values from the card for drawing
 		BasicCommands.setUnitHealth(out, unitSummon, card.getHealth());
 		BasicCommands.setUnitAttack(out, unitSummon, card.getAttack());
+		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		BasicCommands.setPlayer2Mana(out, gameState.player2);
 		try {
 			
-				for (int i = 0; i < gameState.player2.playerHand.length; i++) {
-			        if (gameState.player2.playerHand[i] != null && gameState.player2.playerHand[i].getCardname().equals(card.getCardname())) {
+				for (int i = 0; i < gameState.player2.getPlayerHand().length; i++) {
+			        if (gameState.player2.getPlayerHand()[i] != null && gameState.player2.getPlayerHand()[i].getCardname().equals(card.getCardname())) {
 			        	gameState.player2.removeCardFromHand(i);  // Remove by setting the reference to null
 			            break; // Stop if you only need to remove the first match
 			        }
@@ -386,113 +529,13 @@ public class AILogic {
 		Game.resetGameState(out, gameState);
 	}
 
-	private static Tile selectTileForSummoning(GameState gameState) {
+	
 
-		Position avatarPosition = gameState.player2.getAvatar().getPosition();
 
-		int X = avatarPosition.getTilex();
-		System.out.println("tile X avatar " + X);
-		int Y = avatarPosition.getTiley();
-		System.out.println("tile Y avatar " + Y);
-		Tile avatarTile = Game.getBoard().getTile(X, Y);
-		List<Tile> adjacentTiles = Game.getBoard().getAdjacentTiles(avatarTile);
 
-		// Assuming adjacentTiles is not empty
-		Random random = new Random();
-		Boolean findEmptyTile = false;
-		int randomIndex = 0;
-
-		while (!findEmptyTile) {
-
-			randomIndex = random.nextInt(adjacentTiles.size());
-			if (!adjacentTiles.get(randomIndex).hasUnit()) {
-				findEmptyTile = true;
-				return adjacentTiles.get(randomIndex);
-			}
-
-		}
-
-		return adjacentTiles.get(randomIndex);
-
-	}
-
-	private static List<Card> getPlayableAICards(GameState gameState) {
-
-		List<Card> playableCreatures = getPlayableCreatureCards(gameState);
-
-		// Sort by mana cost
-		playableCreatures.sort(Comparator.comparing(Card::getManacost));
-
-		return playableCreatures;
-	}
-
-	private static List<Card> getPlayableCreatureCards(GameState gameState) {
-
-		List<Card> playable = new ArrayList<>();
-
-		for (int i = 0; i < gameState.player2.playerHand.length; i++) {
-			if (gameState.player2.playerHand[i] instanceof Card) {
-
-				// add playable creature cards
-				if (gameState.player2.playerHand[i].isCreature() == true
-						&& gameState.player2.getMana() >= gameState.player2.playerHand[i].getManacost()) {
-					playable.add(gameState.player2.playerHand[i]);
-				}
-				// add playable spell cards
-				if (gameState.player2.playerHand[i].isCreature() == false
-						&& gameState.player2.getMana() >= gameState.player2.playerHand[i].getManacost()) {
-					// placeholder for logic
-				}
-			}
-		}
-		return playable;
-	}
-
-	public static void selectAICardToPlay(ActorRef out, GameState gameState) {
-
-		// to find playable cards (creature)
-		List<Card> playableCards = getPlayableAICards(gameState);
-		System.out.println("playableAI cards #### : " + playableCards.size());
-		int remainingMana = gameState.player2.getMana();
-
-		if (!playableCards.isEmpty()) {
-
-			for (int i = 0; i < playableCards.size(); i++) {
-
-				if (remainingMana >= playableCards.get(i).getManacost()) {
-					Card cardToPlay = playableCards.get(i);
-					remainingMana -= playableCards.get(i).getManacost();
-					Tile targetTile = selectTileForSummoning(gameState);
-					// System.out.println("tile selected "+targetTile.getTilex());
-					// System.out.println("tile selected "+targetTile.getTiley());
-
-					summonAICard(out, gameState, targetTile, cardToPlay);
-					gameState.player2.playerHand[i] = null;
-
-				} else {
-					break;
-				}
-
-			}
-
-		} else {
-			// logic to move the avatar/other units already placed, attack(if it can attack)
-			// and end turn
-		}
-
-	}
 
 	public static void endAITurn(ActorRef out, GameState gameState) {
-		gameState.turn++;
-
-		List<Unit> player2Units = Game.getBoard().getPlayer2Units();
-		for (Unit unit : player2Units) {
-			// System.out.println("setting unit to not moved");
-			unit.setHasMoved(false);
-			unit.setHasAttacked(false);
-		}
 		Game.getBoard().resetAllTiles(out);
-		//gameState.player2.drawCardAtTurnEnd(out);
 		Game.beginNewTurn(out, gameState);
 
 	}

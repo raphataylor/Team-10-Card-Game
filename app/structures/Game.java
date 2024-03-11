@@ -89,12 +89,6 @@ public class Game {
 			// utilises a method created for this purpose rather than making additional work
 			updateManaVisual(out, gameState.currentPlayer, gameState);
 
-			// if (gameState.currentPlayer == gameState.player1) {
-			// BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
-			// } else {
-			// BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
-			// }
-
 		}
 
 	}
@@ -118,7 +112,6 @@ public class Game {
 
 	}
 
-	// STATIC METHODS TO CALL DURING GAME - RECONSIDER NEW CLASS?
 
 	// when the player selects a card this method is called - essentially has a
 	// highlight and dehighlight system in place
@@ -142,7 +135,7 @@ public class Game {
 		}
 	}
 
-	// this method only does player 1 summoning?
+
 	public static void summonUnit(ActorRef out, GameState gameState, int x, int y) {
 		System.out.println("summoning unit");
 		Card cardToPlayer = GameState.player1.getPlayerHandCard(gameState.currentCardSelected);
@@ -151,20 +144,15 @@ public class Game {
 		System.out.println(tileSelected.getIsActionableTile());
 		// ensures the card attempting to be played is a unit card
 		if (tileSelected.getIsActionableTile() && cardToPlayer.getIsCreature()) {
-			//
 			// mana cost check to ensure the player attempting to summon the unit has enough
 			// mana
 			if (gameState.currentPlayer.getMana() - cardToPlayer.getManacost() < 0) {
 				BasicCommands.addPlayer1Notification(out, "NOT ENOUGH MANA", 3);
 			} else {
-				// Unit unitSummon = BasicObjectBuilders.loadUnit(cardJSONReference, 0,
-				// Unit.class);
 				Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(cardToPlayer.getCardname(),
 						cardJSONReference, x, y);
 				
 				System.out.println("unitSummon : "+unitSummon);
-				// System.out.println(unitSummon.getPosition().getTilex() + "," +
-				// unitSummon.getPosition().getTiley());
 				unitSummon.setPositionByTile(tileSelected);
 				tileSelected.setUnit(unitSummon);
 
@@ -280,7 +268,7 @@ public class Game {
 
 		humanAvatar.setAttack(2);
 		humanAvatar.setHealth(20);
-		humanAvatar.setName("Avatar");
+		humanAvatar.setName("Human Avatar");
 		
 		humanAvatar.setMaxAttack(2);
 		humanAvatar.setMaxHealth(20);
@@ -306,7 +294,7 @@ public class Game {
 
 		aiAvatar.setAttack(2);
 		aiAvatar.setHealth(20);
-		aiAvatar.setName("Avatar");
+		aiAvatar.setName("AI Avatar");
 		
 		aiAvatar.setMaxAttack(2);
 		aiAvatar.setMaxHealth(20);
@@ -343,11 +331,15 @@ public class Game {
 								getBoard().getPlayer1Units().contains(adjUnit))) {
 					BasicCommands.drawTile(out, adjTiles.get(i), 2);
 					adjTiles.get(i).setIsActionableTile(true);
+					return;
 				}
 			} else {
 				// Iterate over the board to find tiles within the specified distance.
 				for (int x = Math.max(X - distance, 0); x <= Math.min(X + distance, grid.length - 1); x++) {
 					for (int y = Math.max(Y - distance, 0); y <= Math.min(Y + distance, grid[0].length - 1); y++) {
+						if (x < 0 || x > 8 || y < 0 || y > 4) {
+							continue;
+						}
 						Tile checkedTile = Game.getBoard().getTile(x, y);
 						// Calculate the Manhattan distance to the unit.
 						int manhattanDistance = Math.abs(x - X) + Math.abs(y - Y);
@@ -525,13 +517,14 @@ public class Game {
 
 		System.out.println("Game : inside beginNewTurn");
 		System.out.println("Game : gameState.turn : " + gameState.turn);
-		// gameState.turn++;
+		gameState.turn++;
 		System.out.println("Game : gameState.turn : " + gameState.turn);
 
 		
 		getBoard().resetAllTiles(out);
 		resetGameState(out, gameState);
 		if(gameState.currentPlayer == gameState.player1) {
+			gameState.player1.drawCardAtTurnEnd(out, gameState);
 			System.out.println("End Turned : inside if");
 			gameState.currentPlayer = gameState.player2;
 			Game.resetMana(out, gameState);
@@ -541,7 +534,7 @@ public class Game {
 			    unit.setHasAttacked(false);
 			    unit.setStunned(out, false);
 			}
-			gameState.player1.drawCardAtTurnEnd(out);
+			
 			setManaOnStartTurn(out, gameState);
 			AILogic.playAITurn(out, gameState);
 		}
@@ -549,10 +542,16 @@ public class Game {
 		
 		// these actions occur if it is the players turn
 		else if (gameState.currentPlayer == gameState.player2) {
+			gameState.player2.drawCardAtTurnEnd(out, gameState);
 			gameState.currentPlayer = gameState.player1;
+			List<Unit> player2Units = Game.getBoard().getPlayer2Units();
+			for (Unit unit : player2Units) {
+			    unit.setHasMoved(false);
+			    unit.setHasAttacked(false);
+			    unit.setStunned(out, false);
+			}
 			Game.resetMana(out, gameState);
 			setManaOnStartTurn(out, gameState);
-			
 		}
 
 

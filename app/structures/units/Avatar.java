@@ -21,7 +21,7 @@ public class Avatar extends Unit{
 	//attribute for storing the horn of the forsaken to utilise its methods
 	private HornOfTheForsaken hornOfTheForsaken = null;
 	
-	public void highlightAdjacentTiles(ActorRef out, Tile[][] grid) {
+	public void highlightAdjacentTiles(ActorRef out, Tile[][] grid, GameState gameState) {
 		int X = this.getPosition().getTilex();
 		int Y = this.getPosition().getTiley();
 		
@@ -30,7 +30,9 @@ public class Avatar extends Unit{
 	            if (x != X || y != Y) { 
 	            	// highlight tile if empty
 	            	if (!Game.getBoard().getTile(x, y).hasUnit()) {
-					BasicCommands.drawTile(out, grid[x][y], 1); 
+	            		if(gameState.currentPlayer == gameState.player1	) {
+	            			BasicCommands.drawTile(out, grid[x][y], 1); 
+	            		}
 					grid[x][y].setIsActionableTile(true);
 					try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 	            	}

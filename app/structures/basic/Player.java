@@ -110,11 +110,16 @@ public class Player {
 		}
 	}
 
-	public void drawCardAtTurnEnd(ActorRef out) {
+	public void drawCardAtTurnEnd(ActorRef out, GameState gameState) {
 		if (this.playerDeck.isEmpty()) {
 			System.out.println("Card Deck Empty. Deck Reshuffled!");
 			BasicCommands.addPlayer1Notification(out, "Card Deck Empty. Deck Reshfulled", 5);
-			setPlayerDeck(OrderedCardLoader.getPlayer1Cards(2));
+			if (gameState.currentPlayer == gameState.player1) {
+				setPlayerDeck(OrderedCardLoader.getPlayer1Cards(2));
+			}
+			else {
+				setPlayerDeck(OrderedCardLoader.getPlayer2Cards(2));
+			}
 			shufflePlayerCards();
 		}
 		//if there are no free spaces in the hand then it will return -1
@@ -123,9 +128,15 @@ public class Player {
 		if (freeHandPos == -1) {
 		}
 		else {
-			
-				drawCard(out, 1);
-				return;
+				if (gameState.currentPlayer == gameState.player1) {
+					drawCard(out, 1);
+					return;
+				}
+				else {
+					drawAICard(out, 1);
+					return;
+				}
+				
 			}
 	
 		removeCardFromDeck(0);
@@ -193,10 +204,15 @@ public class Player {
 	
 	public void removeCardFromHand(String cardName) {
 		// test bandaid
+		
+		System.out.println("attempting to remove: " + cardName);
 		for (int i = 0; i < playerHand.length; i++) {
-			if (playerHand[i].getCardname() == cardName) {
-				playerHand[i] = null;
-				System.out.println("removing card from hand");
+			if (playerHand[i] != null) {
+				System.out.println("current card name: " + playerHand[i].getCardname());
+				if (playerHand[i].getCardname().equals(cardName)) {
+					playerHand[i] = null;
+					System.out.println("removing card from hand");
+				}
 			}
 		}
 	}
