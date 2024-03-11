@@ -55,14 +55,12 @@ public class AILogic {
 				continue;
 			}
 			else if (!AIHand[i].getIsCreature()) {
-				System.out.println("ai casting spell");
 				if (gameState.player2.getMana() > AIHand[i].getManacost()) {
 					spellAILogic(AIHand[i], gameState, out);
 					Game.getBoard().resetAllTiles(out);
 				}
 			}
 			else {
-				System.out.println("ai summoning unit");
 				if (gameState.player2.getMana() > AIHand[i].getManacost()) {
 					unitSummonAILogic(AIHand[i], gameState, out);
 					Game.getBoard().resetAllTiles(out);
@@ -119,10 +117,7 @@ public class AILogic {
 		
 		//the ai will target the unit furthest to the right (usually most threatening) and if there are multiple it will choose the highest hp one
 		if (spell instanceof BeamShock) {
-			
-		
-				System.out.println("beamshocking");
-			
+						
 				int tileX = gameState.player1.getAvatar().getPosition().getTilex();
 				int tileY = gameState.player1.getAvatar().getPosition().getTiley();
 				Tile targetTile = Game.getBoard().getTile(tileX, tileY);
@@ -283,7 +278,6 @@ public class AILogic {
 	
     // Identifies the most strategically advantageous tiles for the AI to move or attack.
 	public static void identifyValidMoves(ActorRef out, GameState gameState) {
-		System.out.println("AILogic : inside identifyValidMoves");
 		
 		ArrayList<Tile> moveTiles = new ArrayList<Tile>();
 		ArrayList<Tile> attackTiles = new ArrayList<Tile>();
@@ -292,7 +286,6 @@ public class AILogic {
 		aiUnits = Game.getBoard().getPlayer2Units();
 
 		for (Unit unitOfInterest : aiUnits) {
-			System.out.println("identifying valid moves for: " + unitOfInterest.getName());
 
 			Tile tileOfInterest = Game.getBoard().getTile(unitOfInterest.getPosition().getTilex(),
 					unitOfInterest.getPosition().getTiley());
@@ -359,7 +352,6 @@ public class AILogic {
 	        Collections.shuffle(candidateTiles);
 	        for (Tile tile: candidateTiles) {
 				if (tile.getIsActionableTile() && !tile.hasUnit()) {
-					System.out.println("returning a ai tile");
 					return tile;
 				}
 			}
@@ -411,7 +403,6 @@ public class AILogic {
 	
     // Moves the AI's unit towards strategic positions on the board.
 	public static void performUnitMove(Unit unitOfInterest, ActorRef out, GameState gameState) {
-		System.out.println("AILogic : inside performUnitMove");
 
 		int currentTileX = unitOfInterest.getPosition().getTilex();
 		int currentTileY = unitOfInterest.getPosition().getTiley();
@@ -443,8 +434,7 @@ public class AILogic {
 			return;
 		}
 		else {
-			System.out.println("moving ai unit with animation");
-			System.out.println(unitOfInterest.getName());
+			
 			BasicCommands.moveUnitToTile(out, unitOfInterest, tileToMoveTo);
 			tileToMoveTo.setUnit(unitOfInterest);
 			unitOfInterest.setPositionByTile(tileToMoveTo);
@@ -478,7 +468,6 @@ public class AILogic {
 		Unit unitSummon = SubUnitCreator.identifyUnitTypeAndSummon(card.getCardname(), cardJSONReference,
 				tile.getTilex(), tile.getTiley());
 
-		System.out.println(unitSummon.getPosition().getTilex() + "," + unitSummon.getPosition().getTiley());
 		unitSummon.setPositionByTile(tile);
 		tile.setUnit(unitSummon);
 		
@@ -489,9 +478,6 @@ public class AILogic {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		
-		// System.out.println(board.getPlayer2Units());
 
 		BasicCommands.drawUnit(out, unitSummon, tile);
 		// stops tiles from highlighting after summon
@@ -536,7 +522,6 @@ public class AILogic {
 		}catch(Exception e) {
 			System.out.println("exception");
 		}
-		//gameState.player2.removeCardFromHand(gameState.currentCardSelected);
 		Game.resetGameState(out, gameState);
 	}
 
