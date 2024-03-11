@@ -80,7 +80,7 @@ public class TileClicked implements EventProcessor {
 			} 
 			//checks for if unit has attack or move action available
 			else if ( (tileSelected.hasUnit() && !gameState.isTileSelected && (!tileSelected.getUnit().getHasMoved() || !tileSelected.getUnit().getHasAttacked())
-					&& Game.getBoard().getPlayer1Units().contains(tileSelected.getUnit()) && !tileSelected.getUnit().isStunned()) ) { // if the tile clicked has unit on it show
+					&& Game.getBoard().getPlayer1Units().contains(tileSelected.getUnit()) && !tileSelected.getUnit().isStunned(out)) ) { // if the tile clicked has unit on it show
 																				// valid moves
 				
 				//tileSelected.hasUnit() && !tileSelected.getUnit().getHasAttacked()

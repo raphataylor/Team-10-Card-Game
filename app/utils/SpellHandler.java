@@ -17,6 +17,7 @@ import structures.spells.HornOfTheForsaken;
 import structures.spells.Spell;
 import structures.spells.SundropElixir;
 import structures.spells.TrueStrike;
+import structures.units.Avatar;
 
 public class SpellHandler {
 	
@@ -76,6 +77,12 @@ public class SpellHandler {
 		if (gameState.currentPlayer == gameState.player1) {
 			BasicCommands.addPlayer1Notification(out, "I use this spell!", 5);
 		}
+		
+		if (spell instanceof DarkTerminus && selectedTile.getUnit() instanceof Avatar) {
+            	BasicCommands.addPlayer1Notification(out, "He seems to be protected by something", 3);
+            	return;
+		}
+		
 		gameState.currentPlayer.setMana(gameState.currentPlayer.getMana() - spell.getManaCost()); // Deducting mana cost
         BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
 		spell.spell(out, gameState, selectedTile);	

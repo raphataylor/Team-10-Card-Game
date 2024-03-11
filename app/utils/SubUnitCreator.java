@@ -11,6 +11,7 @@ import structures.units.GloomChaser;
 import structures.units.IroncliffGuardian;
 import structures.units.ShadowWatcher;
 import structures.units.Shadowdancer;
+import structures.units.SilverguardKnight;
 import structures.units.SilverguardSquire;
 import structures.units.SwampEntangler;
 import structures.units.NightsorrowAssasin;
@@ -36,6 +37,7 @@ public class SubUnitCreator {
 			put("Rock Pulveriser", RockPulveriser.class);
 			put("Swamp Entangler", SwampEntangler.class);
 			put("Ironcliff Guardian", IroncliffGuardian.class);
+			put("Silverguard Knight", SilverguardKnight.class);
 			
 		}
 	};

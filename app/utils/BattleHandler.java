@@ -15,6 +15,7 @@ import structures.basic.UnitAnimationType;
 import structures.spells.HornOfTheForsaken;
 import structures.units.DeathAbilityUnit;
 import structures.units.DeathwatchAbilityUnit;
+import structures.units.SilverguardKnight;
 import structures.units.Avatar;
 
 public class BattleHandler {
@@ -42,7 +43,7 @@ public class BattleHandler {
 		}
 	
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(2000	);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -79,6 +80,12 @@ public class BattleHandler {
 		// display defender player's health on top
 		if ((defender instanceof Avatar) && gameState.currentPlayer == gameState.player1) {
 			gameState.player2.setHealth(defenderPostCombatHealth);
+			for (Unit unit: player2Units) {
+				//if a silverguard knight is on the board then it will gain two attack as per its ability zeal
+				if (unit instanceof SilverguardKnight) {
+					unit.setAttack(unit.getAttack() + 2);
+				}
+			}
 			BasicCommands.setPlayer2Health(out, gameState.player2); // Update player 1's health
 		} else if ((defender instanceof Avatar) && gameState.currentPlayer == gameState.player2) {
 			gameState.player1.setHealth(defenderPostCombatHealth);
@@ -260,7 +267,10 @@ public class BattleHandler {
 		else {
 			for (Tile tile: adjTiles) {
 				System.out.println("checking tiles");
-				if (canAttack(tile, targetTile)) {
+				if (startTile.getUnit().getHasMoved()) {
+					return false;
+				}
+				else if (canAttack(tile, targetTile)) {
 					System.out.println("able to move");
 					BasicCommands.addPlayer1Notification(out, "Move my unit!", 5);
 					try {
@@ -272,7 +282,7 @@ public class BattleHandler {
 					tile.setUnit(startTile.getUnit());
 					BasicCommands.moveUnitToTile(out, startTile.getUnit(), tile);
 					try {
-						Thread.sleep(100);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

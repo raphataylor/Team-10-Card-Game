@@ -191,7 +191,10 @@ public class Unit {
 
 	// SPELL
 	// Method to check if the unit is stunned
-	public boolean isStunned() {
+	public boolean isStunned(ActorRef out) {
+		if (stunned) {
+			BasicCommands.addPlayer1Notification(out, this.name + " is stunned and cannot move or attack!", 2);
+		}
 		return stunned;
 	}
 
@@ -205,7 +208,7 @@ public class Unit {
 
 	// Check if a unit is stunned before allowing it to move or attack
 	public void performAction(ActorRef out, GameState gameState) {
-		if (this.isStunned()) {
+		if (this.isStunned(out)) {
 			BasicCommands.addPlayer1Notification(out, this.name + " is stunned and cannot act this turn.", 2);
 		} else {
 			// Normal action handling here

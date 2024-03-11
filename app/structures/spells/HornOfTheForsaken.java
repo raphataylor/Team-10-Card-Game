@@ -5,6 +5,7 @@ import structures.Game;
 import structures.GameState;
 import structures.basic.*;
 import structures.units.Avatar;
+import utils.BasicObjectBuilders;
 
 import java.util.List;
 import java.util.Random;
@@ -39,6 +40,14 @@ public class HornOfTheForsaken extends Spell implements FriendlySpell {
         playerAvatar.setHornOfTheForsaken(this); // Equipping the artifact to the player's avatar
 
         BasicCommands.addPlayer1Notification(out, "Horn of the Forsaken equipped", 2); // Display notification
+        EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_buff.json");
+        int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tile);
+        try {
+			Thread.sleep(animationDuration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
     }
 
     public void onPlayerAvatarDamaged(ActorRef out, GameState gameState) {

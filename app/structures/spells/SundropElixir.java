@@ -4,8 +4,10 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.GameState;
 import structures.basic.Card;
+import structures.basic.EffectAnimation;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import utils.BasicObjectBuilders;
 
 /*
  * Spell Name - Sundrop Elixir
@@ -34,11 +36,14 @@ public class SundropElixir extends Spell implements FriendlySpell{
 		}
 		
 		selectedUnit.setHealth(newHP);
-		try {
-			Thread.sleep(2000);
+		EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_buff.json");
+        int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tile);
+        try {
+			Thread.sleep(animationDuration);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
 		BasicCommands.setUnitHealth(out, selectedUnit, newHP);
     }
 

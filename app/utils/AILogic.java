@@ -91,17 +91,17 @@ public class AILogic {
 		}
 		// if no easy kills are found this for loop is run instead for potential chip
 		// damage
-		for (Tile attackTile : allTiles) {
-			if (attackTile.getIsActionableTile() && !unitOfInterest.getHasAttacked() && attackTile.hasUnit()) {
-				Unit unitToAttack = attackTile.getUnit();
-				// if the selected unit will survive a counter attack then it will attack for
-				// the sake of attacking to chip the enemy unit
-				if ((unitOfInterest.getHealth() > unitToAttack.getAttack()) && unitOfInterest.getAttack() > 0) {
-					BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
-					return;
-				}
-			}
-		}
+//		for (Tile attackTile : allTiles) {
+//			if (attackTile.getIsActionableTile() && !unitOfInterest.getHasAttacked() && attackTile.hasUnit()) {
+//				Unit unitToAttack = attackTile.getUnit();
+//				// if the selected unit will survive a counter attack then it will attack for
+//				// the sake of attacking to chip the enemy unit
+//				if ((unitOfInterest.getHealth() > unitToAttack.getAttack()) && unitOfInterest.getAttack() > 0) {
+//					BattleHandler.attackUnit(out, unitOfInterest, attackTile, gameState);
+//					return;
+//				}
+//			}
+//		}
 	}
 
 	public static void performUnitMove(Unit unitOfInterest, ActorRef out, GameState gameState) {
@@ -322,7 +322,6 @@ public class AILogic {
 			unit.setHasMoved(false);
 			unit.setHasAttacked(false);
 		}
-		gameState.currentPlayer = gameState.player1;
 		Game.getBoard().resetAllTiles(out);
 		//gameState.player2.drawCardAtTurnEnd(out);
 		Game.beginNewTurn(out, gameState);

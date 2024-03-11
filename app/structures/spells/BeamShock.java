@@ -4,8 +4,10 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.GameState;
 import structures.basic.Card;
+import structures.basic.EffectAnimation;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import utils.BasicObjectBuilders;
  
 /*
 * Spell Name - BeamShock
@@ -29,6 +31,13 @@ public class BeamShock extends Spell implements EnemySpell {
             targetUnit.setStunned(out, true);
             // Display notification that the unit is stunned
             BasicCommands.addPlayer1Notification(out, targetUnit.getName() + " is stunned!", 2);
+            EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_inmolation.json");
+            int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tile);
+            try {
+    			Thread.sleep(animationDuration);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
         }
     }
 }

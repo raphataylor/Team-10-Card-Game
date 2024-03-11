@@ -39,17 +39,7 @@ public class EndTurnClicked implements EventProcessor {
 			//makeAIMoves(out, gameState);
 			//If it was the human player that pressed end turn this happens
 			//This should always be the case but needs a check just to be sure
-			if(gameState.currentPlayer == gameState.player1) {
-				
-				System.out.println("End Turned : inside if");
-				gameState.currentPlayer = gameState.player2;
-				List<Unit> player1Units = Game.getBoard().getPlayer1Units();
-				for (Unit unit : player1Units) {
-				    unit.setHasMoved(false);
-				    unit.setHasAttacked(false);
-				}
-				
-			}
+			
 				
 		
 			//for testing AI player
@@ -58,16 +48,16 @@ public class EndTurnClicked implements EventProcessor {
 			//Game.resetMana(out, gameState);
 			//gameState.currentPlayer = gameState.player1;
 			//Game.setManaOnStartTurn(out, gameState);
-			
+			Game.beginNewTurn(out, gameState);
 		}
 
 		//gameState.player1.drawCardAtTurnEnd(out);
 		
 		
 		//resets game state stuff - might need replacing later with proper method if it already exists
-		gameState.previousSelectedTile = null;
-		gameState.isTileSelected = false;
-		Game.beginNewTurn(out, gameState);
+//		gameState.previousSelectedTile = null;
+//		gameState.isTileSelected = false;
+		
 
 	}
 	

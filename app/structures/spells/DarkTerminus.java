@@ -5,8 +5,11 @@ import commands.BasicCommands;
 import structures.Game;
 import structures.GameState;
 import structures.basic.Card;
+import structures.basic.EffectAnimation;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.units.Avatar;
+import utils.BasicObjectBuilders;
  
 /*
 * Spell Name - Dark Terminus
@@ -28,6 +31,13 @@ public class DarkTerminus extends Spell implements EnemySpell {
         // Check if there is an enemy unit on the targeted tile
         if (tile.hasUnit()) {
             Unit targetUnit = tile.getUnit();
+            EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_soulshatter.json");
+            int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tile);
+            try {
+    			Thread.sleep(animationDuration);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
             // Destroy the enemy unit
             BasicCommands.deleteUnit(out, targetUnit);
             tile.setUnit(null); // Remove the unit from the tile

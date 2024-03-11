@@ -5,9 +5,11 @@ import commands.BasicCommands;
 import structures.Game;
 import structures.GameState;
 import structures.basic.Card;
+import structures.basic.EffectAnimation;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
+import utils.BasicObjectBuilders;
 import utils.BattleHandler;
 
 /*
@@ -28,6 +30,15 @@ public class TrueStrike extends Spell implements EnemySpell{
 
 	public void spell(ActorRef out, GameState gameState, Tile tile) {
 		Unit targetUnit = tile.getUnit();
+		
+		EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_inmolation.json");
+        int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tile);
+        try {
+			Thread.sleep(animationDuration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
 		targetUnit.setHealth(targetUnit.getHealth() - 2);
 		try {
 			Thread.sleep(100);

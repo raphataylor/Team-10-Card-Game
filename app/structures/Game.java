@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.Board;
 import structures.basic.Card;
+import structures.basic.EffectAnimation;
 import structures.basic.Player;
 import structures.basic.Position;
 import structures.basic.Tile;
@@ -171,7 +172,13 @@ public class Game {
 				board.addPlayer1Unit(unitSummon);
 				
 				BasicCommands.addPlayer1Notification(out, "I summon an ally.", 5);
-				
+				EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_summon.json");
+		        int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tileSelected);
+		        try {
+					Thread.sleep(animationDuration);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				// System.out.println(board.getPlayer1Units());
 
 				BasicCommands.drawUnit(out, unitSummon, tileSelected);
@@ -233,6 +240,15 @@ public class Game {
 		wraithUnit.setAttack(1);
 		wraithUnit.setPositionByTile(tileToSummonOn);
 		tileToSummonOn.setUnit(wraithUnit);
+		
+		EffectAnimation spellEffect = BasicObjectBuilders.loadEffect("conf/gameconfs/effects/f1_wraithsummon.json");
+        int animationDuration = BasicCommands.playEffectAnimation(out, spellEffect, tileToSummonOn);
+        try {
+			Thread.sleep(animationDuration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
 		BasicCommands.drawUnit(out, wraithUnit, tileToSummonOn);
 		try {
 			Thread.sleep(1000);
@@ -264,6 +280,7 @@ public class Game {
 
 		humanAvatar.setAttack(2);
 		humanAvatar.setHealth(20);
+		humanAvatar.setName("Avatar");
 		
 		humanAvatar.setMaxAttack(2);
 		humanAvatar.setMaxHealth(20);
@@ -289,6 +306,7 @@ public class Game {
 
 		aiAvatar.setAttack(2);
 		aiAvatar.setHealth(20);
+		aiAvatar.setName("Avatar");
 		
 		aiAvatar.setMaxAttack(2);
 		aiAvatar.setMaxHealth(20);
@@ -510,28 +528,35 @@ public class Game {
 		// gameState.turn++;
 		System.out.println("Game : gameState.turn : " + gameState.turn);
 
-		Game.resetMana(out, gameState);
-
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		// these actions occur if it is the players turn
-		if (gameState.currentPlayer == gameState.player1) {
-			setManaOnStartTurn(out, gameState);
-			
-		}
-		// these actions occur if it is the AIs turn
-		else {
-			//according to game rules the player will draw a card at the end of their turn
+		
+		getBoard().resetAllTiles(out);
+		resetGameState(out, gameState);
+		if(gameState.currentPlayer == gameState.player1) {
+			System.out.println("End Turned : inside if");
+			gameState.currentPlayer = gameState.player2;
+			Game.resetMana(out, gameState);
+			List<Unit> player1Units = Game.getBoard().getPlayer1Units();
+			for (Unit unit : player1Units) {
+			    unit.setHasMoved(false);
+			    unit.setHasAttacked(false);
+			    unit.setStunned(out, false);
+			}
 			gameState.player1.drawCardAtTurnEnd(out);
 			setManaOnStartTurn(out, gameState);
 			AILogic.playAITurn(out, gameState);
-
 		}
-		getBoard().resetAllTiles(out);
-		resetGameState(out, gameState);
+		
+		
+		// these actions occur if it is the players turn
+		else if (gameState.currentPlayer == gameState.player2) {
+			gameState.currentPlayer = gameState.player1;
+			Game.resetMana(out, gameState);
+			setManaOnStartTurn(out, gameState);
+			
+		}
+
+
+	
+		
 	}
 }
