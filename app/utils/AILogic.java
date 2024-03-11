@@ -15,6 +15,10 @@ import structures.basic.Card;
 import structures.basic.Position;
 import structures.basic.Tile;
 import structures.basic.Unit;
+import structures.spells.BeamShock;
+import structures.spells.Spell;
+import structures.spells.SundropElixir;
+import structures.spells.TrueStrike;
 import structures.basic.Card;
 
 
@@ -22,6 +26,7 @@ import structures.basic.Card;
 public class AILogic {
 
 	public static void playAITurn(ActorRef out, GameState gameState) {
+		checkCards(out, gameState);
 		identifyValidMoves(out, gameState);
 		try {
 			Thread.sleep(1000);
@@ -30,6 +35,170 @@ public class AILogic {
 		}
 		selectAICardToPlay(out, gameState);// working for summoning a creature card around ai avatar
 		endAITurn(out, gameState);
+	}
+	
+	
+	//checks hand like a player does
+	public static void checkCards(ActorRef out, GameState gameState) {
+		Card[] AIHand = gameState.player2.getPlayerHand();
+		for (int i = 0; i < AIHand.length; i++) {
+			//if the card is not a unit card and the ai has enough mana to use it then ai spell logic will come into effect
+			if (!AIHand[i].getIsCreature()) {
+				if (gameState.player2.getMana() > AIHand[i].getManacost()) {
+					spellAILogic(AIHand[i], gameState, out);
+				}
+			}
+		}
+		
+	}
+	
+	//defines logic for how an ai deals with spell cards
+	public static void spellAILogic(Card spellCard, GameState gameState, ActorRef out) {
+		Spell spell = SpellHandler.returnSpell(spellCard.getCardname());
+		List<Unit> player1Units = Game.getBoard().getPlayer1Units();
+		Unit weakestUnit = null;
+		
+		if (player1Units.size() == 0) {
+			return;
+		}
+		
+		if (spell instanceof TrueStrike) {
+			for (Unit unit: player1Units) {
+				//if its a guaranteed kill then the AI will go for it
+				if (unit.getHealth() <= 2) {
+					int tileX = unit.getPosition().getTilex();
+					int tileY = unit.getPosition().getTiley();
+					Tile targetTile = Game.getBoard().getTile(tileX, tileY);
+					SpellHandler.performSpell(spell, targetTile, out, gameState);
+					return;
+				}
+				//logic for finding the weakest unit hp wise to target
+				else {
+					if (weakestUnit == null) {
+						weakestUnit = unit;
+					}
+					else {
+						if (unit.getHealth() < weakestUnit.getHealth()) {
+							weakestUnit = unit;
+						}
+					}
+				}
+			}
+			if (weakestUnit == null) {
+				return;
+			}
+			int tileX = weakestUnit.getPosition().getTilex();
+			int tileY = weakestUnit.getPosition().getTiley();
+			Tile targetTile = Game.getBoard().getTile(tileX, tileY);
+			SpellHandler.performSpell(spell, targetTile, out, gameState);
+		}
+		
+		//the ai will target the unit furthest to the right (usually most threatening) and if there are multiple it will choose the highest hp one
+		if (spell instanceof BeamShock) {
+			//the first unit within the list will always be an avatar as it was added on setup before any other units could be added 
+			int avatarXTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTilex();
+			int avatarYTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTiley();
+			Tile avatarTile = Game.getBoard().getTile(avatarXTile, avatarYTile);
+			Tile tileToTarget = findMostThreateningUnitToAvatar(avatarTile, 0, player1Units);
+			
+			if (tileToTarget == null) {
+				return;
+			}
+			else {
+				SpellHandler.performSpell(spell, tileToTarget, out, gameState);
+			}
+			
+		}
+		
+		if (spell instanceof SundropElixir) {
+			List<Unit> player2Units = Game.getBoard().getPlayer2Units();
+			Unit unitToHeal = null;
+			int hpDiffFromMax = 0;
+			Unit avatar = player2Units.get(0);
+			int avatarXTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTilex();
+			int avatarYTile = Game.getBoard().getPlayer2Units().get(0).getPosition().getTiley();
+			Tile avatarTile = Game.getBoard().getTile(avatarXTile, avatarYTile);
+			
+			//if the avatar is missing more than 2hp the ai will just heal it for safety 
+			if (avatar.getMaxHealth() - avatar.getHealth() >= 2) {
+				SpellHandler.performSpell(spell, avatarTile, out, gameState);
+				return;
+			}
+			else {
+				for (Unit unit: player2Units) {
+					if (unitToHeal == null) {
+						if (unit.getHealth() < unit.getMaxHealth()) {
+							hpDiffFromMax = unit.getMaxHealth() - unit.getHealth();
+							unitToHeal = unit;
+						}
+					}
+					else {
+						if (unit.getMaxHealth() - unit.getHealth() > hpDiffFromMax) {
+							hpDiffFromMax = unit.getMaxHealth() - unit.getHealth();
+							unitToHeal = unit;
+						}
+					}
+				}
+				
+				//the ai avatar will not use the spell unless there is a unit missing more than 2 hp from its max
+				if (unitToHeal != null && hpDiffFromMax >= 2) {
+					int tileX = unitToHeal.getPosition().getTilex();
+					int tileY = unitToHeal.getPosition().getTiley();
+					Tile targetTile = Game.getBoard().getTile(tileX, tileY);
+					SpellHandler.performSpell(spell, targetTile, out, gameState);
+				}
+			}	
+		}
+	}
+	
+	public static Tile findMostThreateningUnitToAvatar(Tile avatarTile, int range, List<Unit> player1Units) {
+		Unit closeStrongestUnit = null;
+		for (Unit unit: player1Units) {
+			int currentUnitX = unit.getPosition().getTilex();
+			if (currentUnitX == range) {
+				closeStrongestUnit = unit;
+			}
+			else if (currentUnitX == range) {
+				if (closeStrongestUnit != null) {
+					if (unit.getAttack() > closeStrongestUnit.getAttack()) {
+						closeStrongestUnit = unit;
+					}
+				}
+			}
+		}
+		
+		if (closeStrongestUnit == null) {
+			Tile leftColumn = null;
+			Tile rightColumn = null;
+			if (range > 0) {
+				leftColumn = findMostThreateningUnitToAvatar(avatarTile, range - 1, player1Units);
+			}
+			if (range < 8) {
+				rightColumn = findMostThreateningUnitToAvatar(avatarTile, range + 1, player1Units);
+			}
+			
+			if (leftColumn == null && rightColumn == null) {
+				return null;
+			}
+			else if (rightColumn == null) {
+				return leftColumn;
+			}
+			else {
+				return rightColumn;
+			}
+		}
+		
+		int tileX = closeStrongestUnit.getPosition().getTilex();
+		int tileY = closeStrongestUnit.getPosition().getTiley();
+		Tile targetTile = Game.getBoard().getTile(tileX, tileY);
+		
+		
+		return null;
+	}
+	
+	
+	public static void unitSummonAILogic() {
+		
 	}
 
 	public static void identifyValidMoves(ActorRef out, GameState gameState) {

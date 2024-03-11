@@ -74,20 +74,27 @@ public class SpellHandler {
 	
 	//performs the spell
 	public static void performSpell(Spell spell, Tile selectedTile, ActorRef out, GameState gameState) {
-		if (gameState.currentPlayer == gameState.player1) {
-			BasicCommands.addPlayer1Notification(out, "I use this spell!", 5);
-		}
-		
 		if (spell instanceof DarkTerminus && selectedTile.getUnit() instanceof Avatar) {
-            	BasicCommands.addPlayer1Notification(out, "He seems to be protected by something", 3);
-            	return;
+        	BasicCommands.addPlayer1Notification(out, "He seems to be protected by something", 3);
+        	Game.resetGameState(out, gameState);
+        	return;
 		}
 		
-		gameState.currentPlayer.setMana(gameState.currentPlayer.getMana() - spell.getManaCost()); // Deducting mana cost
-        BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
-		spell.spell(out, gameState, selectedTile);	
-		GameState.player1.removeCardFromHand(gameState.currentCardSelected);
-		BasicCommands.deleteCard(out, gameState.currentCardSelected);
+		else {
+			gameState.currentPlayer.setMana(gameState.currentPlayer.getMana() - spell.getManaCost()); // Deducting mana cost
+			if (gameState.currentPlayer == gameState.player1) {
+				BasicCommands.addPlayer1Notification(out, "I use this spell!", 5);
+				BasicCommands.setPlayer1Mana(out, gameState.currentPlayer);
+				GameState.player1.removeCardFromHand(gameState.currentCardSelected);
+				BasicCommands.deleteCard(out, gameState.currentCardSelected);
+			}
+			else {
+				BasicCommands.setPlayer2Mana(out, gameState.currentPlayer);
+				gameState.player2.removeCardFromHand(spell.name);
+			}
+			spell.spell(out, gameState, selectedTile);	
+		}
+		
 		Game.resetGameState(out, gameState);
 	}
 

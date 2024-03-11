@@ -23,9 +23,9 @@ public class Player {
 	Unit avatar;
 
 
-	public Card[] playerHand = new Card[6];
+	private Card[] playerHand = new Card[6];
 
-	public List<Card> playerDeck = new ArrayList<Card>(20);
+	private List<Card> playerDeck = new ArrayList<Card>(20);
 
 	public Player(Unit avatar) {
 		super();
@@ -40,10 +40,7 @@ public class Player {
 		this.mana = mana;
 	}
 
-	public void removeCardFromHand(int handPosition) {
-		// test bandaid
-		playerHand[handPosition] = null;
-	}
+
 
 	// function for drawing cards
 	public void drawCard(ActorRef out, int cardsToDraw) {
@@ -172,6 +169,10 @@ public class Player {
 	public void setPlayerHandCard(int handPosition, Card card) {
 		this.playerHand[handPosition] = card;
 	}
+	
+	public Card[] getPlayerHand(){
+		return this.playerHand;
+	}
 
 	public List<Card> getPlayerDeck() {
 		return this.playerDeck;
@@ -184,5 +185,21 @@ public class Player {
 	public Unit getAvatar() {
 		return this.avatar;
 	}
+	
+	public void removeCardFromHand(int handPosition) {
+		// test bandaid
+		playerHand[handPosition] = null;
+	}
+	
+	public void removeCardFromHand(String cardName) {
+		// test bandaid
+		for (int i = 0; i < playerHand.length; i++) {
+			if (playerHand[i].getCardname() == cardName) {
+				playerHand[i] = null;
+				System.out.println("removing card from hand");
+			}
+		}
+	}
+	
 
 }

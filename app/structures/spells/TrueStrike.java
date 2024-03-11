@@ -23,7 +23,7 @@ public class TrueStrike extends Spell implements EnemySpell{
 	
 	public void TrueStrike(ActorRef out, GameState gameState, Tile tile){
 		this.manaCost = 1;
-		this.name = "True Strike";
+		this.name = "Truestrike";
     }
 
 
